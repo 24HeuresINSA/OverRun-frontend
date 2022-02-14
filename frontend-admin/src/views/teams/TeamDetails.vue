@@ -1,5 +1,11 @@
 <template>
-  <div class="container-fluid">
+  <TopBar @toggleSideBar="toggleSideBar" />
+
+  <SideBar :hide="hideSideBar" activeVue="Teams" />
+  <div
+    class="container-fluid main-container"
+    :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }"
+  >
     <div class="row m-2 mt-4">
       <div class="col-4 text-start border-bottom p-0">
         <h2>Random Team (Équipe)</h2>
@@ -10,28 +16,24 @@
       </div>
     </div>
     <div class="row mt-4 m-2">
-        <div class="col text-start">
-            Course: <router-link :to="{ name: 'RaceDetails', params: {id: 'test'}}">
-                  Random Race
-                </router-link>
-        </div>
+      <div class="col text-start">
+        Course:
+        <router-link :to="{ name: 'RaceDetails', params: { id: 'test' } }">
+          Random Race
+        </router-link>
+      </div>
     </div>
-     <div class="row  m-2">
-        <div class="col text-start">
-            Nombre d'équipier: 7/10
-        </div>
-    </div>
-
-     <div class="row  m-2">
-        <div class="col text-start">
-            Nombre d'inscriptions complètes: 5/7
-        </div>
+    <div class="row m-2">
+      <div class="col text-start">Nombre d'équipier: 7/10</div>
     </div>
 
-     <div class="row m-2 mt-3">
-      <div class="col text-start border-bottom" >
+    <div class="row m-2">
+      <div class="col text-start">Nombre d'inscriptions complètes: 5/7</div>
+    </div>
+
+    <div class="row m-2 mt-3">
+      <div class="col text-start border-bottom">
         <h4>Membres</h4>
-        
       </div>
     </div>
 
@@ -49,36 +51,49 @@
           <tbody>
             <tr>
               <th scope="row">
-                <span class="material-icons-outlined">
-                military_tech
-                </span>
+                <span class="material-icons-outlined"> military_tech </span>
               </th>
               <td>
-                <router-link :to="{ name: 'InscriptionDetails', params: {id: 'test'}}">
+                <router-link
+                  :to="{ name: 'InscriptionDetails', params: { id: 'test' } }"
+                >
                   Random Athlète
                 </router-link>
               </td>
+              <td>random-athlete@random.com</td>
               <td>
-                random-athlete@random.com
+                <a href="" class="badge rounded-pill bg-success mx-1"
+                  >Complète</a
+                >
               </td>
-              <td>
-                  <a href="" class="badge rounded-pill bg-success mx-1">Complète</a>
-              </td>
-              
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-
   </div>
-
-  
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+
 export default defineComponent({
+  components: {
+    SideBar,
+    TopBar,
+  },
+  data() {
+    return {
+      hideSideBar: false,
+    };
+  },
+  methods: {
+    toggleSideBar(): void {
+      this.hideSideBar = !this.hideSideBar;
+    },
+  },
   mounted() {
     this.$emit("isActive", "Teams");
   },

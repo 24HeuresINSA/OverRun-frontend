@@ -1,5 +1,8 @@
 <template>
-  <div class="container-fluid">
+  <TopBar @toggleSideBar="toggleSideBar" />
+
+  <SideBar :hide="hideSideBar" activeVue="Teams" />
+  <div class="container-fluid main-container" :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }" >
     <div class="row m-2 mt-4">
       <div class="col-4 text-start border-bottom p-0">
         <h2>Equipes</h2>
@@ -16,16 +19,20 @@
           role="group"
           aria-label="Basic mixed styles example"
         >
-          <button type="button" class="btn btn-warning" @click="filterMenuActive = !filterMenuActive">Filtrer</button>
+          <button
+            type="button"
+            class="btn btn-warning"
+            @click="filterMenuActive = !filterMenuActive"
+          >
+            Filtrer
+          </button>
           <button type="button" class="btn btn-danger">Supprimer</button>
         </div>
       </div>
     </div>
 
     <div class="row border-top bg-light m-2" v-if="filterMenuActive">
-      <div class="col text-start">
-          test
-      </div>
+      <div class="col text-start">test</div>
     </div>
 
     <div class="row m-2 mt-4 bg-light rounded">
@@ -39,7 +46,7 @@
                   type="checkbox"
                   value=""
                   aria-label="Checkbox for following text input"
-                  @change="selectAllRows=!selectAllRows" 
+                  @change="selectAllRows = !selectAllRows"
                 />
               </th>
               <th scope="col">Nom</th>
@@ -53,7 +60,7 @@
             <tr>
               <th scope="row">
                 <input
-                  class="form-check-input mt-0 "
+                  class="form-check-input mt-0"
                   type="checkbox"
                   value=""
                   aria-label="Checkbox for following text input"
@@ -61,19 +68,21 @@
                 />
               </th>
               <td>
-                <router-link :to="{ name: 'TeamDetails', params: {id: 'test'}}">
+                <router-link
+                  :to="{ name: 'TeamDetails', params: { id: 'test' } }"
+                >
                   Random Team
                 </router-link>
               </td>
               <td>
-                <router-link :to="{ name: 'RaceDetails', params: {id: 'test'}}">
+                <router-link
+                  :to="{ name: 'RaceDetails', params: { id: 'test' } }"
+                >
                   Random Race
                 </router-link>
               </td>
               <td>7/10</td>
-              <td>
-                5/7
-              </td>
+              <td>5/7</td>
               <td>
                 <a href="" class="badge bg-danger"> Supprimer</a>
               </td>
@@ -88,23 +97,31 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
 
 export default defineComponent({
   components: {
+    SideBar,
+    TopBar,
     SearchBarVue,
   },
   data() {
     return {
-        filterMenuActive: false,
-        selectAllRows: false,
-    }
+      hideSideBar: false,
+      filterMenuActive: false,
+      selectAllRows: false,
+    };
   },
-  mounted () {
-    this.$emit('isActive', 'Teams');
-  }
+  methods: {
+    toggleSideBar(): void {
+      this.hideSideBar = !this.hideSideBar;
+    },
+  },
+  mounted() {
+    this.$emit("isActive", "Teams");
+  },
 });
 </script>
 
-<style>
-
-</style>
+<style></style>

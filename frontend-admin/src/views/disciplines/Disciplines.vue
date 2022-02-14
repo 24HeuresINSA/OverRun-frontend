@@ -1,5 +1,8 @@
 <template>
-  <div class="container-fluid">
+ <TopBar @toggleSideBar="toggleSideBar" />
+
+  <SideBar :hide="hideSideBar" activeVue="Disciplines" />
+  <div class="container-fluid main-container" :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }">
     <div class="row m-2 mt-4">
       <div class="col-4 text-start border-bottom p-0">
         <h2>Disciplines</h2>
@@ -86,13 +89,18 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
 
 export default defineComponent({
   components: {
+    SideBar,
+    TopBar,
     SearchBarVue,
   },
   data() {
     return {
+      hideSideBar: false,
         filterMenuActive: false,
         selectAllRows: false,
     }
@@ -100,7 +108,10 @@ export default defineComponent({
   methods: {
     showDisciplineModal() {
       this.$emit("showDisciplineModal")
-    }
+    },
+    toggleSideBar(): void{
+      this.hideSideBar = !this.hideSideBar;
+    },
   },
   mounted () {
     this.$emit('isActive', 'Disciplines');

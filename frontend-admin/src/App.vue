@@ -7,9 +7,6 @@
     />
   </div>
 
-  <div v-show="!getLoginApiStatus">
-    <Login />
-  </div>
 
   <div v-show="showCategoryModal">
     <CreateCategoryVue @closeCategoryModal="toggleCategoryModal" />
@@ -31,16 +28,11 @@
     <CreateAdminInviteVue @closeAdminInviteModal="toggleAdminInviteModal" />
   </div>
 
-  <TopBar @toggleSideBar="toggleSideBar" />
+  <!-- <TopBar @toggleSideBar="toggleSideBar" />
 
-  <SideBar :hide="hideSideBar" :activeVue="activeVue" />
+  <SideBar :hide="hideSideBar" :activeVue="activeVue" /> -->
 
-  <div
-    class="container-fluid"
-    id="main-container"
-    :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }"
-  >
-    <router-view
+  <router-view
       @isActive="setActiveVue"
       @showCertificate="toggleCertificateModal"
       @showCategoryModal="toggleCategoryModal"
@@ -49,7 +41,14 @@
       @showRaceModal="toggleRaceModal"
       @showAdminInviteModal="toggleAdminInviteModal"
     />
-  </div>
+
+  <!-- <div
+    class="container-fluid"
+    id="main-container"
+    :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }"
+  >
+    
+  </div> -->
 </template>
 
 <script lang="ts">
@@ -144,7 +143,7 @@ body {
   width: 100%;
 }
 
-#main-container {
+.main-container {
   height: calc(100vh - 60px);
   background: #eee;
   overflow-x: hidden;
