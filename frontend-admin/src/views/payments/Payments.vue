@@ -126,9 +126,7 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
   },
-  mounted() {
-    this.$emit("isActive", "Payments");
-  },
+  mounted() {},
 });
 </script>
 

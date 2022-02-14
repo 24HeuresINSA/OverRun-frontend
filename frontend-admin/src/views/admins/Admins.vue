@@ -36,9 +36,7 @@ export default defineComponent({
       this.showAdminInviteModal = !this.showAdminInviteModal;
     }
   },
-  mounted () {
-    this.$emit('isActive', 'Admins');
-  }
+  mounted () {}
 });
 </script>
 

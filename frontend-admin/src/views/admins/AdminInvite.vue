@@ -158,9 +158,7 @@ export default defineComponent({
       this.showAdminInviteModal = !this.showAdminInviteModal;
     }
   },
-  mounted() {
-    this.$emit("isActive", "AdminInvites");
-  },
+  mounted() {},
 });
 </script>
 

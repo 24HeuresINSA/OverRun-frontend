@@ -100,9 +100,7 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
   },
-  mounted() {
-    this.$emit("isActive", "Categories");
-  },
+  mounted() {},
 });
 </script>
 

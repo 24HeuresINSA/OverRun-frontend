@@ -204,9 +204,7 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
   },
-  mounted() {
-    this.$emit("isActive", "Races");
-  },
+  mounted() {},
 });
 </script>
 

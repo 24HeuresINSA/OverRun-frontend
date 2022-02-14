@@ -143,8 +143,7 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
   },
-  mounted () {
-  }
+  mounted () {}
 });
 </script>
 
