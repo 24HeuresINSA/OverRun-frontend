@@ -21,9 +21,6 @@
                     <SideBarSecondaryLink route="AdminInvites" title="Invitations" :activeVue="activeVue" />
             </div>
           </div>
-          <!-- <div class="w-100 primary-bg" id="footer">
-              <p>Hello Tout le monde</p>
-          </div> -->
       </div>
 </template>
 

@@ -1,5 +1,6 @@
 <template>
- <TopBar @toggleSideBar="toggleSideBar" />
+<div>
+  <TopBar @toggleSideBar="toggleSideBar" />
 
   <SideBar :hide="hideSideBar" activeVue="Admins" />
 
@@ -8,13 +9,16 @@
   </div>
 
   <h1>Admins Vue</h1>
+
+</div>
+ 
 </template>
 
 <script lang="ts">
 import {defineComponent } from "vue";
-import SideBar from "@/components/SideBar/SideBar.vue";
-import TopBar from "@/components/TopBar/TopBar.vue";
-import CreateAdminInviteVue from "@/components/modals/CreateAdminInvite.vue";
+import SideBar from "../../components/SideBar/SideBar.vue";
+import TopBar from "../../components/TopBar/TopBar.vue";
+import CreateAdminInviteVue from "../../components/modals/CreateAdminInvite.vue";
 
 export default defineComponent({
   components: {

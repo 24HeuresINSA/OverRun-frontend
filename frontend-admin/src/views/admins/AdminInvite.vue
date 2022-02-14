@@ -1,4 +1,5 @@
 <template>
+<div>
   <TopBar @toggleSideBar="toggleSideBar" />
 
   <SideBar :hide="hideSideBar" activeVue="AdminInvites" />
@@ -128,14 +129,16 @@
       </div>
     </div>
   </div>
+</div>
+
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import SideBar from "@/components/SideBar/SideBar.vue";
-import TopBar from "@/components/TopBar/TopBar.vue";
+import SideBar from "../../components/SideBar/SideBar.vue";
+import TopBar from "../../components/TopBar/TopBar.vue";
 import SearchBoxVue from "../../components/searchBar/SearchBar.vue";
-import CreateAdminInviteVue from "@/components/modals/CreateAdminInvite.vue";
+import CreateAdminInviteVue from "../../components/modals/CreateAdminInvite.vue";
 
 export default defineComponent({
   components: {

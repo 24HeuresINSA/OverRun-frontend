@@ -1,5 +1,6 @@
 <template>
- <TopBar @toggleSideBar="toggleSideBar" />
+<div>
+<TopBar @toggleSideBar="toggleSideBar" />
 
   <SideBar :hide="hideSideBar" activeVue="Categories" />
   <div class="container-fluid main-container" :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }">
@@ -77,12 +78,14 @@
       </div>
     </div>
   </div>
+</div>
+ 
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import SideBar from "@/components/SideBar/SideBar.vue";
-import TopBar from "@/components/TopBar/TopBar.vue";
+import SideBar from "../../components/SideBar/SideBar.vue";
+import TopBar from "../../components/TopBar/TopBar.vue";
 
 export default defineComponent({
   components: {
