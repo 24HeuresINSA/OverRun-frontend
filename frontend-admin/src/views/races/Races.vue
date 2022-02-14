@@ -2,6 +2,11 @@
   <TopBar @toggleSideBar="toggleSideBar" />
 
   <SideBar :hide="hideSideBar" activeVue="Races" />
+
+   <div v-show="showRaceModal">
+    <CreateRaceModalVue @closeRaceModal="toggleRaceModal" />
+  </div>
+
   <div
     class="container-fluid main-container"
     :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }"
@@ -22,7 +27,7 @@
           role="group"
           aria-label="Basic mixed styles example"
         >
-          <button type="button" class="btn btn-primary" @click="showRaceModal">
+          <button type="button" class="btn btn-primary" @click="toggleRaceModal">
             Ajouter course
           </button>
           <button
@@ -135,23 +140,26 @@ import { defineComponent } from "vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
+import CreateRaceModalVue from "@/components/modals/CreateRaceModal.vue";
 
 export default defineComponent({
   components: {
     SideBar,
     TopBar,
     SearchBarVue,
+    CreateRaceModalVue
   },
   data() {
     return {
       hideSideBar: false,
       filterMenuActive: false,
       selectAllRows: false,
+      showRaceModal: false
     };
   },
   methods: {
-    showRaceModal() {
-      this.$emit("showRaceModal");
+    toggleRaceModal(){
+      this.showRaceModal = !this.showRaceModal;
     },
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;

@@ -2,6 +2,11 @@
  <TopBar @toggleSideBar="toggleSideBar" />
 
   <SideBar :hide="hideSideBar" activeVue="Disciplines" />
+
+  <div v-show="showDisciplineModal">
+    <CreateDisciplineVue @closeDisciplineModal="toggleDisciplineModal" />
+  </div>
+
   <div class="container-fluid main-container" :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }">
     <div class="row m-2 mt-4">
       <div class="col-4 text-start border-bottom p-0">
@@ -19,14 +24,7 @@
           role="group"
           aria-label="Basic mixed styles example"
         >
-          <button type="button" class="btn btn-primary text-light" @click="showDisciplineModal">Ajouter discipline</button>
-          <!-- <button
-            type="button"
-            class="btn btn-warning"
-            @click="filterMenuActive = !filterMenuActive"
-          >
-            Filtrer
-          </button> -->
+          <button type="button" class="btn btn-primary text-light" @click="toggleDisciplineModal">Ajouter discipline</button>
           <button type="button" class="btn bg-danger text-light">Supprimer</button>
         </div>
       </div>
@@ -91,23 +89,26 @@ import { defineComponent } from "vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
+import CreateDisciplineVue from "@/components/modals/CreateDiscipline.vue";
 
 export default defineComponent({
   components: {
     SideBar,
     TopBar,
     SearchBarVue,
+    CreateDisciplineVue
   },
   data() {
     return {
       hideSideBar: false,
         filterMenuActive: false,
         selectAllRows: false,
+        showDisciplineModal: false,
     }
   },
   methods: {
-    showDisciplineModal() {
-      this.$emit("showDisciplineModal")
+     toggleDisciplineModal() {
+      this.showDisciplineModal = !this.showDisciplineModal;
     },
     toggleSideBar(): void{
       this.hideSideBar = !this.hideSideBar;

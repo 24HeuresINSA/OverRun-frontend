@@ -2,6 +2,11 @@
   <TopBar @toggleSideBar="toggleSideBar" />
 
   <SideBar :hide="hideSideBar" activeVue="AdminInvites" />
+
+  <div v-show="showAdminInviteModal">
+    <CreateAdminInviteVue @closeAdminInviteModal="toggleAdminInviteModal" />
+  </div>
+
   <div class="container-fluid main-container" :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }">
     <div class="row m-2 mt-4">
       <div class="col-4 text-start border-bottom p-0">
@@ -130,22 +135,28 @@ import { defineComponent } from "vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import SearchBoxVue from "../../components/searchBar/SearchBar.vue";
+import CreateAdminInviteVue from "@/components/modals/CreateAdminInvite.vue";
 
 export default defineComponent({
   components: {
     SideBar,
     TopBar,
     SearchBoxVue,
+    CreateAdminInviteVue
   },
   data() {
     return {
       hideSideBar: false,
+      showAdminInviteModal: true
     };
   },
   methods: {
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
+    toggleAdminInviteModal() {
+      this.showAdminInviteModal = !this.showAdminInviteModal;
+    }
   },
   mounted() {
     this.$emit("isActive", "AdminInvites");

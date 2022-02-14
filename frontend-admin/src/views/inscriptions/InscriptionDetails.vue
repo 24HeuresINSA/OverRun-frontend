@@ -2,6 +2,15 @@
  <TopBar @toggleSideBar="toggleSideBar" />
 
   <SideBar :hide="hideSideBar" activeVue="Inscriptions" />
+
+  <div v-show="showCertificateModal">
+    <CertificateModalVue
+      @hideCertificate="toggleCertificateModal"
+      :inscriptions="[$route.params.id]"
+      :index="0"
+    />
+  </div>
+
   <div class="container-fluid main-container" :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }">
     <div class="row m-2 mt-4">
       <div class="col-4 text-start border-bottom p-0">
@@ -121,9 +130,13 @@ export default defineComponent ({
   data () {
     return {
       hideSideBar: false,
+      showCertificateModal: false
     };
   },
   methods: {
+    toggleCertificateModal() {
+        this.showCertificateModal = !this.showCertificateModal;
+    },
     toggleSideBar(): void{
       this.hideSideBar = !this.hideSideBar;
     },

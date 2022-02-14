@@ -1,7 +1,16 @@
 <template>
- <TopBar @toggleSideBar="toggleSideBar" />
 
+ <TopBar @toggleSideBar="toggleSideBar" />
   <SideBar :hide="hideSideBar" activeVue="Inscriptions" />
+
+  <div v-show="showCertificateModal">
+    <CertificateModalVue
+      @hideCertificate="toggleCertificateModal"
+      :inscriptions="inscriptions"
+      :index="index"
+    />
+  </div>
+
   <div class="container-fluid main-container" :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }">
     <div class="row m-2 mt-4">
       <div class="col-4 text-start border-bottom p-0">
@@ -85,7 +94,7 @@
                 done
                 </span>
               </td>
-              <td @click="showCertificate">
+              <td @click="toggleCertificateModal">
                 <a class="badge rounded-pill bg-success mx-1">Validé</a>
               </td>
               <td>
@@ -122,18 +131,19 @@ export default defineComponent({
         filterMenuActive: false,
         selectAllRows: false,
         showCertificateModal: false,
+        inscriptions: [], 
+        index: 0
     }
   },
   methods: {
-    showCertificate () {
-      this.$emit('showCertificate', true, [1,2,3], 1)
+    toggleCertificateModal() {
+        this.showCertificateModal = !this.showCertificateModal;
     },
     toggleSideBar(): void{
       this.hideSideBar = !this.hideSideBar;
     },
   },
   mounted () {
-    this.$emit('isActive', 'Inscriptions');
   }
 });
 </script>

@@ -2,6 +2,11 @@
  <TopBar @toggleSideBar="toggleSideBar" />
 
   <SideBar :hide="hideSideBar" activeVue="Categories" />
+
+   <div v-show="showCategoryModal">
+    <CreateCategoryVue @closeCategoryModal="toggleCategoryModal" />
+  </div>
+
   <div class="container-fluid main-container" :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }">
     <div class="row m-2 mt-4">
       <div class="col-4 text-start border-bottom p-0">
@@ -19,7 +24,7 @@
           role="group"
           aria-label="Basic mixed styles example"
         >
-          <button type="button" class="btn btn-primary" @click="showCategoryModal">Ajouter categorie</button>
+          <button type="button" class="btn btn-primary" @click="toggleCategoryModal">Ajouter categorie</button>
           <button
             type="button"
             class="btn btn-warning"
@@ -90,23 +95,26 @@ import { defineComponent } from "vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
+import CreateCategoryVue from "@/components/modals/CreateCategory.vue";
 
 export default defineComponent({
   components: {
     SideBar,
     TopBar,
     SearchBarVue,
+    CreateCategoryVue
   },
   data() {
     return {
       hideSideBar: false,
         filterMenuActive: false,
         selectAllRows: false,
+        showCategoryModal: false
     }
   },
   methods: {
-    showCategoryModal() {
-      this.$emit("showCategoryModal");
+     toggleCategoryModal() {
+      this.showCategoryModal = !this.showCategoryModal;
     },
     toggleSideBar(): void{
       this.hideSideBar = !this.hideSideBar;
