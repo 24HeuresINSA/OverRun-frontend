@@ -78,7 +78,6 @@ export default defineComponent ({
   text-align: center;
   width: 320px;
   background: #24305e;
-  display: inline-block;
   float: left;
 }
 
@@ -108,7 +107,6 @@ export default defineComponent ({
 #img-container {
     width: 50px;
     margin: 0 6px 0 20px;
-    display: inline-block;
     float: right;
 }
 
