@@ -1,0 +1,117 @@
+import { Chart, ChartData, ChartType, Plugin } from 'chart.js';
+import { ComponentPublicInstance, Ref } from 'vue';
+import { ComponentData } from './components';
+import { ChartPropsOptions } from './types';
+import { ExtractPropTypes, MaybeRef } from './utils';
+import { StyleValue } from './vue.types';
+declare type DumbTypescript = 0;
+declare type ChartHookReturnType<TType extends ChartType> = {
+    [K in DumbTypescript as `${TType}ChartRef`]: Ref<ComponentPublicInstance<ChartPropsOptions<TType>, ComponentData<TType>> | null>;
+} & {
+    [K in DumbTypescript as `${TType}ChartProps`]: Ref<ExtractPropTypes<ChartPropsOptions<TType>>>;
+};
+export declare const useDoughnutChart: (params: {
+    chartData: MaybeRef<ChartData<"doughnut", number[], unknown>>;
+    options?: MaybeRef<Record<string, any>> | undefined;
+    width?: number | undefined;
+    height?: number | undefined;
+    cssClasses?: string | undefined;
+    styles?: StyleValue | undefined;
+    plugins?: Plugin<keyof import("chart.js").ChartTypeRegistry, import("chart.js/types/basic").AnyObject>[] | undefined;
+    onLabelsUpdate?: (() => void) | undefined;
+    onChartUpdate?: ((chartInstance: Chart<"doughnut", number[], unknown>) => void) | undefined;
+    onChartDestroy?: (() => void) | undefined;
+    onChartRender?: ((chartInstance: Chart<"doughnut", number[], unknown>) => void) | undefined;
+}) => ChartHookReturnType<"doughnut">;
+export declare const useBarChart: (params: {
+    chartData: MaybeRef<ChartData<"bar", number[], unknown>>;
+    options?: MaybeRef<Record<string, any>> | undefined;
+    width?: number | undefined;
+    height?: number | undefined;
+    cssClasses?: string | undefined;
+    styles?: StyleValue | undefined;
+    plugins?: Plugin<keyof import("chart.js").ChartTypeRegistry, import("chart.js/types/basic").AnyObject>[] | undefined;
+    onLabelsUpdate?: (() => void) | undefined;
+    onChartUpdate?: ((chartInstance: Chart<"bar", number[], unknown>) => void) | undefined;
+    onChartDestroy?: (() => void) | undefined;
+    onChartRender?: ((chartInstance: Chart<"bar", number[], unknown>) => void) | undefined;
+}) => ChartHookReturnType<"bar">;
+export declare const useLineChart: (params: {
+    chartData: MaybeRef<ChartData<"line", (number | import("chart.js").ScatterDataPoint | null)[], unknown>>;
+    options?: MaybeRef<Record<string, any>> | undefined;
+    width?: number | undefined;
+    height?: number | undefined;
+    cssClasses?: string | undefined;
+    styles?: StyleValue | undefined;
+    plugins?: Plugin<keyof import("chart.js").ChartTypeRegistry, import("chart.js/types/basic").AnyObject>[] | undefined;
+    onLabelsUpdate?: (() => void) | undefined;
+    onChartUpdate?: ((chartInstance: Chart<"line", (number | import("chart.js").ScatterDataPoint | null)[], unknown>) => void) | undefined;
+    onChartDestroy?: (() => void) | undefined;
+    onChartRender?: ((chartInstance: Chart<"line", (number | import("chart.js").ScatterDataPoint | null)[], unknown>) => void) | undefined;
+}) => ChartHookReturnType<"line">;
+export declare const usePieChart: (params: {
+    chartData: MaybeRef<ChartData<"pie", number[], unknown>>;
+    options?: MaybeRef<Record<string, any>> | undefined;
+    width?: number | undefined;
+    height?: number | undefined;
+    cssClasses?: string | undefined;
+    styles?: StyleValue | undefined;
+    plugins?: Plugin<keyof import("chart.js").ChartTypeRegistry, import("chart.js/types/basic").AnyObject>[] | undefined;
+    onLabelsUpdate?: (() => void) | undefined;
+    onChartUpdate?: ((chartInstance: Chart<"pie", number[], unknown>) => void) | undefined;
+    onChartDestroy?: (() => void) | undefined;
+    onChartRender?: ((chartInstance: Chart<"pie", number[], unknown>) => void) | undefined;
+}) => ChartHookReturnType<"pie">;
+export declare const usePolarAreaChart: (params: {
+    chartData: MaybeRef<ChartData<"polarArea", number[], unknown>>;
+    options?: MaybeRef<Record<string, any>> | undefined;
+    width?: number | undefined;
+    height?: number | undefined;
+    cssClasses?: string | undefined;
+    styles?: StyleValue | undefined;
+    plugins?: Plugin<keyof import("chart.js").ChartTypeRegistry, import("chart.js/types/basic").AnyObject>[] | undefined;
+    onLabelsUpdate?: (() => void) | undefined;
+    onChartUpdate?: ((chartInstance: Chart<"polarArea", number[], unknown>) => void) | undefined;
+    onChartDestroy?: (() => void) | undefined;
+    onChartRender?: ((chartInstance: Chart<"polarArea", number[], unknown>) => void) | undefined;
+}) => ChartHookReturnType<"polarArea">;
+export declare const useRadarChart: (params: {
+    chartData: MaybeRef<ChartData<"radar", (number | null)[], unknown>>;
+    options?: MaybeRef<Record<string, any>> | undefined;
+    width?: number | undefined;
+    height?: number | undefined;
+    cssClasses?: string | undefined;
+    styles?: StyleValue | undefined;
+    plugins?: Plugin<keyof import("chart.js").ChartTypeRegistry, import("chart.js/types/basic").AnyObject>[] | undefined;
+    onLabelsUpdate?: (() => void) | undefined;
+    onChartUpdate?: ((chartInstance: Chart<"radar", (number | null)[], unknown>) => void) | undefined;
+    onChartDestroy?: (() => void) | undefined;
+    onChartRender?: ((chartInstance: Chart<"radar", (number | null)[], unknown>) => void) | undefined;
+}) => ChartHookReturnType<"radar">;
+export declare const useBubbleChart: (params: {
+    chartData: MaybeRef<ChartData<"bubble", import("chart.js").BubbleDataPoint[], unknown>>;
+    options?: MaybeRef<Record<string, any>> | undefined;
+    width?: number | undefined;
+    height?: number | undefined;
+    cssClasses?: string | undefined;
+    styles?: StyleValue | undefined;
+    plugins?: Plugin<keyof import("chart.js").ChartTypeRegistry, import("chart.js/types/basic").AnyObject>[] | undefined;
+    onLabelsUpdate?: (() => void) | undefined;
+    onChartUpdate?: ((chartInstance: Chart<"bubble", import("chart.js").BubbleDataPoint[], unknown>) => void) | undefined;
+    onChartDestroy?: (() => void) | undefined;
+    onChartRender?: ((chartInstance: Chart<"bubble", import("chart.js").BubbleDataPoint[], unknown>) => void) | undefined;
+}) => ChartHookReturnType<"bubble">;
+export declare const useScatterChart: (params: {
+    chartData: MaybeRef<ChartData<"scatter", (number | import("chart.js").ScatterDataPoint | null)[], unknown>>;
+    options?: MaybeRef<Record<string, any>> | undefined;
+    width?: number | undefined;
+    height?: number | undefined;
+    cssClasses?: string | undefined;
+    styles?: StyleValue | undefined;
+    plugins?: Plugin<keyof import("chart.js").ChartTypeRegistry, import("chart.js/types/basic").AnyObject>[] | undefined;
+    onLabelsUpdate?: (() => void) | undefined;
+    onChartUpdate?: ((chartInstance: Chart<"scatter", (number | import("chart.js").ScatterDataPoint | null)[], unknown>) => void) | undefined;
+    onChartDestroy?: (() => void) | undefined;
+    onChartRender?: ((chartInstance: Chart<"scatter", (number | import("chart.js").ScatterDataPoint | null)[], unknown>) => void) | undefined;
+}) => ChartHookReturnType<"scatter">;
+export {};

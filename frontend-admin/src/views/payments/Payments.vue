@@ -35,11 +35,23 @@
         </div>
       </div>
 
-      <div class="row border-top bg-light m-2" v-if="filterMenuActive">
-        <div class="col text-start">test</div>
+      <div
+        class="row border-top bg-light m-2 shadow-sm"
+        v-if="filterMenuActive"
+      >
+        <div class="row mx-2">
+          <div class="col-2 p-2 text-start">
+            <p class="fw-bolder mb-0">Status:</p>
+            <select class="form-select" aria-label="Default select example">
+              <option value="" disabled selected hidden>Choix status</option>
+              <option value="1">Validé</option>
+              <option value="2">A validé</option>
+            </select>
+          </div>
+        </div>
       </div>
 
-      <div class="row m-2 mt-4 bg-light rounded">
+      <div class="row m-2 mt-4 bg-light rounded shadow">
         <div class="col">
           <table class="table table-striped table-hover">
             <thead style="position: sticky; top: 0">
@@ -59,7 +71,6 @@
                 <th scope="col">Montant payement</th>
                 <th scope="col">Montant dû</th>
                 <th scope="col">Status</th>
-                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
@@ -99,9 +110,31 @@
                 <td>
                   <a href="" class="badge rounded-pill bg-success"> Payé</a>
                 </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <input
+                    class="form-check-input mt-0"
+                    type="checkbox"
+                    value=""
+                    aria-label="Checkbox for following text input"
+                    :checked="selectAllRows"
+                  />
+                </th>
                 <td>
-                  <a href="" class="badge bg-warning text-dark">
-                    Valider payement</a
+                  <router-link
+                    :to="{ name: 'PaymentDetails', params: { id: 'test' } }"
+                  >
+                    Random Payment
+                  </router-link>
+                </td>
+                <td>-</td>
+                <td>-</td>
+                <td>12.5</td>
+                <td>-</td>
+                <td>
+                  <a href="" class="badge rounded-pill bg-warning text-dark">
+                    A valider</a
                   >
                 </td>
               </tr>

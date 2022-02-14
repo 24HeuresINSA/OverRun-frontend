@@ -43,41 +43,46 @@
         </div>
       </div>
 
-      <div class="row border-top bg-light m-2" v-if="filterMenuActive">
-        <div class="col-2 p-2 text-start">
-          <p class="fw-bolder mb-0">Course:</p>
-          <select class="form-select" aria-label="Default select example">
-            <option value="" disabled selected hidden>Choix course</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-        </div>
-        <div class="col-2 p-2 text-start">
-          <p class="fw-bolder mb-0">Status Certificat:</p>
-          <select class="form-select" aria-label="Default select example">
-            <option value="" disabled selected hidden>Choix status</option>
-            <option value="1">Validé</option>
-            <option value="3">En attente</option>
-            <option value="2">Rejeté</option>
-          </select>
-        </div>
-        <div class="col-2 p-2 text-start">
-          <p class="fw-bolder mb-0">Statut Payement:</p>
-          <select class="form-select" aria-label="Default select example">
-            <option value="" disabled selected hidden>Choix status</option>
-            <option value="1">Validé</option>
-            <option value="3">En attente</option>
-            <option value="2">Rejeté</option>
-          </select>
-        </div>
+      <div
+        class="row border-top bg-light m-2 shadow-sm"
+        v-if="filterMenuActive"
+      >
+        <div class="row mx-2">
+          <div class="col-2 p-2 text-start">
+            <p class="fw-bolder mb-0">Course:</p>
+            <select class="form-select" aria-label="Default select example">
+              <option value="" disabled selected hidden>Choix course</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div>
+          <div class="col-2 p-2 text-start">
+            <p class="fw-bolder mb-0">Status Certificat:</p>
+            <select class="form-select" aria-label="Default select example">
+              <option value="" disabled selected hidden>Choix status</option>
+              <option value="1">Validé</option>
+              <option value="3">En attente</option>
+              <option value="2">Rejeté</option>
+            </select>
+          </div>
+          <div class="col-2 p-2 text-start">
+            <p class="fw-bolder mb-0">Statut Payement:</p>
+            <select class="form-select" aria-label="Default select example">
+              <option value="" disabled selected hidden>Choix status</option>
+              <option value="1">Validé</option>
+              <option value="3">En attente</option>
+              <option value="2">Rejeté</option>
+            </select>
+          </div>
 
-        <div class="col-6 p-2 text-end light">
-          <button class="btn bg-secondary">Reset</button>
+          <div class="col-6 p-2 text-end light">
+            <button class="btn bg-secondary">Reset</button>
+          </div>
         </div>
       </div>
 
-      <div class="row m-2 mt-4 bg-light rounded">
+      <div class="row m-2 mt-4 bg-light rounded shadow-sm">
         <div class="col">
           <table class="table table-striped table-hover">
             <thead style="position: sticky; top: 0">

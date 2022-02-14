@@ -3,7 +3,7 @@
     <div class="row h-100">
       <div class="col h-100 d-table">
         <div class="" id="form-container">
-          <div id="form" class="bg-light">
+          <div id="form" class="bg-light shadow-sm">
             <img src="../../assets/logo.png" alt="Logo 24 heures" id="logo" />
 
             <form class="text-start px-5 mt-4">

@@ -33,7 +33,7 @@
         </div>
       </div>
 
-      <div class="row m-2 bg-light rounded">
+      <div class="row m-2 bg-light rounded shadow-sm">
         <div class="col">
           <table class="table table-striped table-hover">
             <thead style="position: sticky; top: 0">

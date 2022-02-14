@@ -47,15 +47,15 @@
       >
         <h4>
           Courses
-          <span v-if="showRaces" class="material-icons-outlined d-inline">
+          <!-- <span v-if="showRaces" class="material-icons-outlined d-inline">
             expand_more
           </span>
-          <span v-else class="material-icons-outlined"> navigate_next </span>
+          <span v-else class="material-icons-outlined"> navigate_next </span> -->
         </h4>
       </div>
     </div>
 
-    <div v-if="showRaces" class="row m-2 bg-light rounded">
+    <div v-if="showRaces" class="row m-2 bg-light rounded shadow-sm">
       <div class="col">
         <table class="table table-striped table-hover">
           <thead style="position: sticky; top: 0">
