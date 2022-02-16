@@ -2,12 +2,12 @@
   <div>
     <TopBar @toggleSideBar="toggleSideBar" />
     <SideBar :hide="hideSideBar" activeVue="Inscriptions" />
-
+    <!-- TODO to change -->
     <div v-show="showCertificateModal">
       <CertificateModalVue
         @hideCertificate="toggleCertificateModal"
-        :inscriptions="inscriptions"
-        :index="index"
+        :inscriptions="[1,2,3]"
+        :index="2"
       />
     </div>
 
