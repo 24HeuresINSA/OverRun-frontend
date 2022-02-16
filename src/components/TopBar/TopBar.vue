@@ -36,19 +36,26 @@
               class="dropdown-menu p-0"
               aria-labelledby="dropdownUserLink"
             >
-              <li class="inactiveLink ">
-                <span class="dropdown-item text-center pt-2 pb-2" href="#">Pintade</span>
+              <li class="inactiveLink">
+                <span class="dropdown-item text-center pt-2 pb-2" href="#"
+                  >Pintade</span
+                >
               </li>
               <li><hr class="dropdown-divider m-0 p-0" /></li>
-              <li >
+              <li>
                 <a class="dropdown-item text-dark pt-2 pb-2" href="#">
-                  <span class="material-icons-outlined icon  d-inline m-0 p-0"> settings </span>
+                  <span class="material-icons-outlined icon d-inline m-0 p-0">
+                    settings
+                  </span>
                   <p class="d-inline">Paramètre</p>
                 </a>
               </li>
               <li><hr class="dropdown-divider m-0 p-0" /></li>
-              <li >
-                <a class="dropdown-item bg-danger text-light pt-2 pb-2" href="#">
+              <li>
+                <a
+                  class="dropdown-item bg-danger text-light pt-2 pb-2"
+                  href="#"
+                >
                   <span class="material-icons-outlined icon d-inline m-0 p-0">
                     meeting_room
                   </span>
@@ -58,14 +65,53 @@
             </ul>
           </div>
           <div id="edition-button" class="h-100">
-            <div class="centered-text">
-              <p>Edition</p>
-            </div>
-            <div class="h-100 w-10" id="edition-arrow">
-              <span class="material-icons d-inline" id="test">
-                expand_more
-              </span>
-            </div>
+            <a
+              id="dropdownEditionLink"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <div class="centered-text">
+                <p>Edition</p>
+              </div>
+              <div class="h-100 w-10" id="edition-arrow">
+                <span class="material-icons d-inline" id="test">
+                  expand_more
+                </span>
+              </div>
+            </a>
+
+            <ul
+              id="dropdownEditionMenu"
+              class="dropdown-menu p-0"
+              aria-labelledby="dropdownEditionLink"
+            >
+              <li class="inactiveLink">
+                <span class="dropdown-item text-center pt-2 pb-2" href="#"
+                  >Pintade</span
+                >
+              </li>
+              <li><hr class="dropdown-divider m-0 p-0" /></li>
+              <li>
+                <a class="dropdown-item text-dark pt-2 pb-2" href="#">
+                  <span class="material-icons-outlined icon d-inline m-0 p-0">
+                    settings
+                  </span>
+                  <p class="d-inline">Paramètre</p>
+                </a>
+              </li>
+              <li><hr class="dropdown-divider m-0 p-0" /></li>
+              <li>
+                <a
+                  class="dropdown-item bg-danger text-light pt-2 pb-2"
+                  href="#"
+                >
+                  <span class="material-icons-outlined icon d-inline m-0 p-0">
+                    meeting_room
+                  </span>
+                  <p class="d-inline">Deconnection</p>
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -174,6 +220,12 @@ export default defineComponent({
   margin-top: 22px !important;
 }
 
+#dropdownEditionMenu {
+   margin-top: 22px !important;
+   margin-right: 60px !important;
+}
+
+
 .icon {
   display: inline-block;
   vertical-align: middle;
@@ -181,7 +233,7 @@ export default defineComponent({
 }
 
 .inactiveLink {
-   pointer-events: none;
-   cursor: default;
+  pointer-events: none;
+  cursor: default;
 }
 </style>
