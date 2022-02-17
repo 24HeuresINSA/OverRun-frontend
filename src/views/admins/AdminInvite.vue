@@ -59,7 +59,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr v-for="adminInvite in adminInvites" :key="adminInvite.id">
                 <th scope="row">
                   <input
                     class="form-check-input mt-0"
@@ -70,14 +70,10 @@
                   />
                 </th>
                 <td>
-                  <router-link
-                    :to="{ name: 'TeamDetails', params: { id: 'test' } }"
-                  >
-                    random Email
-                  </router-link>
+                    {{ adminInvite.email}}
                 </td>
                 <td>
-                  <a href="" class="badge bg-danger" @click.prevent="deleteAdmin"> Supprimer</a>
+                  <a href="" class="badge bg-danger" @click.prevent="deleteAdminInvite(adminInvite.id)"> Supprimer</a>
                 </td>
               </tr>
             </tbody>
@@ -94,6 +90,12 @@ import SideBar from "../../components/SideBar/SideBar.vue";
 import TopBar from "../../components/TopBar/TopBar.vue";
 import CreateAdminInviteVue from "../../components/modals/CreateAdminInvite.vue";
 import SearchBarVue from "../../components/searchBar/SearchBar.vue";
+import axios from "axios";
+
+export interface AdminInvite {
+  id: number,
+  email: string
+}
 
 export default defineComponent({
   components: {
@@ -107,6 +109,8 @@ export default defineComponent({
       hideSideBar: false,
       showAdminInviteModal: false,
       search: null as unknown,
+      adminInvites: [] as AdminInvite[],
+      selectAllRows: false,
     };
   },
   methods: {
@@ -115,15 +119,36 @@ export default defineComponent({
     },
     toggleAdminInviteModal() {
       this.showAdminInviteModal = !this.showAdminInviteModal;
+      this.reloadTable();
     },
-    deleteAdmin(){
-      console.log();
+    async deleteAdminInvite(id: number) {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.delete("adminInvitations/" + id,
+      {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      });
+      if (response.status < 300) {
+          this.reloadTable()
+      }
+    }, 
+    async reloadTable() {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.get("adminInvitations",
+      {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      });
+      if (response.status < 300) {
+         this.adminInvites = response.data.data;
+          console.log(JSON.stringify(this.adminInvites))
+      }
     },
     setSearch(search: string) {
       this.search = search;
     }
   },
-  mounted() {},
+  mounted() {
+    this.reloadTable();
+  },
   watch: {
     search(newValue, oldValue){
       console.log(this.search)

@@ -143,9 +143,6 @@ export default defineComponent({
           headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
       });
       if (response.status < 300) {
-         this.categories = response.data.data;
-          console.log(response);
-          console.log(JSON.stringify(this.categories))
           this.reloadTable()
       }
     }, 

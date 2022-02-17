@@ -32,6 +32,8 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import axios from "axios";
+
 export default defineComponent({
   data() {
     return {
@@ -42,9 +44,19 @@ export default defineComponent({
     closeModal () {
       this.$emit('closeAdminInviteModal');
     },
-    sendInvite() {
-      console.log("Send Invite");
-      this.closeModal()
+    async sendInvite(e: Event) {
+       console.log(this.$store.getters.getAccessToken);
+      const response = await axios.post("adminInvitations", {
+        email: this.email
+      },
+      {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      });
+      if (response.status < 300) {
+        this.closeModal();
+        (e.target as HTMLFormElement)?.reset();
+      }
+      console.log(response);
     }
   }
 });

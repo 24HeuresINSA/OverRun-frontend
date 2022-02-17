@@ -40,18 +40,16 @@
                     @change="selectAllRows = !selectAllRows"
                   />
                 </th>
-                <th scope="col">Nom</th>
-                <th scope="col">Maximum participants</th>
-                <th scope="col">Maximum équipes</th>
-                <th scope="col">Disciplines</th>
-                <th scope="col">Categories</th>
-                <th scope="col">Tarif</th>
-                <th scope="col">Tarif VA</th>
+                <th scope="col">Pseudo</th>
+                <th scope="col">Prénom - Nom</th>
+                <th scope="col">Email</th>
+                <th scope="col">Télephone</th>
+                <th scope="col">Dernière inscription</th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr v-for="athlete in athletes" :key="athlete.id">
                 <th scope="row">
                   <input
                     class="form-check-input mt-0"
@@ -63,33 +61,21 @@
                 </th>
                 <td>
                   <router-link
-                    :to="{ name: 'RaceDetails', params: { id: 'test' } }"
+                    :to="{ name: 'RaceDetails', params: { id: athlete.id } }"
                   >
-                    Random Race
+                   {{ athlete.user.username}}
                   </router-link>
                 </td>
-                <td>200</td>
-                <td>10</td>
+                <td>{{ athlete.firstName}} {{ athlete.lastName }}</td>
+                <td>{{ athlete.user.email }}</td>
                 <td>
-                  <a href="" class="badge rounded-pill bg-primary mx-1"
-                    >Discipline 2</a
-                  >
-                  <a href="" class="badge rounded-pill bg-primary mx-1"
-                    >Discipline 3</a
-                  >
-                  <a href="" class="badge rounded-pill bg-primary mx-1"
-                    >Discipline 1</a
-                  >
+                  {{ athlete.phoneNumber }}
                 </td>
                 <td>
-                  <a href="" class="badge rounded-pill bg-primary mx-1"
-                    >Discipline 1</a
-                  >
+                  -
                 </td>
-                <td>12.5€</td>
-                <td>12€</td>
                 <td>
-                  <a href="" class="badge bg-danger"> Supprimer</a>
+                  <a href="" class="badge bg-danger" @click.prevent="deleteAthlete(athlete.id)"> Supprimer</a>
                 </td>
               </tr>
             </tbody>
@@ -105,6 +91,21 @@ import { defineComponent } from "vue";
 import SideBar from "../../components/SideBar/SideBar.vue";
 import TopBar from "../../components/TopBar/TopBar.vue";
 import SearchBarVue from "../../components/searchBar/SearchBar.vue";
+import axios from "axios";
+
+export interface User {
+  id: number,
+  username: string,
+  email: string,
+}
+
+export interface Athlete {
+  id: number, 
+  user: User,
+  firstName: string,
+  lastName: string,
+  phoneNumber: string
+}
 
 export default defineComponent({
   components: {
@@ -118,22 +119,45 @@ export default defineComponent({
       filterMenuActive: false,
       selectAllRows: false,
       search: null as unknown,
+      athletes: [] as Athlete[],
     };
   },
   methods: {
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
-    setSearch(search: string) {
-      this.search = search;
+    async deleteAthlete(id: number) {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.delete("athletes/" + id,
+      {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      });
+      if (response.status < 300) {
+          this.reloadTable();
+      }
+    }, 
+    async reloadTable() {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.get("athletes",
+      {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      });
+      if (response.status < 300) {
+         this.athletes = response.data.data;
+      }
     },
+    setSearch(search: string){
+      this.search=search;
+    }
   },
   watch: {
     search(newSearch, oldSearch) {
       console.log(this.search);
     },
   },
-  mounted() {},
+  mounted() {
+    this.reloadTable();
+  },
 });
 </script>
 

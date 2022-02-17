@@ -18,7 +18,7 @@
         </div>
         <div class="col-6"></div>
         <div class="col-2">
-          <SearchBarVue :search="setSearch"/>
+          <SearchBarVue :search="setSearch" />
         </div>
       </div>
       <div class="row m-2 mt-4">
@@ -55,11 +55,12 @@
                   />
                 </th>
                 <th scope="col">Pseudo</th>
+                <th scope="col">Email</th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr v-for="admin in admins" :key="admin.id">
                 <th scope="row">
                   <input
                     class="form-check-input mt-0"
@@ -69,15 +70,20 @@
                     :checked="selectAllRows"
                   />
                 </th>
-                <td>
-                  <router-link
-                    :to="{ name: 'TeamDetails', params: { id: 'test' } }"
-                  >
-                    Random Admin
-                  </router-link>
+                <td class="text-black">
+                  {{ admin.user.username }}
                 </td>
                 <td>
-                  <a href="" class="badge bg-danger" @click.prevent="deleteAdmin"> Supprimer</a>
+                  {{ admin.user.email }}
+                </td>
+                <td>
+                  <a
+                    href=""
+                    class="badge bg-danger"
+                    @click.prevent="deleteAdmin(admin.id)"
+                  >
+                    Supprimer</a
+                  >
                 </td>
               </tr>
             </tbody>
@@ -94,6 +100,18 @@ import SideBar from "../../components/SideBar/SideBar.vue";
 import TopBar from "../../components/TopBar/TopBar.vue";
 import CreateAdminInviteVue from "../../components/modals/CreateAdminInvite.vue";
 import SearchBarVue from "../../components/searchBar/SearchBar.vue";
+import axios from "axios";
+
+export interface User {
+  id: number;
+  email: string;
+  username: string;
+}
+
+export interface Admin {
+  id: number;
+  user: User;
+}
 
 export default defineComponent({
   components: {
@@ -106,7 +124,9 @@ export default defineComponent({
     return {
       hideSideBar: false,
       showAdminInviteModal: false,
+      selectAllRows: false,
       search: null as unknown,
+      admins: [] as Admin[],
     };
   },
   methods: {
@@ -116,22 +136,43 @@ export default defineComponent({
     toggleAdminInviteModal() {
       this.showAdminInviteModal = !this.showAdminInviteModal;
     },
-    deleteAdmin(){
-      console.log();
+    async deleteAdmin(id: number) {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.delete("admins/" + id, {
+        headers: {
+          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+        },
+      });
+      if (response.status < 300) {
+        this.reloadTable();
+      }
     },
-    setSearch(search: string){
+    async reloadTable() {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.get("admins", {
+        headers: {
+          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+        },
+      });
+      if (response.status < 300) {
+        this.admins = response.data.data;
+        console.log(response);
+        console.log(JSON.stringify(this.admins));
+      }
+    },
+    setSearch(search: string) {
       this.search = search;
-    }
+    },
   },
-  mounted() {},
+  mounted() {
+    this.reloadTable();
+  },
   watch: {
     search(newSearch, oldSearch) {
-      console.log(this.search)
-    }
-  }
+      console.log(this.search);
+    },
+  },
 });
 </script>
 
-
-<style>
-</style>
+<style></style>

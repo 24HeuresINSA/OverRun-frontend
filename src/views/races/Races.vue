@@ -90,7 +90,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr v-for="race in races" :key="race.id">
                 <th scope="row">
                   <input
                     class="form-check-input mt-0"
@@ -102,49 +102,35 @@
                 </th>
                 <td>
                   <router-link
-                    :to="{ name: 'RaceDetails', params: { id: 'test' } }"
+                    :to="{ name: 'RaceDetails', params: { id: race.id } }"
                   >
-                    Random Race
+                    {{ race.name}}
                   </router-link>
                 </td>
-                <td>105/200</td>
-                <td>7/10</td>
-                <td>
-                  <router-link
-                    :to="{ name: 'DisciplineDetails', params: { id: 'test' } }"
+                <td>{{race.teams.length}}/{{race.maxTeams}}</td>
+                <td>{{race.inscriptions.length}}/{{race.maxParticipants}}</td>
+                <td >
+                  <router-link v-for="discipline in race.disciplines" :key="discipline.id"
+                    :to="{ name: 'DisciplineDetails', params: { id: discipline.discipline.id } }"
                   >
                     <a href="" class="badge rounded-pill bg-secondary mx-1"
-                      >Discipline 1</a
-                    >
-                  </router-link>
-                  <router-link
-                    :to="{ name: 'DisciplineDetails', params: { id: 'test' } }"
-                  >
-                    <a href="" class="badge rounded-pill bg-secondary mx-1"
-                      >Discipline 1</a
-                    >
-                  </router-link>
-                  <router-link
-                    :to="{ name: 'DisciplineDetails', params: { id: 'test' } }"
-                  >
-                    <a href="" class="badge rounded-pill bg-secondary mx-1"
-                      >Discipline 1</a
+                      >{{discipline.discipline.name}}</a
                     >
                   </router-link>
                 </td>
                 <td>
                   <router-link
-                    :to="{ name: 'CategoryDetails', params: { id: 'test' } }"
+                    :to="{ name: 'CategoryDetails', params: { id: race.category.id } }"
                   >
                     <a href="" class="badge rounded-pill bg-secondary mx-1"
-                      >Category 1</a
+                      >{{ race.category.name}}</a
                     >
                   </router-link>
                 </td>
-                <td>12.5€</td>
-                <td>12€</td>
+                <td>{{ race.registrationPrice}}</td>
+                <td>{{ race.vaRegistrationPrice}}</td>
                 <td>
-                  <a href="" class="badge bg-danger"> Supprimer</a>
+                  <a href="" class="badge bg-danger" @click.prevent="deleteRace(race.id)"> Supprimer</a>
                 </td>
               </tr>
             </tbody>
@@ -161,6 +147,46 @@ import SideBar from "../../components/SideBar/SideBar.vue";
 import TopBar from "../../components/TopBar/TopBar.vue";
 import SearchBarVue from "../../components/searchBar/SearchBar.vue";
 import CreateRaceModalVue from "../../components/modals/CreateRaceModal.vue";
+import axios from "axios";
+
+
+export interface Discipline {
+  id: number,
+  name: string
+}
+
+export interface RaceDiscipline {
+  id: number,
+  discipline: Discipline, 
+  duration: number,
+}
+
+export interface Category {
+  id: number,
+  name: number,
+}
+
+export interface Inscription {
+  id: number
+}
+
+export interface Team {
+  id: number
+}
+
+export interface Race {
+  id: number,
+  name: string,
+  registrationPrice: number,
+  vaRegistrationPrice: number,
+  disciplines: RaceDiscipline[],
+  maxParticipants: number,
+  maxTeams: number,
+  teams: Team[],
+  inscriptions: Inscription[],
+  category: Category
+
+}
 
 export default defineComponent({
   components: {
@@ -176,7 +202,7 @@ export default defineComponent({
       selectAllRows: false,
       showRaceModal: false,
       search: null as unknown,
-      races: [{ id: 0, name: 0 }],
+      races: [] as Race[],
       race: null,
       teams: [{ id: 0, name: 0, members: [] }],
     };
@@ -184,6 +210,7 @@ export default defineComponent({
   methods: {
     toggleRaceModal() {
       this.showRaceModal = !this.showRaceModal;
+      this.reloadTable();
     },
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
@@ -191,13 +218,37 @@ export default defineComponent({
     setSearch(search: string) {
       this.search = search;
     },
+    async deleteRace(id: number) {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.delete("races/" + id,
+      {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      });
+      if (response.status < 300) {
+          this.reloadTable()
+      }
+    }, 
+    async reloadTable() {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.get("races",
+      {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      });
+      if (response.status < 300) {
+         this.races = response.data.data;
+          console.log(response);
+          console.log(JSON.stringify(this.races))
+      }
+    },
   },
   watch: {
     search(newSearch, oldSearch) {
       console.log(this.search);
     },
   },
-  mounted() {},
+  mounted() {
+    this.reloadTable();
+  },
 });
 </script>
 
