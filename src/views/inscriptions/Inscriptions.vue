@@ -2,12 +2,12 @@
   <div>
     <TopBar @toggleSideBar="toggleSideBar" />
     <SideBar :hide="hideSideBar" activeVue="Inscriptions" />
-
+    <!-- TODO to change -->
     <div v-show="showCertificateModal">
       <CertificateModalVue
         @hideCertificate="toggleCertificateModal"
         :inscriptions="inscriptions"
-        :index="index"
+        :index="2"
       />
     </div>
 
@@ -21,7 +21,7 @@
         </div>
         <div class="col-6"></div>
         <div class="col-2">
-          <SearchBarVue />
+          <SearchBarVue @search="setSearch"/>
         </div>
       </div>
       <div class="row m-2 mt-4">
@@ -50,7 +50,7 @@
         <div class="row mx-2">
           <div class="col-2 p-2 text-start">
             <p class="fw-bolder mb-0">Course:</p>
-            <select class="form-select" aria-label="Default select example">
+            <select class="form-select" aria-label="Default select example" v-model="race">
               <option value="" disabled selected hidden>Choix course</option>
               <option value="1">One</option>
               <option value="2">Two</option>
@@ -59,7 +59,7 @@
           </div>
           <div class="col-2 p-2 text-start">
             <p class="fw-bolder mb-0">Status Certificat:</p>
-            <select class="form-select" aria-label="Default select example">
+            <select class="form-select" aria-label="Default select example" v-model="certificateStatus">
               <option value="" disabled selected hidden>Choix status</option>
               <option value="1">Validé</option>
               <option value="3">En attente</option>
@@ -68,7 +68,7 @@
           </div>
           <div class="col-2 p-2 text-start">
             <p class="fw-bolder mb-0">Statut Payement:</p>
-            <select class="form-select" aria-label="Default select example">
+            <select class="form-select" aria-label="Default select example" v-model="paymentStatus">
               <option value="" disabled selected hidden>Choix status</option>
               <option value="1">Validé</option>
               <option value="3">En attente</option>
@@ -180,8 +180,33 @@ export default defineComponent({
       filterMenuActive: false,
       selectAllRows: false,
       showCertificateModal: false,
-      inscriptions: [],
       index: 0,
+      races: [{
+        id:0,
+        name: ""
+      }], 
+      search: null as unknown,
+      race: null,
+      certificateStatus: null,
+      paymentStatus: null,
+      inscriptions: [
+        {
+          id: 0,
+          athlete: {
+            id: 0,
+            firstName: "",
+            lastName: "",
+          },
+          team: {
+            id: 0,
+            name: "",
+          },
+          certificate: {
+            id: 0,
+            status: 0,
+          },
+        },
+      ],
     };
   },
   methods: {
@@ -191,8 +216,25 @@ export default defineComponent({
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
+    setSearch(search:string){
+      this.search = search;
+    } 
   },
   mounted() {},
+  watch: {
+    race(newRace, oldRace) {
+      console.log("Hello");
+    },
+    certficateStatus(newStatus, oldStatus){
+      console.log("Helo");
+    },
+    paymentStatus(newStatus, oldStatus){
+      console.log("Hello");
+    }, 
+    search(newSearch, oldSearch){
+      console.log(this.search)
+    }
+  }
 });
 </script>
 

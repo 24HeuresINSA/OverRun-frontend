@@ -47,10 +47,6 @@
       >
         <h4>
           Courses
-          <!-- <span v-if="showRaces" class="material-icons-outlined d-inline">
-            expand_more
-          </span>
-          <span v-else class="material-icons-outlined"> navigate_next </span> -->
         </h4>
       </div>
     </div>
@@ -63,7 +59,7 @@
               <th scope="col">Course</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody >
             <tr>
               <td>
                 <router-link
@@ -86,6 +82,7 @@
 import { defineComponent } from "vue";
 import SideBar from "../../components/SideBar/SideBar.vue";
 import TopBar from "../../components/TopBar/TopBar.vue";
+import axios from "axios";
 
 export default defineComponent({
   components: {
@@ -96,6 +93,7 @@ export default defineComponent({
     return {
       hideSideBar: false,
       showRaces: true,
+      
     };
   },
   methods: {
@@ -103,7 +101,7 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
   },
-  mounted() {},
+  
 });
 </script>
 

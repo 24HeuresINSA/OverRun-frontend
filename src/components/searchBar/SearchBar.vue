@@ -6,6 +6,7 @@
       placeholder="Rechercher"
       aria-label="Search"
       aria-describedby="button-addon2"
+      v-model="search"
     />
     <button class="btn btn-outline-secondary" type="button" id="search-button">
       <span class="material-icons-outlined">
@@ -14,6 +15,25 @@
     </button>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  data(){
+    return {
+      search: null,
+    };
+  },
+  watch: {
+    search(newSearch, oldSearch) {
+      this.$emit("search", this.search);
+    }
+  }
+})
+
+
+</script>
 
 <style scoped>
 .input-group{

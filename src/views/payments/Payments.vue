@@ -13,7 +13,7 @@
         </div>
         <div class="col-6"></div>
         <div class="col-2">
-          <SearchBarVue />
+          <SearchBarVue @search="setSearch" />
         </div>
       </div>
       <div class="row m-2 mt-4">
@@ -163,14 +163,23 @@ export default defineComponent({
       hideSideBar: false,
       filterMenuActive: false,
       selectAllRows: false,
+      search: null as unknown,
     };
   },
   methods: {
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
+    setSearch(search: string) {
+      this.search = search;
+    }
   },
   mounted() {},
+  watch: {
+    search(newSearch, oldSearch) {
+      console.log(this.search)
+    }
+  }
 });
 </script>
 

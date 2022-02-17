@@ -7,30 +7,36 @@
         </div>
       </div>
       <hr class="dropdown-divider my-2" />
-      <form class="mx-5 my-4 text-start">
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label"
-            >Email address</label
+      <form class="mx-5 my-4 text-start" @submit.prevent="createDiscipline">
+        <div class="mb-3 fw-bold">
+          <label for="inputName" class="form-label"
+            >Nom de la discipline:</label
           >
           <input
-            type="email"
+            type="text"
+            class="form-control"
+            id="inputName"
+            aria-describedby="emailHelp"
+            v-model="name"
+            required
+          />
+        </div>
+        <div class="mb-3 fw-bold">
+          <label for="exampleInputEmail1" class="form-label"
+            >Description de la discipline:
+          </label>
+          <input
+            type="text"
             class="form-control"
             id="exampleInputEmail1"
             aria-describedby="emailHelp"
-          />
-        </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="exampleInputPassword1"
+            v-model="description"
+            required
           />
         </div>
         <div class="text-center">
-          <button type="submit" class="btn btn-primary mb-3">Submit</button>
+          <button type="submit" class="btn btn-primary mb-3">Créer</button>
         </div>
-        
       </form>
     </div>
   </div>
@@ -38,12 +44,38 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { MutationTypes } from "../../store/modules/auth";
+import axios from "axios";
+import { edition } from "@/main";
+
 export default defineComponent({
+  data() {
+    return {
+      name: null,
+      description: null,
+      editionId: 1,
+     };
+  },
   methods: {
     closeModal() {
       this.$emit("closeDisciplineModal");
     },
-  },
+    async createDiscipline() {
+       console.log(this.$store.getters.getAccessToken);
+      const response = await axios.post("disciplines", {
+        name: this.name,
+        description: this.description,
+        editionId: edition,
+      },
+      {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      });
+      if (response.status < 300) {
+        this.closeModal();
+      }
+      console.log(response);
+    }
+  }
 });
 </script>
 <style scoped>

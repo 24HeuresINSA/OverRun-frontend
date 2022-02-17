@@ -18,7 +18,7 @@
         </div>
         <div class="col-6"></div>
         <div class="col-2">
-          <SearchBarVue />
+          <SearchBarVue @search="setSearch" />
         </div>
       </div>
       <div class="row m-2 mt-4">
@@ -49,15 +49,19 @@
 
       <div class="row border-top bg-light m-2 shadow" v-if="filterMenuActive">
         <div class="row mx-2">
-           <div class="col-2 p-2 text-start">
-          <p class="fw-bolder mb-0">Course:</p>
-          <select class="form-select" aria-label="Default select example">
-            <option value="" disabled selected hidden>Choix course</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-        </div>
+          <div class="col-2 p-2 text-start">
+            <p class="fw-bolder mb-0">Course:</p>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              v-model="race"
+            >
+              <option value="" disabled selected hidden>Choix course</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -171,6 +175,10 @@ export default defineComponent({
       filterMenuActive: false,
       selectAllRows: false,
       showRaceModal: false,
+      search: null as unknown,
+      races: [{ id: 0, name: 0 }],
+      race: null,
+      teams: [{ id: 0, name: 0, members: [] }],
     };
   },
   methods: {
@@ -179,6 +187,14 @@ export default defineComponent({
     },
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
+    },
+    setSearch(search: string) {
+      this.search = search;
+    },
+  },
+  watch: {
+    search(newSearch, oldSearch) {
+      console.log(this.search);
     },
   },
   mounted() {},

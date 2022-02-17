@@ -9,32 +9,16 @@
     >
       <div class="row m-2 mt-4">
         <div class="col-4 text-start border-bottom p-0">
-          <h2>Courses</h2>
+          <h2>Utilisateurs</h2>
         </div>
         <div class="col-6"></div>
         <div class="col-2">
-          <SearchBarVue />
+          <SearchBarVue @search="setSearch" />
         </div>
       </div>
       <div class="row m-2 mt-4">
         <div class="col text-end">
-          <div
-            class="btn-group"
-            role="group"
-            aria-label="Basic mixed styles example"
-          >
-            <button type="button" class="btn btn-primary">
-              Ajouter course
-            </button>
-            <button
-              type="button"
-              class="btn btn-warning"
-              @click="filterMenuActive = !filterMenuActive"
-            >
-              Filtrer
-            </button>
-            <button type="button" class="btn btn-danger">Supprimer</button>
-          </div>
+          <button type="button" class="btn btn-danger">Supprimer</button>
         </div>
       </div>
 
@@ -133,11 +117,20 @@ export default defineComponent({
       hideSideBar: false,
       filterMenuActive: false,
       selectAllRows: false,
+      search: null as unknown,
     };
   },
   methods: {
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
+    },
+    setSearch(search: string) {
+      this.search = search;
+    },
+  },
+  watch: {
+    search(newSearch, oldSearch) {
+      console.log(this.search);
     },
   },
   mounted() {},
