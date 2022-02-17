@@ -65,8 +65,8 @@
                 <th scope="col"></th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
+            <tbody v-if="disciplines.length > 0 ">
+              <tr v-for="discipline in disciplines" :key="discipline.id">
                 <th scope="row">
                   <input
                     class="form-check-input mt-0"
@@ -80,12 +80,12 @@
                   <router-link
                     :to="{ name: 'DisciplineDetails', params: { id: 'test' } }"
                   >
-                    Random Discipline
+                    {{ discipline.name}}
                   </router-link>
                 </td>
-                <td>A random description for a random discipline</td>
+                <td>{{ discipline.description}}</td>
                 <td>
-                  <a href="" class="badge bg-danger"> Supprimer</a>
+                  <a href="" class="badge bg-danger" @click.prevent="deleteDiscipline(discipline.id)"> Supprimer</a>
                 </td>
               </tr>
             </tbody>
@@ -103,6 +103,7 @@ import SideBar from "../../components/SideBar/SideBar.vue";
 import TopBar from "../../components/TopBar/TopBar.vue";
 import SearchBarVue from "../../components/searchBar/SearchBar.vue";
 import CreateDisciplineVue from "../../components/modals/CreateDiscipline.vue";
+import axios from "axios";
 
 export default defineComponent({
   components: {
@@ -117,17 +118,57 @@ export default defineComponent({
       filterMenuActive: false,
       selectAllRows: false,
       showDisciplineModal: false,
+      disciplines: [
+        { id: 0 , name: "", description: ""}
+      ],
     };
   },
   methods: {
     toggleDisciplineModal() {
       this.showDisciplineModal = !this.showDisciplineModal;
+      this.reloadTable();
     },
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
+    async deleteDiscipline(id: number) {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.delete("disciplines/" + id,
+      {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      });
+      if (response.status < 300) {
+         this.disciplines = response.data.data;
+          console.log(response);
+          console.log(JSON.stringify(this.disciplines))
+          this.reloadTable()
+      }
+    }, 
+    async reloadTable() {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.get("disciplines",
+      {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      });
+      if (response.status < 300) {
+         this.disciplines = response.data.data;
+          console.log(response);
+          console.log(JSON.stringify(this.disciplines))
+      }
+    }
   },
-  mounted() {},
+  async mounted () {
+    console.log(this.$store.getters.getAccessToken);
+      const response = await axios.get("disciplines",
+      {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      });
+      if (response.status < 300) {
+         this.disciplines = response.data.data;
+          console.log(response);
+          console.log(JSON.stringify(this.disciplines))
+      }
+  }
 });
 </script>
 

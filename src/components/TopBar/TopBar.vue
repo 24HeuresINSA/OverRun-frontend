@@ -37,7 +37,7 @@
               aria-labelledby="dropdownUserLink"
             >
               <li class="inactiveLink ">
-                <span class="dropdown-item text-center pt-2 pb-2" href="#">Pintade</span>
+                <span class="dropdown-item text-center pt-2 pb-2" href="#">{{ pseudo }}</span>
               </li>
               <li><hr class="dropdown-divider m-0 p-0" /></li>
               <li >
@@ -75,13 +75,29 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { MutationTypes } from "../../store/modules/auth";
+import axios from "axios";
 
 export default defineComponent({
+  data() {
+    return {
+      pseudo: "",
+    };
+  },
   methods: {
     toggleSideBar() {
       this.$emit("toggleSideBar");
     },
   },
+  async mounted () {
+      console.log(this.$store.getters.getAccessToken);
+      const admins = await axios.get("admins/" + this.$store.getters.getAdminId, {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+        });
+        console.log(admins.data.pseudo);
+        this.pseudo = admins.data.user.username;
+  }
+ 
 });
 </script>
 

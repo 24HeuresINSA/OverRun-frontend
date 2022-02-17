@@ -70,8 +70,8 @@
                 <th scope="col"></th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
+            <tbody v-if="categories.length > 0">
+              <tr v-for="category in categories" :key="category.id">
                 <th scope="row">
                   <input
                     class="form-check-input mt-0"
@@ -85,12 +85,12 @@
                   <router-link
                     :to="{ name: 'CategoryDetails', params: { id: 'test' } }"
                   >
-                    Random Category
+                    {{ category.name }}
                   </router-link>
                 </td>
-                <td>2-12</td>
+                <td>{{category.minTeamMembers }}-{{ category.minTeamMembers}}</td>
                 <td>
-                  <a href="" class="badge bg-danger"> Supprimer</a>
+                  <a href="" class="badge bg-danger" @click.prevent="deleteCategory(category.id)"> Supprimer</a>
                 </td>
               </tr>
             </tbody>
@@ -107,6 +107,7 @@ import SearchBarVue from "../../components/searchBar/SearchBar.vue";
 import SideBar from "../../components/SideBar/SideBar.vue";
 import TopBar from "../../components/TopBar/TopBar.vue";
 import CreateCategoryVue from "../../components/modals/CreateCategory.vue";
+import axios from "axios";
 
 export default defineComponent({
   components: {
@@ -121,17 +122,59 @@ export default defineComponent({
       filterMenuActive: false,
       selectAllRows: false,
       showCategoryModal: false,
+      categories: [
+        {id: 0, name: "", description: "", maxTeamMembers:0, minTeamMembers:0 }
+      ]
     };
   },
   methods: {
     toggleCategoryModal() {
       this.showCategoryModal = !this.showCategoryModal;
+      this.reloadTable()
     },
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
+    async deleteCategory(id: number) {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.delete("categories/" + id,
+      {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      });
+      if (response.status < 300) {
+         this.categories = response.data.data;
+          console.log(response);
+          console.log(JSON.stringify(this.categories))
+          this.reloadTable()
+      }
+    }, 
+    async reloadTable() {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.get("categories",
+      {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      });
+      if (response.status < 300) {
+         this.categories = response.data.data;
+          console.log(response);
+          console.log(JSON.stringify(this.categories))
+      }
+    }
   },
-  mounted() {},
+  async mounted () {
+    console.log(this.$store.getters.getAccessToken);
+      const response = await axios.get("categories",
+      {
+          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      });
+      if (response.status < 300) {
+         this.categories = response.data.data;
+          console.log(response);
+          console.log(JSON.stringify(this.categories))
+      }
+      console.log(response);
+      
+  }
 });
 </script>
 >

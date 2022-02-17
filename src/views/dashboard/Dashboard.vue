@@ -222,6 +222,7 @@ import SideBar from "../../components/SideBar/SideBar.vue";
 import TopBar from "../../components/TopBar/TopBar.vue";
 import CertificateModalVue from "../../components/CertificateModal/CertificateModal.vue";
 import Doughnut from "../../components/charts/Doughnut.vue";
+import axios from "axios";
 
 export default defineComponent({
   components: {
@@ -261,7 +262,7 @@ export default defineComponent({
       this.showCertificateModal = !this.showCertificateModal;
     },
   },
-  mounted() {},
+   
 });
 </script>
 

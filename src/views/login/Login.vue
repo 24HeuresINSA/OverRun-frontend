@@ -6,7 +6,7 @@
           <div id="form" class="bg-light shadow-sm">
             <img src="../../assets/logo.png" alt="Logo 24 heures" id="logo" />
 
-            <form class="text-start px-5 mt-4">
+            <form class="text-start px-5 mt-4" @submit.prevent="login">
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label"
                   >Adresse mail</label
@@ -49,10 +49,9 @@
               </div>
               <div class="w-100 d-flex">
                 <button
-                  type="button"
+                  type="submit"
                   class="btn btn-primary text-center align-middle"
                   id="submit-btn"
-                  @click="login"
                 >
                   Se connecter
                 </button>
@@ -67,7 +66,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapActions, mapGetters } from "vuex";
+
+import { MutationTypes } from "../../store/modules/auth";
+import axios from "axios";
 
 export default defineComponent({
   data() {
@@ -76,28 +77,43 @@ export default defineComponent({
       password: "",
     };
   },
-  computed: {
-    ...mapGetters("auth", {
-      getLoginApiStatus: "getLoginApiStatus",
-    }),
-  },
+ 
   methods: {
-    ...mapActions("auth", {
-      actionLoginApi: "LOGIN_API",
-    }),
     async login() {
-      const payload = {
+       console.log(this.email, this.password);
+      const response = await axios.post("login", {
         email: this.email,
         password: this.password,
-      };
-      await this.actionLoginApi(payload);
-      if (this.getLoginApiStatus == "success") {
-        console.log("hello world");
-        this.$router.push("/");
-      } else {
-        alert("failed");
+      });
+
+      console.log(response);
+      if (response.status === 200) {
+        // this.$store.commit(
+        //   MutationTypes.SET_ACCESS_TOKEN,
+        //   process.env.ACCESS_TOKEN
+        // );
+        this.$store.commit(
+          MutationTypes.SET_REFRESH_TOKEN,
+          response.data.refreshToken
+        );
+        const base64Url = this.$store.getters.getAccessToken.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split("")
+            .map(function (c) {
+              return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+            })
+            .join("")
+        );
+        console.log(JSON.parse(jsonPayload))
+        this.$store.commit(MutationTypes.SET_USER, JSON.parse(jsonPayload).id);
+        this.$store.commit(MutationTypes.SET_ADMIN_ID, JSON.parse(jsonPayload).adminId);
+        console.log(this.$store.getters.getAdminId);
+        this.$router.push({ name: "Home" });
       }
-    },
+    }
+    
   },
 });
 </script>
