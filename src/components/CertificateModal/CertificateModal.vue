@@ -6,7 +6,7 @@
           <Certificate @next="nextInscription" @previous="previousInscription" :next="inscriptions?.length > (currentIndex +1)" :previous="currentIndex > 0" :inscriptionId="inscriptions[currentIndex]"/>
         </div>
         <div class="col-3" >
-         <SideInfo @hideCertificate="closeModal" :inscriptionId="inscriptions[currentIndex]" />
+         <SideInfo @hideCertificate="closeModal" :athleteId="inscriptions.a" />
         </div>
       </div>
     </div>
@@ -17,11 +17,11 @@
 import { defineComponent } from "vue";
 import Certificate from "./Certificate.vue"
 import SideInfo from "./SideInfo.vue"
-import { PropType } from "vue";
+
 
 export default defineComponent ({
   props: {
-    'inscriptions': Array as PropType<Array<number>>, 
+    'inscriptions': Object, 
     'index': Number
   },
     components: {

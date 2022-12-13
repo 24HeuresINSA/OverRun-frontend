@@ -18,7 +18,7 @@
         </div>
         <div class="col-6"></div>
         <div class="col-2">
-          <SearchBarVue @search="setSearch"/>
+          <SearchBarVue @search="setSearch" />
         </div>
       </div>
       <div class="row m-2 mt-4">
@@ -35,13 +35,6 @@
             >
               Ajouter categorie
             </button>
-            <!-- <button
-              type="button"
-              class="btn btn-warning"
-              @click="filterMenuActive = !filterMenuActive"
-            >
-              Filtrer
-            </button> -->
             <button type="button" class="btn btn-danger">Supprimer</button>
           </div>
         </div>
@@ -88,9 +81,27 @@
                     {{ category.name }}
                   </router-link>
                 </td>
-                <td>{{category.minTeamMembers }}-{{ category.minTeamMembers}}</td>
                 <td>
-                  <a href="" class="badge bg-danger" @click.prevent="deleteCategory(category.id)"> Supprimer</a>
+                  <div
+                    v-if="
+                      category.minTeamMembers === 1 &&
+                      category.maxTeamMembers === 1
+                    "
+                  >
+                    1
+                  </div>
+                  <div v-else>
+                    {{ category.minTeamMembers }}-{{ category.maxTeamMembers }}
+                  </div>
+                </td>
+                <td>
+                  <a
+                    href=""
+                    class="badge bg-danger"
+                    @click.prevent="deleteCategory(category.id)"
+                  >
+                    Supprimer</a
+                  >
                 </td>
               </tr>
             </tbody>
@@ -123,7 +134,13 @@ export default defineComponent({
       selectAllRows: false,
       showCategoryModal: false,
       categories: [
-        {id: 0, name: "", description: "", maxTeamMembers:0, minTeamMembers:0 }
+        {
+          id: 0,
+          name: "",
+          description: "",
+          maxTeamMembers: 0,
+          minTeamMembers: 0,
+        },
       ],
       search: null as unknown,
     };
@@ -131,58 +148,58 @@ export default defineComponent({
   methods: {
     toggleCategoryModal() {
       this.showCategoryModal = !this.showCategoryModal;
-      this.reloadTable()
+      this.reloadTable();
     },
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
     async deleteCategory(id: number) {
       console.log(this.$store.getters.getAccessToken);
-      const response = await axios.delete("categories/" + id,
-      {
-          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      const response = await axios.delete("categories/" + id, {
+        headers: {
+          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+        },
       });
       if (response.status < 300) {
-          this.reloadTable()
-      }
-    }, 
-    async reloadTable() {
-      console.log(this.$store.getters.getAccessToken);
-      const response = await axios.get("categories",
-      {
-          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
-      });
-      if (response.status < 300) {
-         this.categories = response.data.data;
-          console.log(response);
-          console.log(JSON.stringify(this.categories))
+        this.reloadTable();
       }
     },
-    setSearch(search: string){
-      this.search = search;
-    }
-  },
-  watch: {
-    search(newSearch, oldSearch) {
-      console.log(this.search)
-    }
-  },
-  async mounted () {
-    console.log(this.$store.getters.getAccessToken);
-      const response = await axios.get("categories",
-      {
-          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+    async reloadTable() {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.get("categories", {
+        params: {
+          search: this.search,
+        },
+        headers: {
+          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+        },
       });
       if (response.status < 300) {
-         this.categories = response.data.data;
-          console.log(response);
-          console.log(JSON.stringify(this.categories))
+        this.categories = response.data.data;
+        console.log(response);
+        console.log(JSON.stringify(this.categories));
       }
+    },
+    async setSearch(search: string) {
+      this.search = search;
+      this.reloadTable();
+    },
+  },
+  async mounted() {
+    console.log(this.$store.getters.getAccessToken);
+    const response = await axios.get("categories", {
+      headers: {
+        Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+      },
+    });
+    if (response.status < 300) {
+      this.categories = response.data.data;
       console.log(response);
-      
-  }
+      console.log(JSON.stringify(this.categories));
+    }
+    console.log(response);
+  },
 });
 </script>
-
 
 <style></style>

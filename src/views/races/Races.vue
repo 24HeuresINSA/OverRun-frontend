@@ -104,33 +104,49 @@
                   <router-link
                     :to="{ name: 'RaceDetails', params: { id: race.id } }"
                   >
-                    {{ race.name}}
+                    {{ race.name }}
                   </router-link>
                 </td>
-                <td>{{race.teams.length}}/{{race.maxTeams}}</td>
-                <td>{{race.inscriptions.length}}/{{race.maxParticipants}}</td>
-                <td >
-                  <router-link v-for="discipline in race.disciplines" :key="discipline.id"
-                    :to="{ name: 'DisciplineDetails', params: { id: discipline.discipline.id } }"
+                <td>{{ race.teams.length }}/{{ race.maxTeams }}</td>
+                <td>
+                  {{ race.inscriptions.length }}/{{ race.maxParticipants }}
+                </td>
+                <td>
+                  <router-link
+                    v-for="discipline in race.disciplines"
+                    :key="discipline.id"
+                    :to="{
+                      name: 'DisciplineDetails',
+                      params: { id: discipline.discipline.id },
+                    }"
                   >
-                    <a href="" class="badge rounded-pill bg-secondary mx-1"
-                      >{{discipline.discipline.name}}</a
-                    >
+                    <a href="" class="badge rounded-pill bg-secondary mx-1">{{
+                      discipline.discipline.name
+                    }}</a>
                   </router-link>
                 </td>
                 <td>
                   <router-link
-                    :to="{ name: 'CategoryDetails', params: { id: race.category.id } }"
+                    :to="{
+                      name: 'CategoryDetails',
+                      params: { id: race.category.id },
+                    }"
                   >
-                    <a href="" class="badge rounded-pill bg-secondary mx-1"
-                      >{{ race.category.name}}</a
-                    >
+                    <a href="" class="badge rounded-pill bg-secondary mx-1">{{
+                      race.category.name
+                    }}</a>
                   </router-link>
                 </td>
-                <td>{{ race.registrationPrice}}</td>
-                <td>{{ race.vaRegistrationPrice}}</td>
+                <td>{{ race.registrationPrice }}</td>
+                <td>{{ race.vaRegistrationPrice }}</td>
                 <td>
-                  <a href="" class="badge bg-danger" @click.prevent="deleteRace(race.id)"> Supprimer</a>
+                  <a
+                    href=""
+                    class="badge bg-danger"
+                    @click.prevent="deleteRace(race.id)"
+                  >
+                    Supprimer</a
+                  >
                 </td>
               </tr>
             </tbody>
@@ -149,43 +165,41 @@ import SearchBarVue from "../../components/searchBar/SearchBar.vue";
 import CreateRaceModalVue from "../../components/modals/CreateRaceModal.vue";
 import axios from "axios";
 
-
 export interface Discipline {
-  id: number,
-  name: string
+  id: number;
+  name: string;
 }
 
 export interface RaceDiscipline {
-  id: number,
-  discipline: Discipline, 
-  duration: number,
+  id: number;
+  discipline: Discipline;
+  duration: number;
 }
 
 export interface Category {
-  id: number,
-  name: number,
+  id: number;
+  name: number;
 }
 
 export interface Inscription {
-  id: number
+  id: number;
 }
 
 export interface Team {
-  id: number
+  id: number;
 }
 
 export interface Race {
-  id: number,
-  name: string,
-  registrationPrice: number,
-  vaRegistrationPrice: number,
-  disciplines: RaceDiscipline[],
-  maxParticipants: number,
-  maxTeams: number,
-  teams: Team[],
-  inscriptions: Inscription[],
-  category: Category
-
+  id: number;
+  name: string;
+  registrationPrice: number;
+  vaRegistrationPrice: number;
+  disciplines: RaceDiscipline[];
+  maxParticipants: number;
+  maxTeams: number;
+  teams: Team[];
+  inscriptions: Inscription[];
+  category: Category;
 }
 
 export default defineComponent({
@@ -217,33 +231,34 @@ export default defineComponent({
     },
     setSearch(search: string) {
       this.search = search;
+      this.reloadTable();
     },
     async deleteRace(id: number) {
       console.log(this.$store.getters.getAccessToken);
-      const response = await axios.delete("races/" + id,
-      {
-          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      const response = await axios.delete("races/" + id, {
+        headers: {
+          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+        },
       });
       if (response.status < 300) {
-          this.reloadTable()
-      }
-    }, 
-    async reloadTable() {
-      console.log(this.$store.getters.getAccessToken);
-      const response = await axios.get("races",
-      {
-          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
-      });
-      if (response.status < 300) {
-         this.races = response.data.data;
-          console.log(response);
-          console.log(JSON.stringify(this.races))
+        this.reloadTable();
       }
     },
-  },
-  watch: {
-    search(newSearch, oldSearch) {
-      console.log(this.search);
+    async reloadTable() {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.get("races", {
+        params: {
+          search: this.search,
+        },
+        headers: {
+          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+        },
+      });
+      if (response.status < 300) {
+        this.races = response.data.data;
+        console.log(response);
+        console.log(JSON.stringify(this.races));
+      }
     },
   },
   mounted() {

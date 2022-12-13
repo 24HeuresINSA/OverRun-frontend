@@ -35,17 +35,20 @@
         </div>
       </div>
 
-      <div class="row border-top bg-light m-2 shadow-sm" v-if="filterMenuActive">
-         <div class="row mx-2">
-           <div class="col-2 p-2 text-start">
-          <p class="fw-bolder mb-0">Course:</p>
-          <select class="form-select" aria-label="Default select example">
-            <option value="" disabled selected hidden>Choix course</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-        </div>
+      <div
+        class="row border-top bg-light m-2 shadow-sm"
+        v-if="filterMenuActive"
+      >
+        <div class="row mx-2">
+          <div class="col-2 p-2 text-start">
+            <p class="fw-bolder mb-0">Course:</p>
+            <select class="form-select" aria-label="Default select example">
+              <option value="" disabled selected hidden>Choix course</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -71,7 +74,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr v-for="team in teams" :key="team.id">
                 <th scope="row">
                   <input
                     class="form-check-input mt-0"
@@ -83,22 +86,32 @@
                 </th>
                 <td>
                   <router-link
-                    :to="{ name: 'TeamDetails', params: { id: 'test' } }"
+                    :to="{ name: 'TeamDetails', params: { id: team.id } }"
                   >
-                    Random Team
+                    {{ team.name }}
                   </router-link>
                 </td>
                 <td>
                   <router-link
-                    :to="{ name: 'RaceDetails', params: { id: 'test' } }"
+                    :to="{ name: 'RaceDetails', params: { id: team.race.id } }"
                   >
-                    Random Race
+                    {{ team.race.name }}
                   </router-link>
                 </td>
-                <td>7/10</td>
-                <td>5/7</td>
                 <td>
-                  <a href="" class="badge bg-danger"> Supprimer</a>
+                  {{ team.members.length }}/{{
+                    team.race.category.maxTeamMembers
+                  }}
+                </td>
+                <td> {{ getValidatedInscriptions(team) }}/ {{ team.members.length }}</td>
+                <td>
+                  <a
+                    href=""
+                    class="badge bg-danger"
+                    @click.prevent="deleteTeam(team.id)"
+                  >
+                    Supprimer</a
+                  >
                 </td>
               </tr>
             </tbody>
@@ -114,6 +127,31 @@ import { defineComponent } from "vue";
 import SearchBarVue from "../../components/searchBar/SearchBar.vue";
 import SideBar from "../../components/SideBar/SideBar.vue";
 import TopBar from "../../components/TopBar/TopBar.vue";
+import axios from "axios";
+
+export interface Inscription {
+  id: number;
+  validated: boolean;
+}
+
+export interface Category {
+  id: number;
+  maxTeamMembers: number;
+  minTeamMembers: number;
+}
+
+export interface Race {
+  id: number;
+  name: true;
+  category: Category;
+}
+
+export interface Team {
+  id: number;
+  name: string;
+  members: Inscription[];
+  race: Race;
+}
 
 export default defineComponent({
   components: {
@@ -127,6 +165,7 @@ export default defineComponent({
       filterMenuActive: false,
       selectAllRows: false,
       search: null as unknown,
+      teams: [] as Team[],
     };
   },
   methods: {
@@ -135,15 +174,38 @@ export default defineComponent({
     },
     setSearch(search: string) {
       this.search = search;
-      console.log(this.search)
+      this.reloadTable();
+    },
+    deleteTeam(id: number) {
+      
+    },
+    async reloadTable() {
+      console.log(this.$store.getters.getAccessToken);
+      const response = await axios.get("teams", {
+        params: {
+          search: this.search
+        },
+        headers: {
+          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+        },
+      });
+      if (response.status < 300) {
+        this.teams = response.data.data;
+      }
+    },
+    getValidatedInscriptions(team: Team) {
+      let nbValidatedInscirptions = 0;
+      team.members.forEach((member, index) => {
+        if(member.validated) {
+          nbValidatedInscirptions += 1;
+        }
+      });
+      return nbValidatedInscirptions;
     }
   },
-  mounted() {},
-  watch: {
-    search(newSearch, oldSearch) {
-      console.log(this.search)
-    }
-  }
+  mounted() {
+    this.reloadTable();
+  },
 });
 </script>
 

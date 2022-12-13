@@ -28,7 +28,6 @@ axios.interceptors.response.use(
                 store.commit(MutationTypes.SET_REFRESH_TOKEN, (await response).data.refreshToken);
                 return axios(originalConfig);
             } else {
-                console.log("Aie")
                 router.push({ name: "Login" });
             }
         }

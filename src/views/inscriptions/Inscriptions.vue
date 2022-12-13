@@ -21,7 +21,7 @@
         </div>
         <div class="col-6"></div>
         <div class="col-2">
-          <SearchBarVue @search="setSearch"/>
+          <SearchBarVue @search="setSearch" />
         </div>
       </div>
       <div class="row m-2 mt-4">
@@ -50,7 +50,11 @@
         <div class="row mx-2">
           <div class="col-2 p-2 text-start">
             <p class="fw-bolder mb-0">Course:</p>
-            <select class="form-select" aria-label="Default select example" v-model="race">
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              v-model="race"
+            >
               <option value="" disabled selected hidden>Choix course</option>
               <option value="1">One</option>
               <option value="2">Two</option>
@@ -59,7 +63,11 @@
           </div>
           <div class="col-2 p-2 text-start">
             <p class="fw-bolder mb-0">Status Certificat:</p>
-            <select class="form-select" aria-label="Default select example" v-model="certificateStatus">
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              v-model="certificateStatus"
+            >
               <option value="" disabled selected hidden>Choix status</option>
               <option value="1">Validé</option>
               <option value="3">En attente</option>
@@ -68,7 +76,11 @@
           </div>
           <div class="col-2 p-2 text-start">
             <p class="fw-bolder mb-0">Statut Payement:</p>
-            <select class="form-select" aria-label="Default select example" v-model="paymentStatus">
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              v-model="paymentStatus"
+            >
               <option value="" disabled selected hidden>Choix status</option>
               <option value="1">Validé</option>
               <option value="3">En attente</option>
@@ -106,7 +118,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr v-for="inscription in inscriptions" :key="inscription.id">
                 <th scope="row">
                   <input
                     class="form-check-input mt-0"
@@ -118,36 +130,92 @@
                 </th>
                 <td>
                   <router-link
-                    :to="{ name: 'InscriptionDetails', params: { id: 'test' } }"
+                    :to="{
+                      name: 'InscriptionDetails',
+                      params: { id: inscription.id },
+                    }"
                   >
-                    Random Athlete
+                    {{ inscription.athlete.firstName }}
+                    {{ inscription.athlete.lastName }}
                   </router-link>
                 </td>
                 <td>
                   <router-link
-                    :to="{ name: 'RaceDetails', params: { id: 'test' } }"
+                    :to="{
+                      name: 'RaceDetails',
+                      params: { id: inscription.race.id },
+                    }"
                   >
-                    Random Race
+                    {{ inscription.race.name }}
                   </router-link>
                 </td>
                 <td>
-                  <router-link
-                    :to="{ name: 'TeamDetails', params: { id: 'test' } }"
-                  >
-                    Random Team
-                  </router-link>
+                  <div v-if="inscription.race">
+                    <router-link
+                      :to="{
+                        name: 'TeamDetails',
+                        params: { id: inscription.team.id },
+                      }"
+                    >
+                      {{ inscription.team.name }}
+                    </router-link>
+                  </div>
+                  <div v-else>-</div>
                 </td>
                 <td>
-                  <span class="material-icons-outlined"> done </span>
+                  <div v-if="inscription.va">
+                    <span class="material-icons-outlined"> done </span>
+                  </div>
+                  <div v-else>-</div>
                 </td>
                 <td @click="toggleCertificateModal">
-                  <a class="badge rounded-pill bg-success mx-1">Validé</a>
+                  <div v-if="inscription.certificate">
+                    <div v-if="inscription.certificate.status === 1">
+                      <a class="badge rounded-pill bg-success mx-1">Validé</a>
+                    </div>
+                    <div
+                      v-else-if="
+                        inscription.certificate.status > 1 &&
+                        inscription.certificate.status < 5
+                      "
+                    >
+                      <a class="badge text-dark rounded-pill bg-warning mx-1"
+                        >A validé</a
+                      >
+                    </div>
+                    <div v-else-if="inscription.certificate.status > 4">
+                      <a class="badge text-dark rounded-pill bg-danger mx-1"
+                        >Refusé</a
+                      >
+                    </div>
+                  </div>
+                  <div v-else>-</div>
                 </td>
-                <td>
-                  <a href="" class="badge rounded-pill bg-success mx-1"
-                    >Validé</a
-                  >
+
+                <td @click="toggleCertificateModal">
+                  <div v-if="inscription.payment">
+                    <div v-if="inscription.payment.status === 1">
+                      <a class="badge rounded-pill bg-success mx-1">Validé</a>
+                    </div>
+                    <div
+                      v-else-if="
+                        inscription.payment.status > 1 &&
+                        inscription.payment.status < 5
+                      "
+                    >
+                      <a class="badge text-dark rounded-pill bg-warning mx-1"
+                        >A validé</a
+                      >
+                    </div>
+                    <div v-else-if="inscription.payment.status > 4">
+                      <a class="badge text-dark rounded-pill bg-danger mx-1"
+                        >Refusé</a
+                      >
+                    </div>
+                  </div>
+                  <div v-else>-</div>
                 </td>
+
                 <td>
                   <a href="" class="badge bg-danger"> Supprimer</a>
                 </td>
@@ -166,6 +234,54 @@ import SideBar from "../../components/SideBar/SideBar.vue";
 import TopBar from "../../components/TopBar/TopBar.vue";
 import SearchBarVue from "../../components/searchBar/SearchBar.vue";
 import CertificateModalVue from "../../components/CertificateModal/CertificateModal.vue";
+import axios from "axios";
+
+export interface User {
+  id: number;
+  email: string;
+  username: string;
+}
+
+export interface Athlete {
+  id: number;
+  user: User;
+  firstName: string;
+  lastName: string;
+}
+
+export interface Team {
+  id: number;
+  name: string;
+}
+
+export interface VA {
+  id: number;
+}
+
+export interface Race {
+  id: number;
+  name: string;
+}
+
+export interface Certifcate {
+  id: number;
+  status: number;
+}
+
+export interface Payment {
+  id: number;
+  status: number;
+}
+
+export interface Inscription {
+  id: number;
+  athlete: Athlete;
+  team: Team;
+  va: VA | null;
+  race: Race;
+  certificate: Certifcate | null;
+  payment: Payment | null;
+}
 
 export default defineComponent({
   components: {
@@ -181,32 +297,13 @@ export default defineComponent({
       selectAllRows: false,
       showCertificateModal: false,
       index: 0,
-      races: [{
-        id:0,
-        name: ""
-      }], 
+      races: [] as Race[],
+      teams: [] as Team[],
       search: null as unknown,
       race: null,
       certificateStatus: null,
       paymentStatus: null,
-      inscriptions: [
-        {
-          id: 0,
-          athlete: {
-            id: 0,
-            firstName: "",
-            lastName: "",
-          },
-          team: {
-            id: 0,
-            name: "",
-          },
-          certificate: {
-            id: 0,
-            status: 0,
-          },
-        },
-      ],
+      inscriptions: [] as Inscription[],
     };
   },
   methods: {
@@ -216,25 +313,38 @@ export default defineComponent({
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
-    setSearch(search:string){
+    setSearch(search: string) {
       this.search = search;
-    } 
+    },
   },
-  mounted() {},
+  async mounted() {
+    console.log(this.$store.getters.getAccessToken);
+    const response = await axios.get("inscriptions", {
+      headers: {
+        Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+      },
+    });
+    if (response.status < 300) {
+      this.inscriptions = response.data.data;
+      console.log(response);
+      console.log(JSON.stringify(this.inscriptions));
+    }
+    console.log(response);
+  },
   watch: {
     race(newRace, oldRace) {
       console.log("Hello");
     },
-    certficateStatus(newStatus, oldStatus){
+    certficateStatus(newStatus, oldStatus) {
       console.log("Helo");
     },
-    paymentStatus(newStatus, oldStatus){
+    paymentStatus(newStatus, oldStatus) {
       console.log("Hello");
-    }, 
-    search(newSearch, oldSearch){
-      console.log(this.search)
-    }
-  }
+    },
+    search(newSearch, oldSearch) {
+      console.log(this.search);
+    },
+  },
 });
 </script>
 
