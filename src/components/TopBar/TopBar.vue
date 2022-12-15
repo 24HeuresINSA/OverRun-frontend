@@ -1,8 +1,8 @@
 <template>
   <div id="top-bar" class="sticky-top bg-primary">
     <div id="top-logo">
-      <span id="overun">
-        <h1 class="m-0 text-light">Overun</h1>
+      <span id="overRun">
+        <h1 class="m-0 text-light">OverRun</h1>
       </span>
     </div>
     <div id="top-side" class="container-fluid p-0 shadow-sm">
@@ -169,7 +169,7 @@ export default defineComponent({
   width: calc(100vw - 320px);
 }
 
-#overun {
+#overRun {
   margin-top: 8px;
   display: inline-block;
   vertical-align: middle;
