@@ -1,5 +1,7 @@
 module.exports = {
-    devServer: {
-      disableHostCheck: true
-    }
-  }
+  devServer: {
+    disableHostCheck: true,
+    public: "https://overrun.traefik.me",
+  },
+  publicPath: "/admin",
+};
