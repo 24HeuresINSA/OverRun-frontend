@@ -36,9 +36,10 @@
               class="dropdown-menu p-0"
               aria-labelledby="dropdownUserLink"
             >
-              <li class="inactiveLink ">
-                <span class="dropdown-item text-center pt-2 pb-2" href="#">{{ pseudo }}</span>
-
+              <li class="inactiveLink">
+                <span class="dropdown-item text-center pt-2 pb-2" href="#">{{
+                  pseudo
+                }}</span>
               </li>
               <li><hr class="dropdown-divider m-0 p-0" /></li>
               <li>
@@ -50,7 +51,7 @@
                 </a>
               </li>
               <li><hr class="dropdown-divider m-0 p-0" /></li>
-              <li>
+              <li @click="logout()">
                 <a
                   class="dropdown-item bg-danger text-light pt-2 pb-2"
                   href="#"
@@ -99,7 +100,7 @@
                 </a>
               </li>
               <li><hr class="dropdown-divider m-0 p-0" /></li>
-              <li>
+              <li @click="logout()">
                 <a
                   class="dropdown-item bg-danger text-light pt-2 pb-2"
                   href="#"
@@ -133,16 +134,29 @@ export default defineComponent({
     toggleSideBar() {
       this.$emit("toggleSideBar");
     },
+    async logout() {
+      const res = await axios.post(
+        "logout",
+        { refreshToken: this.$store.getters.getRefreshToken },
+        {
+          headers: {
+            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+          },
+        }
+      );
+      if (res.status !== 200) return;
+      this.$store.commit(MutationTypes.LOGOUT, undefined);
+      this.$router.push({ name: "Login" });
+    },
   },
-  async mounted () {
-      console.log(this.$store.getters.getAccessToken);
-      const admins = await axios.get("admins/" + this.$store.getters.getAdminId, {
-          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
-        });
-        console.log(admins.data.pseudo);
-        this.pseudo = admins.data.user.username;
-  }
- 
+  async mounted() {
+    const admins = await axios.get("admins/" + this.$store.getters.getAdminId, {
+      headers: {
+        Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+      },
+    });
+    this.pseudo = admins.data.user.username;
+  },
 });
 </script>
 
@@ -236,10 +250,9 @@ export default defineComponent({
 }
 
 #dropdownEditionMenu {
-   margin-top: 22px !important;
-   margin-right: 60px !important;
+  margin-top: 22px !important;
+  margin-right: 60px !important;
 }
-
 
 .icon {
   display: inline-block;

@@ -77,10 +77,10 @@ export default defineComponent({
       password: "",
     };
   },
- 
+
   methods: {
     async login() {
-       console.log(this.email, this.password);
+      console.log(this.email, this.password);
       const response = await axios.post("login", {
         email: this.email,
         password: this.password,
@@ -105,10 +105,12 @@ export default defineComponent({
             })
             .join("")
         );
-        console.log(JSON.parse(jsonPayload))
         this.$store.commit(MutationTypes.SET_USER, JSON.parse(jsonPayload).id);
         this.$store.commit(MutationTypes.SET_ADMIN_ID, JSON.parse(jsonPayload).adminId);
-        console.log(this.$store.getters.getAdminId);
+        if (this.$store.getters.getAdminId === null) {
+          alert("Vous n'êtes pas autorisé à accéder à cette page");
+          return this.$router.go(-1);
+        }
         this.$router.push({ name: "Home" });
       }
     }
