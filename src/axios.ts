@@ -3,7 +3,7 @@ import { MutationTypes } from "./store/modules/auth";
 import store from "./store";
 import router from "./router";
 
-axios.defaults.baseURL = "https://overrun.traefik.me/api/v1";
+axios.defaults.baseURL = "https://overrun.24heures.org/api/v1";
 
 axios.defaults.withCredentials = true;
 

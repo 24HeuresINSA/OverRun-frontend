@@ -4,4 +4,6 @@ module.exports = {
     public: "https://overrun.traefik.me",
   },
   publicPath: "/admin",
+  outputDir: "dist/admin",
+  indexPath: "../index.html",
 };
