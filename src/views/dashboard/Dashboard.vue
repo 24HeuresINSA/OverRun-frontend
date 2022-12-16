@@ -231,6 +231,13 @@ export default defineComponent({
     CertificateModalVue,
     Doughnut,
   },
+
+  beforeCreate() {
+    if(this.$store.getters.getAccessToken === "") {
+      this.$router.push({ name: 'Login' })
+    }
+  },
+
   data() {
     return {
       hideSideBar: false,

@@ -86,12 +86,11 @@ export default defineComponent({
         password: this.password,
       });
 
-      console.log(response);
       if (response.status === 200) {
-        // this.$store.commit(
-        //   MutationTypes.SET_ACCESS_TOKEN,
-        //   process.env.ACCESS_TOKEN
-        // );
+        this.$store.commit(
+          MutationTypes.SET_ACCESS_TOKEN,
+          response.data.accessToken
+        );
         this.$store.commit(
           MutationTypes.SET_REFRESH_TOKEN,
           response.data.refreshToken
