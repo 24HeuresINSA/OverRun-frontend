@@ -168,7 +168,7 @@ export default defineComponent({
         },
       ],
       selectedDisciplines: [] as Discipline[],
-      selectedDisciplinesIds: [] ,
+      selectedDisciplinesIds: [],
       name: null,
       registrationPrice: null,
       vaRegistrationPrice: null,
@@ -195,16 +195,16 @@ export default defineComponent({
         this.selectedDisciplinesIds.splice(i, 1);
         this.selectedDisciplines.splice(i, 1);
       } else {
-        const discipline :Discipline = {
+        const discipline: Discipline = {
           id: id,
           name: name,
           duration: 0,
-        }
+        };
         this.selectedDisciplines.push(discipline);
       }
       console.log(this.selectedDisciplines);
     },
-    isDisciplineSelected(id:number): boolean{
+    isDisciplineSelected(id: number): boolean {
       this.selectedDisciplines.forEach(function (selectedDiscipline, index) {
         if (selectedDiscipline.id === id) {
           return true;
@@ -213,7 +213,6 @@ export default defineComponent({
       return false;
     },
     async createRace(e: Event) {
-      console.log(this.$store.getters.getAccessToken);
       const response = await axios.post(
         "races",
         {
@@ -240,7 +239,6 @@ export default defineComponent({
     },
   },
   async mounted() {
-    console.log(this.$store.getters.getAccessToken);
     let response = await axios.get("disciplines", {
       headers: {
         Authorization: `Bearer ${this.$store.getters.getAccessToken}`,

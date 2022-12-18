@@ -54,28 +54,32 @@ export default defineComponent({
       name: null,
       description: null,
       editionId: 1,
-     };
+    };
   },
   methods: {
     closeModal() {
       this.$emit("closeDisciplineModal");
     },
     async createDiscipline() {
-       console.log(this.$store.getters.getAccessToken);
-      const response = await axios.post("disciplines", {
-        name: this.name,
-        description: this.description,
-        editionId: edition,
-      },
-      {
-          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
-      });
+      const response = await axios.post(
+        "disciplines",
+        {
+          name: this.name,
+          description: this.description,
+          editionId: edition,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+          },
+        }
+      );
       if (response.status < 300) {
         this.closeModal();
       }
       console.log(response);
-    }
-  }
+    },
+  },
 });
 </script>
 <style scoped>

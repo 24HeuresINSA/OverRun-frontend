@@ -70,10 +70,16 @@
                   />
                 </th>
                 <td>
-                    {{ adminInvite.email}}
+                  {{ adminInvite.email }}
                 </td>
                 <td>
-                  <a href="" class="badge bg-danger" @click.prevent="deleteAdminInvite(adminInvite.id)"> Supprimer</a>
+                  <a
+                    href=""
+                    class="badge bg-danger"
+                    @click.prevent="deleteAdminInvite(adminInvite.id)"
+                  >
+                    Supprimer</a
+                  >
                 </td>
               </tr>
             </tbody>
@@ -93,8 +99,8 @@ import SearchBarVue from "../../components/searchBar/SearchBar.vue";
 import axios from "axios";
 
 export interface AdminInvite {
-  id: number,
-  email: string
+  id: number;
+  email: string;
 }
 
 export default defineComponent({
@@ -122,42 +128,39 @@ export default defineComponent({
       this.reloadTable();
     },
     async deleteAdminInvite(id: number) {
-      console.log(this.$store.getters.getAccessToken);
-      const response = await axios.delete("adminInvitations/" + id,
-      {
-          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      const response = await axios.delete("adminInvitations/" + id, {
+        headers: {
+          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+        },
       });
       if (response.status < 300) {
-          this.reloadTable()
+        this.reloadTable();
       }
-    }, 
+    },
     async reloadTable() {
-      console.log(this.$store.getters.getAccessToken);
-      const response = await axios.get("adminInvitations",
-      {
-          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      const response = await axios.get("adminInvitations", {
+        headers: {
+          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+        },
       });
       if (response.status < 300) {
-         this.adminInvites = response.data.data;
-          console.log(JSON.stringify(this.adminInvites))
+        this.adminInvites = response.data.data;
+        console.log(JSON.stringify(this.adminInvites));
       }
     },
     setSearch(search: string) {
       this.search = search;
-    }
+    },
   },
   mounted() {
     this.reloadTable();
   },
   watch: {
-    search(newValue, oldValue){
-      console.log(this.search)
+    search(newValue, oldValue) {
+      console.log(this.search);
     },
-
-  }
+  },
 });
 </script>
 
-
-<style>
-</style>
+<style></style>

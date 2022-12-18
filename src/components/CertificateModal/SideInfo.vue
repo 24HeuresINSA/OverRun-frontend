@@ -219,7 +219,6 @@ export default defineComponent({
       this.$emit("hideCertificate");
     },
     async getAthlete() {
-      console.log(this.$store.getters.getAccessToken);
       const response = await axios.get("athletes/" + this.athleteId, {
         headers: {
           Authorization: `Bearer ${this.$store.getters.getAccessToken}`,

@@ -94,7 +94,6 @@ export default defineComponent({
       };
       await this.actionLoginApi(payload);
       if (this.getLoginApiStatus == "success") {
-        console.log("hello world")
         this.$router.push("/");
       } else {
         alert("failed");

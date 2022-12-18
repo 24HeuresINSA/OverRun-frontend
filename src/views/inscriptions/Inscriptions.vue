@@ -318,7 +318,6 @@ export default defineComponent({
     },
   },
   async mounted() {
-    console.log(this.$store.getters.getAccessToken);
     const response = await axios.get("inscriptions", {
       headers: {
         Authorization: `Bearer ${this.$store.getters.getAccessToken}`,

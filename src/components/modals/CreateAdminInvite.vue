@@ -9,9 +9,7 @@
       <hr class="dropdown-divider my-2" />
       <form class="mx-5 my-4 text-start" @submit.prevent="sendInvite">
         <div class="mb-3 fw-bold">
-          <label for="inputEmail" class="form-label"
-            >Adresse email: </label
-          >
+          <label for="inputEmail" class="form-label">Adresse email: </label>
           <input
             type="email"
             class="form-control"
@@ -22,9 +20,10 @@
           />
         </div>
         <div class="text-center">
-          <button type="submit" class="btn btn-primary mb-3">Envoyer invitation</button>
+          <button type="submit" class="btn btn-primary mb-3">
+            Envoyer invitation
+          </button>
         </div>
-        
       </form>
     </div>
   </div>
@@ -41,29 +40,32 @@ export default defineComponent({
     };
   },
   methods: {
-    closeModal () {
-      this.$emit('closeAdminInviteModal');
+    closeModal() {
+      this.$emit("closeAdminInviteModal");
     },
     async sendInvite(e: Event) {
-       console.log(this.$store.getters.getAccessToken);
-      const response = await axios.post("adminInvitations", {
-        email: this.email
-      },
-      {
-          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
-      });
+      const response = await axios.post(
+        "adminInvitations",
+        {
+          email: this.email,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+          },
+        }
+      );
       if (response.status < 300) {
         this.closeModal();
         (e.target as HTMLFormElement)?.reset();
       }
       console.log(response);
-    }
-  }
+    },
+  },
 });
 </script>
 
 <style scoped>
-
 .custom-modal {
   width: 30%;
 }
@@ -75,5 +77,4 @@ export default defineComponent({
   height: 100%;
   z-index: 10001;
 }
-
 </style>

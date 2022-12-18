@@ -61,7 +61,7 @@
                 </th>
                 <td>
                   <router-link
-                    :to="{ name: 'RaceDetails', params: { id: athlete.id } }"
+                    :to="{ name: 'AthleteDetails', params: { id: athlete.id } }"
                   >
                    {{ athlete.user.username}}
                   </router-link>
@@ -72,7 +72,7 @@
                   {{ athlete.phoneNumber }}
                 </td>
                 <td>
-                  -
+                  {{ athlete.inscriptions?.length > 0 ? athlete.inscriptions[0].edition.name : "-" }}
                 </td>
                 <td>
                   <a href="" class="badge bg-danger" @click.prevent="deleteAthlete(athlete.id)"> Supprimer</a>
@@ -99,12 +99,20 @@ export interface User {
   email: string,
 }
 
+export interface Edition{
+  edition: {
+    id: number,
+    name: string,
+  }
+}
+
 export interface Athlete {
   id: number, 
   user: User,
   firstName: string,
   lastName: string,
   phoneNumber: string
+  inscriptions: Edition[],
 }
 
 export default defineComponent({
@@ -127,7 +135,6 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
     async deleteAthlete(id: number) {
-      console.log(this.$store.getters.getAccessToken);
       const response = await axios.delete("athletes/" + id,
       {
           headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
@@ -137,13 +144,13 @@ export default defineComponent({
       }
     }, 
     async reloadTable() {
-      console.log(this.$store.getters.getAccessToken);
       const response = await axios.get("athletes",
       {
           headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
       });
       if (response.status < 300) {
-         this.athletes = response.data.data;
+        this.athletes = response.data.data;
+        console.log(this.athletes);
       }
     },
     setSearch(search: string){

@@ -154,7 +154,6 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
     async deleteCategory(id: number) {
-      console.log(this.$store.getters.getAccessToken);
       const response = await axios.delete("categories/" + id, {
         headers: {
           Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
@@ -165,7 +164,6 @@ export default defineComponent({
       }
     },
     async reloadTable() {
-      console.log(this.$store.getters.getAccessToken);
       const response = await axios.get("categories", {
         params: {
           search: this.search,
@@ -186,7 +184,6 @@ export default defineComponent({
     },
   },
   async mounted() {
-    console.log(this.$store.getters.getAccessToken);
     const response = await axios.get("categories", {
       headers: {
         Authorization: `Bearer ${this.$store.getters.getAccessToken}`,

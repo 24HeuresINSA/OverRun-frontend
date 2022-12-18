@@ -3,6 +3,7 @@ import DashboardVue from '@/views/dashboard/Dashboard.vue';
 import AdminsVue from '@/views/admins/Admins.vue';
 import AdminInviteVue from '@/views/admins/AdminInvite.vue';
 import AthletesVue from '@/views/athletes/Athletes.vue';
+import AthleteDetailsVue from '@/views/athletes/AthleteDetails.vue';
 import CategoriesVue from '@/views/categories/Categories.vue';
 import CategoryDetailsVue from '@/views/categories/CategoryDetails.vue';
 import DisciplinesVue from '@/views/disciplines/Disciplines.vue';
@@ -37,6 +38,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/athletes",
     name: "Athletes",
     component: AthletesVue,
+  },
+  {
+    path: "/athletes/:id",
+    name: "AthleteDetails",
+    component: AthleteDetailsVue,
   },
   {
     path: "/categories",

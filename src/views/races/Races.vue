@@ -234,7 +234,6 @@ export default defineComponent({
       this.reloadTable();
     },
     async deleteRace(id: number) {
-      console.log(this.$store.getters.getAccessToken);
       const response = await axios.delete("races/" + id, {
         headers: {
           Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
@@ -245,7 +244,6 @@ export default defineComponent({
       }
     },
     async reloadTable() {
-      console.log(this.$store.getters.getAccessToken);
       const response = await axios.get("races", {
         params: {
           search: this.search,

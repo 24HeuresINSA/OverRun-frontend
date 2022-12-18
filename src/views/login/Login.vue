@@ -41,8 +41,11 @@
                     type="checkbox"
                     class="form-check-input"
                     id="exampleCheck1"
+                    v-model="persistentLogin"
                   />
-                  <label class="form-check-label" for="exampleCheck1"
+                  <label 
+                  class="form-check-label" 
+                  for="exampleCheck1"
                     >Rester connecté</label
                   >
                 </div>
@@ -75,12 +78,12 @@ export default defineComponent({
     return {
       email: "",
       password: "",
+      persistentLogin: false,
     };
   },
 
   methods: {
     async login() {
-      console.log(this.email, this.password);
       const response = await axios.post("login", {
         email: this.email,
         password: this.password,
@@ -107,6 +110,14 @@ export default defineComponent({
         );
         this.$store.commit(MutationTypes.SET_USER, JSON.parse(jsonPayload).id);
         this.$store.commit(MutationTypes.SET_ADMIN_ID, JSON.parse(jsonPayload).adminId);
+
+        if (this.persistentLogin) {
+          localStorage.setItem("accessToken", response.data.accessToken);
+          localStorage.setItem("refreshToken", response.data.refreshToken);
+          localStorage.setItem("userId", JSON.parse(jsonPayload).id);
+          localStorage.setItem("adminId", JSON.parse(jsonPayload).adminId);
+        }
+
         if (this.$store.getters.getAdminId === null) {
           alert("Vous n'êtes pas autorisé à accéder à cette page");
           return this.$router.go(-1);

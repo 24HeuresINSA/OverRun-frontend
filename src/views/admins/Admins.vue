@@ -137,7 +137,6 @@ export default defineComponent({
       this.showAdminInviteModal = !this.showAdminInviteModal;
     },
     async deleteAdmin(id: number) {
-      console.log(this.$store.getters.getAccessToken);
       const response = await axios.delete("admins/" + id, {
         headers: {
           Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
@@ -148,7 +147,6 @@ export default defineComponent({
       }
     },
     async reloadTable() {
-      console.log(this.$store.getters.getAccessToken);
       const response = await axios.get("admins", {
         headers: {
           Authorization: `Bearer ${this.$store.getters.getAccessToken}`,

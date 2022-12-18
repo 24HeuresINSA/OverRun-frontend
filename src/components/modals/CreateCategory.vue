@@ -85,7 +85,6 @@ export default defineComponent({
       this.$emit("closeCategoryModal");
     },
     async createCategory() {
-      console.log(this.$store.getters.getAccessToken);
       const response = await axios.post(
         "categories",
         {

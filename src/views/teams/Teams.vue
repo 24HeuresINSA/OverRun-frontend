@@ -103,7 +103,10 @@
                     team.race.category.maxTeamMembers
                   }}
                 </td>
-                <td> {{ getValidatedInscriptions(team) }}/ {{ team.members.length }}</td>
+                <td>
+                  {{ getValidatedInscriptions(team) }}/
+                  {{ team.members.length }}
+                </td>
                 <td>
                   <a
                     href=""
@@ -176,14 +179,11 @@ export default defineComponent({
       this.search = search;
       this.reloadTable();
     },
-    deleteTeam(id: number) {
-      
-    },
+    deleteTeam(id: number) {},
     async reloadTable() {
-      console.log(this.$store.getters.getAccessToken);
       const response = await axios.get("teams", {
         params: {
-          search: this.search
+          search: this.search,
         },
         headers: {
           Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
@@ -196,12 +196,12 @@ export default defineComponent({
     getValidatedInscriptions(team: Team) {
       let nbValidatedInscirptions = 0;
       team.members.forEach((member, index) => {
-        if(member.validated) {
+        if (member.validated) {
           nbValidatedInscirptions += 1;
         }
       });
       return nbValidatedInscirptions;
-    }
+    },
   },
   mounted() {
     this.reloadTable();
