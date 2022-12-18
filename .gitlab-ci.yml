@@ -5,6 +5,7 @@ services:
 
 stages:
   - build
+  - deploy
 
 
 build:
@@ -17,3 +18,12 @@ build:
   only:
     - main
 
+deploy:
+  image: curlimages/curl
+  stage: deploy
+  needs: [build]
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - when: never
+  script:
+    - 'curl -H "Authorization: Bearer ${WATCHTOWER_API_KEY}" "${WATCHTOWER_BASE_URL}/v1/update"'
