@@ -76,7 +76,10 @@
                 </th>
                 <td>
                   <router-link
-                    :to="{ name: 'CategoryDetails', params: { id: 'test' } }"
+                    :to="{
+                      name: 'CategoryDetails',
+                      params: { id: category.id },
+                    }"
                   >
                     {{ category.name }}
                   </router-link>
@@ -113,12 +116,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import SearchBarVue from "../../components/searchBar/SearchBar.vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
-import CreateCategoryVue from "../../components/modals/CreateCategory.vue";
+import CreateCategoryVue from "@/components/modals/CreateCategory.vue";
+import SearchBarVue from "@/components/searchBar/SearchBar.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+import { Category } from "@/types/interface";
 import axios from "axios";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   components: {
@@ -133,15 +137,7 @@ export default defineComponent({
       filterMenuActive: false,
       selectAllRows: false,
       showCategoryModal: false,
-      categories: [
-        {
-          id: 0,
-          name: "",
-          description: "",
-          maxTeamMembers: 0,
-          minTeamMembers: 0,
-        },
-      ],
+      categories: [] as Category[],
       search: null as unknown,
     };
   },

@@ -99,8 +99,8 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
 
 export default defineComponent({
   components: {

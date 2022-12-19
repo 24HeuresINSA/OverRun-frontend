@@ -76,7 +76,9 @@
         <div class="col text-start">
           <span class="d-inline"
             ><p class="d-inline fw-bolder me-2">Date d'anniversaire :</p>
-            <p class="d-inline">{{ new Date(athlete.dateOfBirth).toLocaleDateString('fr') }}</p></span
+            <p class="d-inline">
+              {{ new Date(athlete.dateOfBirth).toLocaleDateString("fr") }}
+            </p></span
           >
         </div>
       </div>
@@ -111,8 +113,8 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
 import axios from "axios";
 
 export default defineComponent({

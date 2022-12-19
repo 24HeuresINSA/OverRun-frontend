@@ -9,7 +9,7 @@
     >
       <div class="row m-2 mt-4">
         <div class="col-4 text-start border-bottom p-0">
-          <h2>Random Discipline (Discipline)</h2>
+          <h2>{{ discipline.name }} (Discipline)</h2>
         </div>
         <div class="col-6"></div>
         <div class="col-2 text-end">
@@ -21,7 +21,7 @@
           <span class="d-inline"
             ><p class="d-inline fw-bolder me-2">Description:</p>
             <p class="d-inline">
-              A random description for a random Discipline
+              {{ discipline.description }}
             </p></span
           >
         </div>
@@ -42,12 +42,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr v-for="race in discipline.races" :key="race.race.id">
                 <td>
                   <router-link
-                    :to="{ name: 'RaceDetails', params: { id: 'test' } }"
+                    :to="{ name: 'RaceDetails', params: { id: race.race.id } }"
                   >
-                    Random Race
+                    {{ race.race.name }}
                   </router-link>
                 </td>
               </tr>
@@ -60,9 +60,11 @@
 </template>
 
 <script lang="ts">
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+import { Discipline } from "@/types/interface";
+import axios from "axios";
 import { defineComponent } from "vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
 
 export default defineComponent({
   components: {
@@ -72,16 +74,28 @@ export default defineComponent({
   data() {
     return {
       hideSideBar: false,
+      discipline: {} as Discipline,
     };
   },
   methods: {
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
+    async reloadTable() {
+      const response = await axios.get(`disciplines/${this.$route.params.id}`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+        },
+      });
+      if (response.status < 300) {
+        this.discipline = response.data;
+      }
+    },
   },
-  mounted() {},
+  beforeMount() {
+    this.reloadTable();
+  },
 });
 </script>
 
-<style>
-</style>
+<style></style>

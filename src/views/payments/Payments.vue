@@ -148,9 +148,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
-import SearchBarVue from "../../components/searchBar/SearchBar.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 
 export default defineComponent({
   components: {
@@ -172,14 +172,14 @@ export default defineComponent({
     },
     setSearch(search: string) {
       this.search = search;
-    }
+    },
   },
   mounted() {},
   watch: {
     search(newSearch, oldSearch) {
-      console.log(this.search)
-    }
-  }
+      console.log(this.search);
+    },
+  },
 });
 </script>
 

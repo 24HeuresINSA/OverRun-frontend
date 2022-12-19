@@ -63,19 +63,29 @@
                   <router-link
                     :to="{ name: 'AthleteDetails', params: { id: athlete.id } }"
                   >
-                   {{ athlete.user.username}}
+                    {{ athlete.user.username }}
                   </router-link>
                 </td>
-                <td>{{ athlete.firstName}} {{ athlete.lastName }}</td>
+                <td>{{ athlete.firstName }} {{ athlete.lastName }}</td>
                 <td>{{ athlete.user.email }}</td>
                 <td>
                   {{ athlete.phoneNumber }}
                 </td>
                 <td>
-                  {{ athlete.inscriptions?.length > 0 ? athlete.inscriptions[0].edition.name : "-" }}
+                  {{
+                    athlete.inscriptions?.length > 0
+                      ? athlete.inscriptions[0].edition.name
+                      : "-"
+                  }}
                 </td>
                 <td>
-                  <a href="" class="badge bg-danger" @click.prevent="deleteAthlete(athlete.id)"> Supprimer</a>
+                  <a
+                    href=""
+                    class="badge bg-danger"
+                    @click.prevent="deleteAthlete(athlete.id)"
+                  >
+                    Supprimer</a
+                  >
                 </td>
               </tr>
             </tbody>
@@ -88,31 +98,31 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
-import SearchBarVue from "../../components/searchBar/SearchBar.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import axios from "axios";
 
 export interface User {
-  id: number,
-  username: string,
-  email: string,
+  id: number;
+  username: string;
+  email: string;
 }
 
-export interface Edition{
+export interface Edition {
   edition: {
-    id: number,
-    name: string,
-  }
+    id: number;
+    name: string;
+  };
 }
 
 export interface Athlete {
-  id: number, 
-  user: User,
-  firstName: string,
-  lastName: string,
-  phoneNumber: string
-  inscriptions: Edition[],
+  id: number;
+  user: User;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  inscriptions: Edition[];
 }
 
 export default defineComponent({
@@ -135,27 +145,29 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
     async deleteAthlete(id: number) {
-      const response = await axios.delete("athletes/" + id,
-      {
-          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      const response = await axios.delete("athletes/" + id, {
+        headers: {
+          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+        },
       });
       if (response.status < 300) {
-          this.reloadTable();
+        this.reloadTable();
       }
-    }, 
+    },
     async reloadTable() {
-      const response = await axios.get("athletes",
-      {
-          headers: { Authorization : `Bearer ${this.$store.getters.getAccessToken}`}
+      const response = await axios.get("athletes", {
+        headers: {
+          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+        },
       });
       if (response.status < 300) {
         this.athletes = response.data.data;
         console.log(this.athletes);
       }
     },
-    setSearch(search: string){
-      this.search=search;
-    }
+    setSearch(search: string) {
+      this.search = search;
+    },
   },
   watch: {
     search(newSearch, oldSearch) {
@@ -168,5 +180,4 @@ export default defineComponent({
 });
 </script>
 
-<style>
-</style>
+<style></style>

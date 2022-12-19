@@ -159,10 +159,10 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
-import SearchBarVue from "../../components/searchBar/SearchBar.vue";
-import CreateRaceModalVue from "../../components/modals/CreateRaceModal.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+import SearchBarVue from "@/components/searchBar/SearchBar.vue";
+import CreateRaceModalVue from "@/components/modals/CreateRaceModal.vue";
 import axios from "axios";
 
 export interface Discipline {

@@ -92,10 +92,10 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
-import CreateAdminInviteVue from "../../components/modals/CreateAdminInvite.vue";
-import SearchBarVue from "../../components/searchBar/SearchBar.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+import CreateAdminInviteVue from "@/components/modals/CreateAdminInvite.vue";
+import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import axios from "axios";
 
 export interface AdminInvite {

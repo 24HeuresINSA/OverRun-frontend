@@ -190,59 +190,13 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
-import SearchBarVue from "../../components/searchBar/SearchBar.vue";
-import CertificateModalVue from "../../components/CertificateModal/CertificateModal.vue";
-import ValidationsChips from "../../components/validationChips/ValidationsChips.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+import SearchBarVue from "@/components/searchBar/SearchBar.vue";
+import CertificateModalVue from "@/components/CertificateModal/CertificateModal.vue";
+import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
 import axios from "axios";
-
-export interface User {
-  id: number;
-  email: string;
-  username: string;
-}
-
-export interface Athlete {
-  id: number;
-  user: User;
-  firstName: string;
-  lastName: string;
-}
-
-export interface Team {
-  id: number;
-  name: string;
-}
-
-export interface VA {
-  id: number;
-}
-
-export interface Race {
-  id: number;
-  name: string;
-}
-
-export interface Certifcate {
-  id: number;
-  status: number;
-}
-
-export interface Payment {
-  id: number;
-  status: number;
-}
-
-export interface Inscription {
-  id: number;
-  athlete: Athlete;
-  team: Team;
-  va: VA | null;
-  race: Race;
-  certificate: Certifcate | null;
-  payment: Payment | null;
-}
+import { Inscription, Race, Team } from "@/types/interface";
 
 export default defineComponent({
   components: {

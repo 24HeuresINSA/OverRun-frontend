@@ -9,7 +9,7 @@
     >
       <div class="row m-2 mt-4">
         <div class="col-4 text-start border-bottom p-0">
-          <h2>Random Team (Équipe)</h2>
+          <h2>{{ team.name }} (Équipe)</h2>
         </div>
         <div class="col-6"></div>
         <div class="col-2">
@@ -19,17 +19,27 @@
       <div class="row mt-4 m-2">
         <div class="col text-start">
           Course:
-          <router-link :to="{ name: 'RaceDetails', params: { id: 'test' } }">
-            Random Race
+          <router-link
+            :to="{ name: 'RaceDetails', params: { id: team.race.id } }"
+          >
+            {{ team.race.name }}
           </router-link>
         </div>
       </div>
       <div class="row m-2">
-        <div class="col text-start">Nombre d'équipier: 7/10</div>
+        <div class="col text-start">
+          Nombre d'équipier: {{ team.members.length }}/{{
+            team.race.category.maxTeamMembers
+          }}
+        </div>
       </div>
 
       <div class="row m-2">
-        <div class="col text-start">Nombre d'inscriptions complètes: 5/7</div>
+        <div class="col text-start">
+          Nombre d'inscriptions complètes: {{ countValidatedMembers(team) }}/{{
+            team.members?.length
+          }}
+        </div>
       </div>
 
       <div class="row m-2 mt-3">
@@ -50,22 +60,30 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr v-for="member in team.members" :key="member.id">
                 <th scope="row">
-                  <span class="material-icons-outlined"> military_tech </span>
+                  <span
+                    v-if="isTeamAdmin(member.id)"
+                    class="material-icons-outlined"
+                  >
+                    military_tech
+                  </span>
                 </th>
                 <td>
                   <router-link
-                    :to="{ name: 'InscriptionDetails', params: { id: 'test' } }"
+                    :to="{
+                      name: 'InscriptionDetails',
+                      params: { id: member.id },
+                    }"
                   >
-                    Random Athlète
+                    {{ member.athlete.firstName }} {{ member.athlete.lastName }}
                   </router-link>
                 </td>
-                <td>random-athlete@random.com</td>
+                <td>{{ member.athlete.user.email }}</td>
                 <td>
-                  <a href="" class="badge rounded-pill bg-success mx-1"
-                    >Complète</a
-                  >
+                  <ValidationsChips
+                    :status="member.validated ? 1 : undefined"
+                  />
                 </td>
               </tr>
             </tbody>
@@ -77,26 +95,49 @@
 </template>
 
 <script lang="ts">
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
+import { Admin, Member, Team } from "@/types/interface";
+import axios from "axios";
 import { defineComponent } from "vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
 
 export default defineComponent({
   components: {
     SideBar,
     TopBar,
+    ValidationsChips,
   },
   data() {
     return {
       hideSideBar: false,
+      team: {} as Team,
     };
   },
   methods: {
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
+    async reloadTable() {
+      const response = await axios.get(`teams/${this.$route.params.id}`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+        },
+      });
+      if (response.status < 300) {
+        this.team = response.data;
+      }
+    },
+    countValidatedMembers(team: Team): number {
+      return team.members.filter((member: Member) => member.validated).length;
+    },
+    isTeamAdmin(id: number): boolean {
+      return this.team.admins.some((admin: Admin) => admin.id === id);
+    },
   },
-  mounted() {},
+  beforeMount() {
+    this.reloadTable();
+  },
 });
 </script>
 

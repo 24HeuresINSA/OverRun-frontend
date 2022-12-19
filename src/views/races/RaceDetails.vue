@@ -47,7 +47,7 @@
               <router-link
                 :to="{
                   name: 'DisciplineDetails',
-                  params: { id: discipline.id },
+                  params: { id: discipline.discipline.id },
                 }"
               >
                 <a href="" class="badge rounded-pill bg-secondary">
@@ -109,37 +109,44 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr v-for="inscription in inscriptions" :key="inscription.id">
                 <td>
                   <router-link
-                    :to="{ name: 'InscriptionDetails', params: { id: 'test' } }"
+                    :to="{
+                      name: 'InscriptionDetails',
+                      params: { id: inscription.id },
+                    }"
                   >
-                    Random Athlète
+                    {{ inscription.athlete.firstName }}
+                    {{ inscription.athlete.lastName }}
                   </router-link>
                 </td>
-                <td>random-athlete@random.com</td>
+                <td>{{ inscription.athlete.user.email }}</td>
                 <td>
                   <router-link
-                    :to="{ name: 'TeamDetails', params: { id: 'test' } }"
+                    :to="{
+                      name: 'TeamDetails',
+                      params: { id: inscription.team.id },
+                    }"
                   >
-                    Random Team
+                    {{ inscription.team.name }}
                   </router-link>
                 </td>
-                <td>-</td>
                 <td>
-                  <a href="" class="badge rounded-pill bg-success mx-1"
-                    >Valider</a
-                  >
+                  <ValidationsChips
+                    :status="inscription.va?.id ? 1 : undefined"
+                  />
                 </td>
                 <td>
-                  <a href="" class="badge rounded-pill bg-success mx-1"
-                    >Valider</a
-                  >
+                  <ValidationsChips :status="inscription.certificate?.status" />
                 </td>
                 <td>
-                  <a href="" class="badge rounded-pill bg-success mx-1"
-                    >Valider</a
-                  >
+                  <ValidationsChips :status="inscription.payment?.status" />
+                </td>
+                <td>
+                  <ValidationsChips
+                    :status="inscription.validated ? 1 : undefined"
+                  />
                 </td>
               </tr>
             </tbody>
@@ -187,7 +194,7 @@
                   }}
                 </td>
                 <td>
-                  {{ countValidatedMembers(team) }}/{{ team.members.length }}
+                  {{ countValidatedMembers(team) }}/{{ team.members?.length }}
                 </td>
               </tr>
             </tbody>
@@ -199,66 +206,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
+import { Inscription, Member, Race, Team } from "@/types/interface";
 import axios from "axios";
-import { Athlete } from "../inscriptions/Inscriptions.vue";
-
-export interface Category {
-  id: string;
-  name: string;
-  maxTeamMembers: number;
-  minTeamMembers: number;
-}
-
-export interface Discipline {
-  id: number;
-  duration: number;
-  discipline: {
-    id: number;
-    name: string;
-  };
-}
-
-export interface Id {
-  id: number;
-}
-
-export interface Race {
-  category: Category;
-  id: number;
-  disciplines: Discipline[];
-  inscriptions: Id[];
-  maxParticipants: number;
-  maxTeams: number;
-  name: string;
-  teams: Id[];
-}
-
-export interface Admin {
-  id: number;
-  adminInscription: Id;
-}
-
-export interface Member {
-  id: number;
-  athlete: Athlete;
-  validated: boolean;
-}
-
-export interface Team {
-  id: number;
-  name: string;
-  members: Member[];
-  admins: Admin[];
-  race: Race;
-}
+import { defineComponent } from "vue";
 
 export default defineComponent({
   components: {
     SideBar,
     TopBar,
+    ValidationsChips,
   },
   data() {
     return {
@@ -267,6 +226,7 @@ export default defineComponent({
       showTeams: true,
       race: {} as Race,
       teams: [] as Team[],
+      inscriptions: [] as Inscription[],
     };
   },
   methods: {
@@ -282,21 +242,35 @@ export default defineComponent({
       if (response.status < 300) {
         this.race = response.data;
 
-        const res = await axios.get(`teams`, {
+        const resTeams = await axios.get(`teams`, {
           headers: {
             Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
           },
         });
-        if (res.status < 300) {
+        if (resTeams.status < 300) {
           const teamsIds = this.race.teams.map((team: any) => team.id);
-          this.teams = res.data.data.filter((team: any) =>
+          this.teams = resTeams.data.data.filter((team: Team) =>
             teamsIds.includes(team.id)
+          );
+        }
+
+        const resInscritptions = await axios.get(`inscriptions`, {
+          headers: {
+            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+          },
+        });
+        if (resInscritptions.status < 300) {
+          const inscriptionsIds = this.race.inscriptions.map(
+            (inscription: any) => inscription.id
+          );
+          this.inscriptions = resInscritptions.data.data.filter(
+            (inscription: any) => inscriptionsIds.includes(inscription.id)
           );
         }
       }
     },
     countValidatedMembers(team: Team): number {
-      return team.members.filter((member) => member.validated).length;
+      return team.members.filter((member: Member) => member.validated).length;
     },
   },
   beforeMount() {

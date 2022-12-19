@@ -85,30 +85,12 @@
               class="dropdown-menu p-0"
               aria-labelledby="dropdownEditionLink"
             >
-              <li class="inactiveLink">
-                <span class="dropdown-item text-center pt-2 pb-2" href="#"
-                  >Pintade</span
-                >
-              </li>
-              <li><hr class="dropdown-divider m-0 p-0" /></li>
               <li>
                 <a class="dropdown-item text-dark pt-2 pb-2" href="#">
                   <span class="material-icons-outlined icon d-inline m-0 p-0">
                     settings
                   </span>
                   <p class="d-inline">Paramètre</p>
-                </a>
-              </li>
-              <li><hr class="dropdown-divider m-0 p-0" /></li>
-              <li @click="logout()">
-                <a
-                  class="dropdown-item bg-danger text-light pt-2 pb-2"
-                  href="#"
-                >
-                  <span class="material-icons-outlined icon d-inline m-0 p-0">
-                    meeting_room
-                  </span>
-                  <p class="d-inline">Deconnection</p>
                 </a>
               </li>
             </ul>
@@ -120,9 +102,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { MutationTypes } from "../../store/modules/auth";
+import { MutationTypes } from "@/store/modules/auth";
 import axios from "axios";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   data() {

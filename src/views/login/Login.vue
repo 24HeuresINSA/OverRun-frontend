@@ -43,9 +43,7 @@
                     id="exampleCheck1"
                     v-model="persistentLogin"
                   />
-                  <label 
-                  class="form-check-label" 
-                  for="exampleCheck1"
+                  <label class="form-check-label" for="exampleCheck1"
                     >Rester connecté</label
                   >
                 </div>
@@ -70,7 +68,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import { MutationTypes } from "../../store/modules/auth";
+import { MutationTypes } from "@/store/modules/auth";
 import axios from "axios";
 
 export default defineComponent({
@@ -109,7 +107,10 @@ export default defineComponent({
             .join("")
         );
         this.$store.commit(MutationTypes.SET_USER, JSON.parse(jsonPayload).id);
-        this.$store.commit(MutationTypes.SET_ADMIN_ID, JSON.parse(jsonPayload).adminId);
+        this.$store.commit(
+          MutationTypes.SET_ADMIN_ID,
+          JSON.parse(jsonPayload).adminId
+        );
 
         if (this.persistentLogin) {
           localStorage.setItem("accessToken", response.data.accessToken);
@@ -124,8 +125,7 @@ export default defineComponent({
         }
         this.$router.push({ name: "Home" });
       }
-    }
-    
+    },
   },
 });
 </script>

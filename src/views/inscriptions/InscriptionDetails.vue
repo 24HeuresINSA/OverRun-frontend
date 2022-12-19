@@ -157,12 +157,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
-import ValidationsChips from "../../components/validationChips/ValidationsChips.vue";
+import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
 import axios from "axios";
-import { Inscription } from "./Inscriptions.vue";
+import { defineComponent } from "vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+import { Inscription } from "@/types/interface";
 
 export default defineComponent({
   components: {

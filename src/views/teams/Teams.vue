@@ -126,35 +126,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import SearchBarVue from "../../components/searchBar/SearchBar.vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
+import SearchBarVue from "@/components/searchBar/SearchBar.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+import { Team } from "@/types/interface";
 import axios from "axios";
-
-export interface Inscription {
-  id: number;
-  validated: boolean;
-}
-
-export interface Category {
-  id: number;
-  maxTeamMembers: number;
-  minTeamMembers: number;
-}
-
-export interface Race {
-  id: number;
-  name: true;
-  category: Category;
-}
-
-export interface Team {
-  id: number;
-  name: string;
-  members: Inscription[];
-  race: Race;
-}
+import { defineComponent } from "vue";
 
 export default defineComponent({
   components: {
@@ -203,7 +180,7 @@ export default defineComponent({
       return nbValidatedInscirptions;
     },
   },
-  mounted() {
+  beforeMount() {
     this.reloadTable();
   },
 });

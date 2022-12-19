@@ -27,7 +27,7 @@
           <div class="container-fluid p-1 pt-3 pb-3">
             <div class="row pt-1 pb-1">
               <div class="col border-bottom">
-                <h5 >Nombre d'inscrits</h5>
+                <h5>Nombre d'inscrits</h5>
               </div>
             </div>
             <div class="row pt-3">
@@ -48,9 +48,7 @@
                 <h5>Status Inscriptions</h5>
               </div>
             </div>
-            <div class="row pt-3">
-
-            </div>
+            <div class="row pt-3"></div>
           </div>
         </div>
         <div class="col bg-light mx-2 rounded-3 shadow-sm">
@@ -60,9 +58,7 @@
                 <h5>Nombre d'inscrits</h5>
               </div>
             </div>
-            <div class="row pt-3">
-              
-            </div>
+            <div class="row pt-3"></div>
           </div>
         </div>
         <div class="col bg-light ms-2 rounded-3 shadow-sm">
@@ -183,34 +179,32 @@
                 <tbody class="text-center">
                   <tr>
                     <td>
-                     <a href="" class="badge rounded-pill bg-warning text-dark mx-1"
-                    >A valider</a
-                  >
+                      <a
+                        href=""
+                        class="badge rounded-pill bg-warning text-dark mx-1"
+                        >A valider</a
+                      >
                     </td>
 
-                    <td >
-                      12.5€
-                    </td>
+                    <td>12.5€</td>
                   </tr>
                   <tr>
-                     <td>
-                     <a href="" class="badge rounded-pill bg-warning text-dark mx-1"
-                    >A valider</a
-                  >
+                    <td>
+                      <a
+                        href=""
+                        class="badge rounded-pill bg-warning text-dark mx-1"
+                        >A valider</a
+                      >
                     </td>
 
-                    <td >
-                      12.5€
-                    </td>
+                    <td>12.5€</td>
                   </tr>
-                  
                 </tbody>
               </table>
             </div>
           </div>
         </div>
         <div class="col bg-light ms-2 rounded-3 shadow-sm"></div>
-        
       </div>
     </div>
   </div>
@@ -218,10 +212,10 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
-import CertificateModalVue from "../../components/CertificateModal/CertificateModal.vue";
-import Doughnut from "../../components/charts/Doughnut.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+import CertificateModalVue from "@/components/CertificateModal/CertificateModal.vue";
+import Doughnut from "@/components/charts/Doughnut.vue";
 import axios from "axios";
 
 export default defineComponent({
@@ -239,7 +233,7 @@ export default defineComponent({
       inscriptions: [],
       index: 0,
       chartOptions: {
-        hoverBorderWidth: 20
+        hoverBorderWidth: 20,
       },
       chartData: {
         hoverBackgroundColor: "red",
@@ -249,10 +243,10 @@ export default defineComponent({
           {
             label: "Data One",
             backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
-            data: [1, 10, 5]
-          }
-        ]
-      }
+            data: [1, 10, 5],
+          },
+        ],
+      },
     };
   },
   methods: {
@@ -263,9 +257,7 @@ export default defineComponent({
       this.showCertificateModal = !this.showCertificateModal;
     },
   },
-   
 });
 </script>
 
-<style>
-</style>
+<style></style>

@@ -78,7 +78,10 @@
                 </th>
                 <td>
                   <router-link
-                    :to="{ name: 'DisciplineDetails', params: { id: 'test' } }"
+                    :to="{
+                      name: 'DisciplineDetails',
+                      params: { id: discipline.id },
+                    }"
                   >
                     {{ discipline.name }}
                   </router-link>
@@ -103,12 +106,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import SideBar from "../../components/SideBar/SideBar.vue";
-import TopBar from "../../components/TopBar/TopBar.vue";
-import SearchBarVue from "../../components/searchBar/SearchBar.vue";
-import CreateDisciplineVue from "../../components/modals/CreateDiscipline.vue";
+import CreateDisciplineVue from "@/components/modals/CreateDiscipline.vue";
+import SearchBarVue from "@/components/searchBar/SearchBar.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+import { Discipline } from "@/types/interface";
 import axios from "axios";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   components: {
@@ -124,7 +128,7 @@ export default defineComponent({
       selectAllRows: false,
       showDisciplineModal: false,
       search: null as unknown,
-      disciplines: [{ id: 0, name: "", description: "" }],
+      disciplines: [] as Discipline[],
     };
   },
   methods: {
@@ -143,8 +147,6 @@ export default defineComponent({
       });
       if (response.status < 300) {
         this.disciplines = response.data.data;
-        console.log(response);
-        console.log(JSON.stringify(this.disciplines));
         this.reloadTable();
       }
     },
@@ -159,8 +161,6 @@ export default defineComponent({
       });
       if (response.status < 300) {
         this.disciplines = response.data.data;
-        console.log(response);
-        console.log(JSON.stringify(this.disciplines));
       }
     },
     setSearch(search: string) {
@@ -176,8 +176,6 @@ export default defineComponent({
     });
     if (response.status < 300) {
       this.disciplines = response.data.data;
-      console.log(response);
-      console.log(JSON.stringify(this.disciplines));
     }
   },
 });
