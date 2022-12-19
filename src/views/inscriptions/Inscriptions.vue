@@ -169,51 +169,11 @@
                   <div v-else>-</div>
                 </td>
                 <td @click="toggleCertificateModal">
-                  <div v-if="inscription.certificate">
-                    <div v-if="inscription.certificate.status === 1">
-                      <a class="badge rounded-pill bg-success mx-1">Validé</a>
-                    </div>
-                    <div
-                      v-else-if="
-                        inscription.certificate.status > 1 &&
-                        inscription.certificate.status < 5
-                      "
-                    >
-                      <a class="badge text-dark rounded-pill bg-warning mx-1"
-                        >A validé</a
-                      >
-                    </div>
-                    <div v-else-if="inscription.certificate.status > 4">
-                      <a class="badge text-dark rounded-pill bg-danger mx-1"
-                        >Refusé</a
-                      >
-                    </div>
-                  </div>
-                  <div v-else>-</div>
+                  <ValidationsChips :status="inscription.certificate?.status" />
                 </td>
 
                 <td @click="toggleCertificateModal">
-                  <div v-if="inscription.payment">
-                    <div v-if="inscription.payment.status === 1">
-                      <a class="badge rounded-pill bg-success mx-1">Validé</a>
-                    </div>
-                    <div
-                      v-else-if="
-                        inscription.payment.status > 1 &&
-                        inscription.payment.status < 5
-                      "
-                    >
-                      <a class="badge text-dark rounded-pill bg-warning mx-1"
-                        >A validé</a
-                      >
-                    </div>
-                    <div v-else-if="inscription.payment.status > 4">
-                      <a class="badge text-dark rounded-pill bg-danger mx-1"
-                        >Refusé</a
-                      >
-                    </div>
-                  </div>
-                  <div v-else>-</div>
+                  <ValidationsChips :status="inscription.payment?.status" />
                 </td>
 
                 <td>
@@ -234,6 +194,7 @@ import SideBar from "../../components/SideBar/SideBar.vue";
 import TopBar from "../../components/TopBar/TopBar.vue";
 import SearchBarVue from "../../components/searchBar/SearchBar.vue";
 import CertificateModalVue from "../../components/CertificateModal/CertificateModal.vue";
+import ValidationsChips from "../../components/validationChips/ValidationsChips.vue";
 import axios from "axios";
 
 export interface User {
@@ -289,6 +250,7 @@ export default defineComponent({
     TopBar,
     SearchBarVue,
     CertificateModalVue,
+    ValidationsChips,
   },
   data() {
     return {

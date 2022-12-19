@@ -41,7 +41,7 @@
         <div class="col text-start">
           <span class="d-inline"
             ><p class="d-inline fw-bolder me-2">Téléphone:</p>
-            <p class="d-inline">{{ inscription.athlete.phoneNumber}}</p></span
+            <p class="d-inline">{{ inscription.athlete.phoneNumber }}</p></span
           >
         </div>
       </div>
@@ -113,27 +113,12 @@
 
       <div class="row mt-2 m-2">
         <div class="col text-start">
-          <span class="d-inline"
-            ><p class="d-inline fw-bolder me-2">Certificat médical:</p>
-            <p class="d-inline">
-              <a
-                class="badge rounded-pill bg-success mx-1"
-                v-if="inscription.certificate.status === 1"
-                >Validé</a
-              >
-              <a
-                class="badge rounded-pill bg-warning mx-1"
-                v-if="inscription.certificate.status > 1 &&
-                      inscription.certificate.status < 5"
-                >A validé</a
-              >
-              <a
-                class="badge rounded-pill bg-danger mx-1"
-                v-if="inscription.certificate.status > 4"
-                >Refusé</a
-              >
-            </p></span
-          >
+          <span class="d-inline">
+            <div class="d-inline fw-bolder me-2">
+              Certificat médical:
+              <ValidationsChips :status="inscription.certificate?.status" />
+            </div>
+          </span>
         </div>
       </div>
 
@@ -159,27 +144,12 @@
 
       <div class="row mt-2 m-2">
         <div class="col text-start">
-          <span class="d-inline"
-            ><p class="d-inline fw-bolder me-2">Payement:</p>
-            <p class="d-inline" v-if="inscription.payment">
-              <a
-                class="badge rounded-pill bg-success mx-1"
-                v-if="inscription.payment.status === 1"
-                >Validé</a
-              >
-              <a
-                class="badge rounded-pill bg-warning mx-1"
-                v-if="inscription.payment.status > 1 &&
-                      inscription.payment.status < 5"
-                >A validé</a
-              >
-              <a
-                class="badge rounded-pill bg-danger mx-1"
-                v-if="inscription.payment.status > 4"
-                >Refusé</a
-              >
-            </p></span
-          >
+          <span class="d-inline">
+            <div class="d-inline fw-bolder me-2">
+              Payement:
+              <ValidationsChips :status="inscription.payment?.status" />
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -190,49 +160,21 @@
 import { defineComponent } from "vue";
 import SideBar from "../../components/SideBar/SideBar.vue";
 import TopBar from "../../components/TopBar/TopBar.vue";
+import ValidationsChips from "../../components/validationChips/ValidationsChips.vue";
 import axios from "axios";
+import { Inscription } from "./Inscriptions.vue";
 
 export default defineComponent({
   components: {
     SideBar,
     TopBar,
+    ValidationsChips,
   },
   data() {
     return {
       hideSideBar: false,
       showCertificateModal: false,
-      inscription: {
-        athlete: {
-          firstName: "",
-          lastName: "",
-          phoneNumber: "",
-          user: {
-            email: "",
-          },
-        },
-        race: {
-          name: "",
-          id: 0,
-        },
-        team: {
-          name: "",
-          id: 0,
-        },
-        teamAdmin: {
-          id: 0,
-        },
-        certificate: {
-          id: 0,
-          status: 0,
-        },
-        va: {
-          id: 0,
-        },
-        payment: {
-          id: 0,
-          status: 0,
-        },
-      },
+      inscription: {} as Inscription,
     };
   },
   methods: {
@@ -256,7 +198,7 @@ export default defineComponent({
       }
     },
   },
-  mounted() {
+  beforeMount() {
     this.reloadTable();
   },
 });

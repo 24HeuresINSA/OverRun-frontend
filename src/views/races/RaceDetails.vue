@@ -9,7 +9,7 @@
     >
       <div class="row m-2 mt-4">
         <div class="col-4 text-start border-bottom p-0">
-          <h2>Random Race (Course)</h2>
+          <h2>{{ race.name }}</h2>
         </div>
         <div class="col-6"></div>
         <div class="col-2 text-end">
@@ -22,10 +22,13 @@
             <p class="d-inline fw-bolder me-2">Categorie:</p>
             <p class="d-inline">
               <router-link
-                :to="{ name: 'CategoryDetails', params: { id: 'test' } }"
+                :to="{
+                  name: 'CategoryDetails',
+                  params: { id: race.category.id },
+                }"
               >
                 <a href="" class="badge rounded-pill bg-secondary">
-                  Random Category</a
+                  {{ race.category.name }}</a
                 >
               </router-link>
             </p>
@@ -36,19 +39,19 @@
         <div class="col text-start">
           <span class="d-inline"
             ><p class="d-inline fw-bolder me-2">Disciplines:</p>
-            <p class="d-inline">
+            <p
+              class="d-inline"
+              v-for="discipline in race.disciplines"
+              :key="discipline.id"
+            >
               <router-link
-                :to="{ name: 'DisciplineDetails', params: { id: 'test' } }"
+                :to="{
+                  name: 'DisciplineDetails',
+                  params: { id: discipline.id },
+                }"
               >
                 <a href="" class="badge rounded-pill bg-secondary">
-                  Random Discipline</a
-                >
-              </router-link>
-              <router-link
-                :to="{ name: 'DisciplineDetails', params: { id: 'test' } }"
-              >
-                <a href="" class="badge rounded-pill bg-secondary ms-2">
-                  Random Discipline</a
+                  {{ discipline.discipline.name }}</a
                 >
               </router-link>
             </p>
@@ -60,7 +63,9 @@
         <div class="col text-start">
           <span class="d-inline"
             ><p class="d-inline fw-bolder me-2">Nombre d'inscriptions:</p>
-            <p class="d-inline">103/200</p>
+            <p class="d-inline">
+              {{ race.inscriptions.length }}/{{ race.maxParticipants }}
+            </p>
           </span>
         </div>
       </div>
@@ -69,7 +74,7 @@
         <div class="col text-start">
           <span class="d-inline"
             ><p class="d-inline fw-bolder me-2">Nombre d'Equipes:</p>
-            <p class="d-inline">7/10</p>
+            <p class="d-inline">{{ race.teams.length }}/{{ race.maxTeams }}</p>
           </span>
         </div>
       </div>
@@ -168,16 +173,22 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr v-for="team in teams" :key="team.id">
                 <td>
                   <router-link
-                    :to="{ name: 'TeamDetails', params: { id: 'test' } }"
+                    :to="{ name: 'TeamDetails', params: { id: team.id } }"
                   >
-                    Random Team
+                    {{ team.name }}
                   </router-link>
                 </td>
-                <td>7/10</td>
-                <td>5/10</td>
+                <td>
+                  {{ team.members.length }}/{{
+                    team.race.category.maxTeamMembers
+                  }}
+                </td>
+                <td>
+                  {{ countValidatedMembers(team) }}/{{ team.members.length }}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -191,6 +202,58 @@
 import { defineComponent } from "vue";
 import SideBar from "../../components/SideBar/SideBar.vue";
 import TopBar from "../../components/TopBar/TopBar.vue";
+import axios from "axios";
+import { Athlete } from "../inscriptions/Inscriptions.vue";
+
+export interface Category {
+  id: string;
+  name: string;
+  maxTeamMembers: number;
+  minTeamMembers: number;
+}
+
+export interface Discipline {
+  id: number;
+  duration: number;
+  discipline: {
+    id: number;
+    name: string;
+  };
+}
+
+export interface Id {
+  id: number;
+}
+
+export interface Race {
+  category: Category;
+  id: number;
+  disciplines: Discipline[];
+  inscriptions: Id[];
+  maxParticipants: number;
+  maxTeams: number;
+  name: string;
+  teams: Id[];
+}
+
+export interface Admin {
+  id: number;
+  adminInscription: Id;
+}
+
+export interface Member {
+  id: number;
+  athlete: Athlete;
+  validated: boolean;
+}
+
+export interface Team {
+  id: number;
+  name: string;
+  members: Member[];
+  admins: Admin[];
+  race: Race;
+}
 
 export default defineComponent({
   components: {
@@ -202,14 +265,43 @@ export default defineComponent({
       hideSideBar: false,
       showAthletes: true,
       showTeams: true,
+      race: {} as Race,
+      teams: [] as Team[],
     };
   },
   methods: {
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
+    async reloadTable() {
+      const response = await axios.get(`races/${this.$route.params.id}`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+        },
+      });
+      if (response.status < 300) {
+        this.race = response.data;
+
+        const res = await axios.get(`teams`, {
+          headers: {
+            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+          },
+        });
+        if (res.status < 300) {
+          const teamsIds = this.race.teams.map((team: any) => team.id);
+          this.teams = res.data.data.filter((team: any) =>
+            teamsIds.includes(team.id)
+          );
+        }
+      }
+    },
+    countValidatedMembers(team: Team): number {
+      return team.members.filter((member) => member.validated).length;
+    },
   },
-  mounted() {},
+  beforeMount() {
+    this.reloadTable();
+  },
 });
 </script>
 
