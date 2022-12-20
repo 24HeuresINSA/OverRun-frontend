@@ -3,11 +3,11 @@
     <div class="row" id="certificate-row">
       <div class="col-15 h-100 p-4 centered">
         <div class="certificate" id="certificate-container">
-          <img
+          <embed
             :src="imageLink"
-            class="h-100 w-100"
+            class="h-100"
+            width="800vw"
             id="certificate-img"
-            alt=""
           />
         </div>
       </div>

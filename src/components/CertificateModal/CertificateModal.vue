@@ -3,7 +3,6 @@
     <div class="container-fluid h-100">
       <div class="row h-100">
         <div class="col-9">
-          {{ certificates }}
           <Certificate
             @next="nextInscription"
             @previous="previousInscription"
