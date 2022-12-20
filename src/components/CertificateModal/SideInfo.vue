@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid w-100 bg-light" id="side-info">
-    <div class="row" v-if="athlete && athlete.user">
+    <div class="row" v-if="inscription?.athlete?.user">
       <div class="container-fluid mt-4">
         <div class="row">
           <div class="col-1"></div>
@@ -24,7 +24,16 @@
             <span class="d-inline"
               ><p class="d-inline fw-bolder me-2">Satut:</p>
               <p class="d-inline">
-                <span class="badge ms-2 reject">Validé</span>
+                <ValidationChips :status="inscription.certificate?.status" /></p
+            ></span>
+          </div>
+        </div>
+        <div class="row text-start">
+          <div class="col">
+            <span class="d-inline"
+              ><p class="d-inline fw-bolder me-2">Par:</p>
+              <p class="d-inline">
+                {{ inscription.certificate?.statusUpdatedBy?.user.username }}
               </p></span
             >
           </div>
@@ -32,16 +41,23 @@
         <div class="row text-start">
           <div class="col">
             <span class="d-inline"
-              ><p class="d-inline fw-bolder me-2">Par:</p>
-              <p class="d-inline">Pintade</p></span
-            >
-          </div>
-        </div>
-        <div class="row text-start">
-          <div class="col">
-            <span class="d-inline"
               ><p class="d-inline fw-bolder me-2">Date:</p>
-              <p class="d-inline">11/08/2022</p></span
+              <p
+                class="d-inline"
+                v-if="inscription.certificate?.statusUpdatedAt"
+              >
+                {{
+                  new Date(
+                    inscription.certificate?.statusUpdatedAt
+                  ).toLocaleDateString("fr", {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                  })
+                }}
+              </p></span
             >
           </div>
         </div>
@@ -56,7 +72,7 @@
           <div class="col">
             <span class="d-inline"
               ><p class="d-inline fw-bolder me-2">Prenom:</p>
-              <p class="d-inline">{{ athlete.firstName }}</p></span
+              <p class="d-inline">{{ inscription.athlete.firstName }}</p></span
             >
           </div>
         </div>
@@ -64,7 +80,7 @@
           <div class="col">
             <span class="d-inline"
               ><p class="d-inline fw-bolder me-2">Nom:</p>
-              <p class="d-inline">{{ athlete.lastName }}</p></span
+              <p class="d-inline">{{ inscription.athlete.lastName }}</p></span
             >
           </div>
         </div>
@@ -72,7 +88,18 @@
           <div class="col">
             <span class="d-inline"
               ><p class="d-inline fw-bolder me-2">Date de naissance:</p>
-              <p class="d-inline">{{ athlete.dateOfBirth }}</p></span
+              <p class="d-inline">
+                {{
+                  new Date(inscription.athlete.dateOfBirth).toLocaleString(
+                    "fr",
+                    {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }
+                  )
+                }}
+              </p></span
             >
           </div>
         </div>
@@ -80,7 +107,7 @@
           <div class="col">
             <span class="d-inline"
               ><p class="d-inline fw-bolder me-2">Email:</p>
-              <p class="d-inline">{{ athlete.user.email }}</p></span
+              <p class="d-inline">{{ inscription.athlete.user.email }}</p></span
             >
           </div>
         </div>
@@ -88,7 +115,9 @@
           <div class="col">
             <span class="d-inline"
               ><p class="d-inline fw-bolder me-2">Téléphone:</p>
-              <p class="d-inline">{{ athlete.phoneNumber }}</p></span
+              <p class="d-inline">
+                {{ inscription.athlete.phoneNumber }}
+              </p></span
             >
           </div>
         </div>
@@ -104,7 +133,7 @@
           <span class="d-inline"
             ><p class="d-inline fw-bolder">Course:</p>
 
-            <p class="d-inline">Triathlon Loisir</p></span
+            <p class="d-inline">{{ inscription.race.name }}</p></span
           >
         </div>
       </div>
@@ -112,16 +141,32 @@
         <div class="col">
           <span class="d-inline"
             ><p class="d-inline fw-bolder">Disciplines:</p>
-            Vélo, Course à pied, Natation
-            <p class="d-inline"></p
-          ></span>
+            <p
+              class="d-inline"
+              v-for="discipline in inscription.race?.disciplines"
+              :key="discipline?.id"
+            >
+              <span class="badge ms-2 bg-primary">{{
+                discipline.discipline.name
+              }}</span>
+            </p>
+          </span>
+        </div>
+      </div>
+      <div class="row text-start">
+        <div class="col">
+          <span class="d-inline"
+            ><p class="d-inline fw-bolder">Categorie:</p>
+
+            <p class="d-inline">{{ inscription.race.category.name }}</p></span
+          >
         </div>
       </div>
       <div class="row text-start">
         <div class="col">
           <span class="d-inline"
             ><p class="d-inline fw-bolder">Age limite:</p>
-            18 ans
+            idk ans
             <p class="d-inline"></p
           ></span>
         </div>
@@ -138,7 +183,7 @@
         <div class="col">
           <span class="d-inline"
             ><p class="d-inline fw-bolder">VA valide:</p>
-            <span class="badge ms-2 reject">Non valide</span>
+            <ValidationChips :status="inscription.va ? 1 : undefined" />
           </span>
         </div>
       </div>
@@ -146,7 +191,7 @@
         <div class="col">
           <span class="d-inline"
             ><p class="d-inline fw-bolder">Montant inscription:</p>
-            17 euros
+            idk €
             <p class="d-inline"></p
           ></span>
         </div>
@@ -155,7 +200,7 @@
         <div class="col">
           <span class="d-inline text-start"
             ><p class="d-inline fw-bolder">Payé:</p>
-            <span class="badge ms-2 valide">Payé</span>
+            <span class="badge ms-2 valide">idk</span>
           </span>
         </div>
       </div>
@@ -164,7 +209,7 @@
         <div class="col">
           <span class="d-inline"
             ><p class="d-inline fw-bolder">Identifiant Transaction:</p>
-            123456789
+            idk
             <p class="d-inline"></p
           ></span>
         </div>
@@ -173,7 +218,7 @@
         <div class="col">
           <span class="d-inline text-start"
             ><p class="d-inline fw-bolder">Date transaction:</p>
-            <p class="d-inline">11/11/21 à 10h51</p>
+            <p class="d-inline">DD/MM/YY à hh:mm</p>
           </span>
         </div>
       </div>
@@ -182,54 +227,45 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import ValidationChips from "@/components/validationChips/ValidationsChips.vue";
+import { Inscription } from "@/types/interface";
 import axios from "axios";
-
-export interface User {
-  id: number;
-  email: string;
-  username: string;
-}
-
-export interface Athlete {
-  id: number;
-  firstName: string;
-  lastName: string;
-  address: string;
-  zipCode: string;
-  city: string;
-  country: string;
-  phoneNumber: string;
-  dateOfBirth: string;
-  sex: boolean;
-  user: User;
-}
+import { defineComponent } from "vue";
 
 export default defineComponent({
+  components: {
+    ValidationChips,
+  },
   props: {
-    athleteId: Number,
+    inscriptionId: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
-      athlete: {} as Athlete,
+      inscription: {} as Inscription,
     };
   },
   methods: {
     closeModal() {
       this.$emit("hideCertificate");
     },
-    async getAthlete() {
-      const response = await axios.get("athletes/" + this.athleteId, {
-        headers: {
-          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-        },
-      });
+    async getInscription() {
+      if (!this.inscriptionId) return;
+      const response = await axios.get("inscriptions/" + this.inscriptionId);
       if (response.status < 300) {
-        this.athlete = response.data.data;
-        console.log(response);
-        console.log(JSON.stringify(this.athlete));
+        this.inscription = response.data;
       }
     },
+  },
+  watch: {
+    inscriptionId(newId, oldId) {
+      this.getInscription();
+    },
+  },
+  beforeMount() {
+    this.getInscription();
   },
 });
 </script>

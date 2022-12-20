@@ -189,14 +189,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import CertificateModalVue from "@/components/CertificateModal/CertificateModal.vue";
+import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
-import SearchBarVue from "@/components/searchBar/SearchBar.vue";
-import CertificateModalVue from "@/components/CertificateModal/CertificateModal.vue";
 import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
-import axios from "axios";
 import { Inscription, Race, Team } from "@/types/interface";
+import axios from "axios";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   components: {
@@ -234,28 +234,15 @@ export default defineComponent({
     },
   },
   async mounted() {
-    const response = await axios.get("inscriptions", {
-      headers: {
-        Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-      },
-    });
+    const response = await axios.get("inscriptions");
     if (response.status < 300) {
       this.inscriptions = response.data.data;
-      console.log(response);
-      console.log(JSON.stringify(this.inscriptions));
     }
-    console.log(response);
   },
   watch: {
-    race(newRace, oldRace) {
-      console.log("Hello");
-    },
-    certficateStatus(newStatus, oldStatus) {
-      console.log("Helo");
-    },
-    paymentStatus(newStatus, oldStatus) {
-      console.log("Hello");
-    },
+    race(newRace, oldRace) {},
+    certficateStatus(newStatus, oldStatus) {},
+    paymentStatus(newStatus, oldStatus) {},
     search(newSearch, oldSearch) {
       console.log(this.search);
     },

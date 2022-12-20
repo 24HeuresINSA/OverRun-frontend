@@ -91,12 +91,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import SideBar from "@/components/SideBar/SideBar.vue";
-import TopBar from "@/components/TopBar/TopBar.vue";
 import CreateAdminInviteVue from "@/components/modals/CreateAdminInvite.vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
 import axios from "axios";
+import { defineComponent } from "vue";
 
 export interface AdminInvite {
   id: number;
@@ -128,21 +128,13 @@ export default defineComponent({
       this.reloadTable();
     },
     async deleteAdminInvite(id: number) {
-      const response = await axios.delete("adminInvitations/" + id, {
-        headers: {
-          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-        },
-      });
+      const response = await axios.delete("adminInvitations/" + id);
       if (response.status < 300) {
         this.reloadTable();
       }
     },
     async reloadTable() {
-      const response = await axios.get("adminInvitations", {
-        headers: {
-          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-        },
-      });
+      const response = await axios.get("adminInvitations");
       if (response.status < 300) {
         this.adminInvites = response.data.data;
         console.log(JSON.stringify(this.adminInvites));

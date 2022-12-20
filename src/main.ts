@@ -1,9 +1,9 @@
+import axios from "axios";
 import { createApp } from "vue";
 import App from "./App.vue";
+import "./axios";
 import router from "./router";
 import store from "./store";
-import "./axios";
-import axios from "axios";
 
 import "./assets/global.css";
 import { MutationTypes } from "./store/modules/auth";
@@ -13,7 +13,6 @@ console.log(axios.defaults.baseURL);
 export const edition = 1;
 
 router.beforeEach(async (to, from) => {
-
   const accessToken = localStorage.getItem("accessToken");
   const refreshToken = localStorage.getItem("refreshToken");
   const userId = localStorage.getItem("userId");
@@ -28,6 +27,10 @@ router.beforeEach(async (to, from) => {
   if (store.getters.getAccessToken === "" && to.name !== "Login") {
     return { name: "Login" };
   }
+
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${store.getters.getAccessToken}`;
 });
 
 createApp(App).use(router).use(store).mount("#app");

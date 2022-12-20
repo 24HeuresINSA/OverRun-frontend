@@ -1,36 +1,15 @@
 <template>
   <div class="container-fluid p-0 h-100">
     <div class="row" id="certificate-row">
-      <div class="col-1" id="left-arrow">
-        <span class="centered-element">
-          <button class="side-btn" @click="previousInscription">
-            <span
-              class="material-icons-outlined text-light fs-1"
-              v-if="previous"
-            >
-              arrow_circle_left
-            </span>
-          </button>
-        </span>
-      </div>
-      <div class="col-10 h-100 p-4">
+      <div class="col-15 h-100 p-4 centered">
         <div class="certificate" id="certificate-container">
           <img
-            src="../../assets/certificat.jpeg"
+            :src="imageLink"
             class="h-100 w-100"
             id="certificate-img"
             alt=""
           />
         </div>
-      </div>
-      <div class="col-1" id="right-arrow">
-        <span class="centered-element">
-          <button class="side-btn" @click="nextInscription">
-            <span class="material-icons-outlined text-light fs-1" v-if="next">
-              arrow_circle_right
-            </span>
-          </button>
-        </span>
       </div>
     </div>
     <div class="row">
@@ -40,11 +19,36 @@
           role="group"
           aria-label="Basic mixed styles example"
         >
-          <button type="button" class="btn menue-btn valide">Valider</button>
-          <button type="button" class="btn menue-btn skip">
-            Passer {{ inscriptionId }}
+          <button
+            type="button"
+            class="btn menue-btn skip"
+            :disabled="!previous"
+            @click="previousInscription"
+          >
+            Précedent
           </button>
-          <button type="button" class="btn menue-btn reject">Refuser</button>
+          <button
+            type="button"
+            class="btn menue-btn valide"
+            @click="validationOfCertificateWithStatus(1)"
+          >
+            Valider
+          </button>
+          <button
+            type="button"
+            class="btn menue-btn reject"
+            @click="validationOfCertificateWithStatus(5)"
+          >
+            Refuser
+          </button>
+          <button
+            type="button"
+            class="btn menue-btn skip"
+            :disabled="!next"
+            @click="nextInscription"
+          >
+            Suivant
+          </button>
         </div>
       </div>
     </div>
@@ -52,13 +56,26 @@
 </template>
 
 <script lang="ts">
+import axios from "axios";
 import { defineComponent } from "vue";
 
 export default defineComponent({
+  data() {
+    return {
+      imageLink: "",
+    };
+  },
   props: {
     next: Boolean,
     previous: Boolean,
-    inscriptionId: Number,
+    certificateId: {
+      type: Number,
+      required: true,
+    },
+    certificateFile: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
     nextInscription() {
@@ -67,10 +84,46 @@ export default defineComponent({
     previousInscription() {
       this.$emit("previous");
     },
+    async getImage(): Promise<string> {
+      if (!this.certificateFile) return "";
+      const response = await fetch(
+        `${process.env.VUE_APP_API_BASE_URL}/static/${this.certificateFile}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const url = URL.createObjectURL(await response.blob());
+        return url;
+      }
+      return "";
+    },
+    async validationOfCertificateWithStatus(status: number) {
+      const response = await axios.post(`certificates/${this.certificateId}`, {
+        // Status signification
+        // 1: Validated
+        // 2: Being validated
+        // 3: Seen
+        // 4: Unseen
+        // 5: Rejected
+        status,
+        statusUpdatedById: this.$store.getters.getAdminId,
+      });
+      if (response.status === 200) {
+        if (status === 1) this.$emit("validate");
+        this.$emit("next");
+      }
+    },
   },
   watch: {
-    inscriptionId(newId, oldId) {
-      console.log(newId);
+    certificateFile(newFile, oldFile) {
+      this.getImage().then((url) => {
+        this.imageLink = url;
+      });
     },
   },
 });

@@ -150,28 +150,15 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
     async deleteCategory(id: number) {
-      const response = await axios.delete("categories/" + id, {
-        headers: {
-          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-        },
-      });
+      const response = await axios.delete("categories/" + id);
       if (response.status < 300) {
         this.reloadTable();
       }
     },
     async reloadTable() {
-      const response = await axios.get("categories", {
-        params: {
-          search: this.search,
-        },
-        headers: {
-          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-        },
-      });
+      const response = await axios.get("categories");
       if (response.status < 300) {
         this.categories = response.data.data;
-        console.log(response);
-        console.log(JSON.stringify(this.categories));
       }
     },
     async setSearch(search: string) {
@@ -187,10 +174,7 @@ export default defineComponent({
     });
     if (response.status < 300) {
       this.categories = response.data.data;
-      console.log(response);
-      console.log(JSON.stringify(this.categories));
     }
-    console.log(response);
   },
 });
 </script>

@@ -10,6 +10,7 @@ export interface Athlete {
   firstName: string;
   lastName: string;
   phoneNumber: string;
+  dateOfBirth: string;
 }
 
 export interface Admin {
@@ -34,12 +35,6 @@ export interface Team {
 export interface VA {
   id: number;
 }
-
-export interface Certifcate {
-  id: number;
-  status: number;
-}
-
 export interface Payment {
   id: number;
   status: number;
@@ -51,7 +46,7 @@ export interface Inscription {
   team: Team;
   va: VA | null;
   race: Race;
-  certificate: Certifcate | null;
+  certificate: Certificate | null;
   payment: Payment | null;
   teamAdmin: Id;
   validated: boolean;
@@ -99,4 +94,17 @@ export interface Race {
   maxTeams: number;
   name: string;
   teams: Id[];
+}
+
+export interface Certificate {
+  id: number;
+  status: number;
+  filename: string;
+  statusUpdatedAt: string;
+  statusUpdatedBy: {
+    id: number;
+    user: User;
+  };
+  uploadAt: string;
+  inscription: Inscription;
 }

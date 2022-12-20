@@ -97,11 +97,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
-import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import axios from "axios";
+import { defineComponent } from "vue";
 
 export interface User {
   id: number;
@@ -145,21 +145,13 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
     async deleteAthlete(id: number) {
-      const response = await axios.delete("athletes/" + id, {
-        headers: {
-          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-        },
-      });
+      const response = await axios.delete("athletes/" + id);
       if (response.status < 300) {
         this.reloadTable();
       }
     },
     async reloadTable() {
-      const response = await axios.get("athletes", {
-        headers: {
-          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-        },
-      });
+      const response = await axios.get("athletes");
       if (response.status < 300) {
         this.athletes = response.data.data;
         console.log(this.athletes);

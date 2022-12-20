@@ -119,11 +119,7 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
     async reloadTable() {
-      const response = await axios.get(`teams/${this.$route.params.id}`, {
-        headers: {
-          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-        },
-      });
+      const response = await axios.get(`teams/${this.$route.params.id}`);
       if (response.status < 300) {
         this.team = response.data;
       }

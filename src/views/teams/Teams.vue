@@ -162,9 +162,6 @@ export default defineComponent({
         params: {
           search: this.search,
         },
-        headers: {
-          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-        },
       });
       if (response.status < 300) {
         this.teams = response.data.data;

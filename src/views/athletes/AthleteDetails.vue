@@ -112,10 +112,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import axios from "axios";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   components: {
@@ -151,11 +151,7 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
     async reloadTable() {
-      const response = await axios.get(`athletes/${this.$route.params.id}`, {
-        headers: {
-          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-        },
-      });
+      const response = await axios.get(`athletes/${this.$route.params.id}`);
       if (response.status < 300) {
         this.athlete = response.data;
         console.log(this.athlete);

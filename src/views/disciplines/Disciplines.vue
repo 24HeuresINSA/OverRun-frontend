@@ -140,11 +140,7 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
     async deleteDiscipline(id: number) {
-      const response = await axios.delete("disciplines/" + id, {
-        headers: {
-          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-        },
-      });
+      const response = await axios.delete("disciplines/" + id);
       if (response.status < 300) {
         this.disciplines = response.data.data;
         this.reloadTable();
@@ -154,9 +150,6 @@ export default defineComponent({
       const response = await axios.get("disciplines", {
         params: {
           search: this.search,
-        },
-        headers: {
-          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
         },
       });
       if (response.status < 300) {

@@ -9,7 +9,7 @@
       >A validé</a
     >
     <a
-      v-else-if="status > 4"
+      v-else-if="status === 5"
       class="badge text-dark rounded-pill bg-danger mx-1"
       >Refusé</a
     >

@@ -158,12 +158,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import CreateRaceModalVue from "@/components/modals/CreateRaceModal.vue";
+import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
-import SearchBarVue from "@/components/searchBar/SearchBar.vue";
-import CreateRaceModalVue from "@/components/modals/CreateRaceModal.vue";
 import axios from "axios";
+import { defineComponent } from "vue";
 
 export interface Discipline {
   id: number;
@@ -234,11 +234,7 @@ export default defineComponent({
       this.reloadTable();
     },
     async deleteRace(id: number) {
-      const response = await axios.delete("races/" + id, {
-        headers: {
-          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-        },
-      });
+      const response = await axios.delete("races/" + id);
       if (response.status < 300) {
         this.reloadTable();
       }
@@ -247,9 +243,6 @@ export default defineComponent({
       const response = await axios.get("races", {
         params: {
           search: this.search,
-        },
-        headers: {
-          Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
         },
       });
       if (response.status < 300) {

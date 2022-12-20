@@ -7,7 +7,7 @@
     <CertificateModalVue
       v-show="showCertificateModal"
       @hideCertificate="toggleCertificateModal"
-      :inscriptions="inscriptions"
+      :certificates="certificates"
       :index="index"
     />
 
@@ -32,10 +32,10 @@
             </div>
             <div class="row pt-3">
               <div class="col-8 border-end">
-                <h1 class="mb-0">310</h1>
+                <h1 class="mb-0">{{ inscriptions.length }}</h1>
               </div>
               <div class="col-4 text-success">
-                <h2 class="d-block m-auto">+10</h2>
+                <h2 class="d-block m-auto">+idk</h2>
                 <div class="form-text d-block">last 24 h</div>
               </div>
             </div>
@@ -48,14 +48,27 @@
                 <h5>Status Inscriptions</h5>
               </div>
             </div>
-            <div class="row pt-3"></div>
+            <div class="row pt-3">
+              <div class="col-6 text-success">
+                <h2 class="d-block m-auto">
+                  {{ getValidatedInscriptionsLength() }}
+                </h2>
+                <div class="form-text d-block">Validé</div>
+              </div>
+              <div class="col-6 text-danger">
+                <h2 class="d-block m-auto">
+                  {{ getNotValidatedInscriptionsLength() }}
+                </h2>
+                <div class="form-text d-block">Non validé</div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="col bg-light mx-2 rounded-3 shadow-sm">
           <div class="container-fluid p-1 pt-3">
             <div class="row pt-1 pb-1">
               <div class="col border-bottom">
-                <h5>Nombre d'inscrits</h5>
+                <h5></h5>
               </div>
             </div>
             <div class="row pt-3"></div>
@@ -70,10 +83,10 @@
             </div>
             <div class="row pt-3">
               <div class="col-8 border-end">
-                <h1>1250.2 €</h1>
+                <h1>idk €</h1>
               </div>
               <div class="col-4 text-danger">
-                <h4 class="d-block m-auto">-750€</h4>
+                <h4 class="d-block m-auto">idk €</h4>
                 <div class="form-text d-block">manquants</div>
               </div>
             </div>
@@ -87,7 +100,7 @@
           <div class="container-fluid p-1 pt-3">
             <div class="row pt-1 pb-1">
               <div class="col border-bottom">
-                <h5>Certificats à valider (3)</h5>
+                <h5>Certificats à valider ({{ certificates.length }})</h5>
               </div>
             </div>
             <div class="row">
@@ -99,58 +112,26 @@
                   </tr>
                 </thead>
                 <tbody class="text-center">
-                  <tr>
+                  <tr v-for="certificate in certificates" :key="certificate.id">
                     <td>
                       <router-link
                         :to="{
                           name: 'InscriptionDetails',
-                          params: { id: 'test' },
+                          params: { id: certificate.inscription.id },
                         }"
                       >
-                        Random Athlete
+                        {{ certificate.inscription.athlete.firstName }}
+                        {{ certificate.inscription.athlete.lastName }}
                       </router-link>
                     </td>
-
-                    <td @click="toggleCertificateModal">
-                      <a class="badge rounded-pill bg-warning text-dark mx-1"
-                        >A valider</a
-                      >
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <router-link
-                        :to="{
-                          name: 'InscriptionDetails',
-                          params: { id: 'test' },
-                        }"
-                      >
-                        Random Athlete
-                      </router-link>
-                    </td>
-
-                    <td @click="toggleCertificateModal">
-                      <a class="badge rounded-pill bg-warning text-dark mx-1"
-                        >A valider</a
-                      >
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <router-link
-                        :to="{
-                          name: 'InscriptionDetails',
-                          params: { id: 'test' },
-                        }"
-                      >
-                        Random Athlete
-                      </router-link>
-                    </td>
-
-                    <td @click="toggleCertificateModal">
-                      <a class="badge rounded-pill bg-warning text-dark mx-1"
-                        >A valider</a
-                      >
+                    <td
+                      @click="
+                        toggleCertificateModal(
+                          certificates.indexOf(certificate)
+                        )
+                      "
+                    >
+                      <ValidationChips :status="certificate.status" />
                     </td>
                   </tr>
                 </tbody>
@@ -165,7 +146,7 @@
           <div class="container-fluid p-1 pt-3">
             <div class="row pt-1 pb-1">
               <div class="col border-bottom">
-                <h5>Payement à valider (2)</h5>
+                <h5>Payement à valider (idk)</h5>
               </div>
             </div>
             <div class="row">
@@ -186,7 +167,7 @@
                       >
                     </td>
 
-                    <td>12.5€</td>
+                    <td>idk €</td>
                   </tr>
                   <tr>
                     <td>
@@ -197,7 +178,7 @@
                       >
                     </td>
 
-                    <td>12.5€</td>
+                    <td>idk €</td>
                   </tr>
                 </tbody>
               </table>
@@ -211,12 +192,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import SideBar from "@/components/SideBar/SideBar.vue";
-import TopBar from "@/components/TopBar/TopBar.vue";
 import CertificateModalVue from "@/components/CertificateModal/CertificateModal.vue";
 import Doughnut from "@/components/charts/Doughnut.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
+import TopBar from "@/components/TopBar/TopBar.vue";
+import ValidationChips from "@/components/validationChips/ValidationsChips.vue";
+import { Certificate, Inscription } from "@/types/interface";
 import axios from "axios";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   components: {
@@ -224,13 +207,15 @@ export default defineComponent({
     TopBar,
     CertificateModalVue,
     Doughnut,
+    ValidationChips,
   },
 
   data() {
     return {
       hideSideBar: false,
       showCertificateModal: false,
-      inscriptions: [],
+      inscriptions: [] as Inscription[],
+      certificates: [] as Certificate[],
       index: 0,
       chartOptions: {
         hoverBorderWidth: 20,
@@ -253,9 +238,38 @@ export default defineComponent({
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
-    toggleCertificateModal() {
+    toggleCertificateModal(index: number): void {
+      this.index = index;
       this.showCertificateModal = !this.showCertificateModal;
     },
+    async reloadTable() {
+      const inscriptionsResponse = await axios.get("inscriptions/");
+      if (inscriptionsResponse.status < 300) {
+        this.inscriptions = inscriptionsResponse.data.data;
+      }
+
+      const certificateResponse = await axios.get("certificates/");
+      if (certificateResponse.status < 300) {
+        this.certificates = certificateResponse.data.data.filter(
+          (certificate: Certificate) => {
+            return certificate.status !== 1;
+          }
+        );
+      }
+    },
+    getValidatedInscriptionsLength() {
+      return this.inscriptions.filter((inscription) => {
+        return inscription.validated;
+      }).length;
+    },
+    getNotValidatedInscriptionsLength() {
+      return this.inscriptions.filter((inscription) => {
+        return !inscription.validated;
+      }).length;
+    },
+  },
+  mounted() {
+    this.reloadTable();
   },
 });
 </script>
