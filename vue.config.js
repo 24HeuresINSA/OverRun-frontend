@@ -1,3 +1,5 @@
+process.env.VUE_APP_API_BASE_URL = "https://overrun.traefik.me/api/v1";
+
 module.exports = {
   devServer: {
     disableHostCheck: true,
