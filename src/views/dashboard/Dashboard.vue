@@ -112,7 +112,10 @@
                   </tr>
                 </thead>
                 <tbody class="text-center">
-                  <tr v-for="certificate in certificates" :key="certificate.id">
+                  <tr
+                    v-for="certificate in certificates.slice(0, 5)"
+                    :key="certificate.id"
+                  >
                     <td>
                       <router-link
                         :to="{
