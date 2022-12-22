@@ -6,8 +6,8 @@
     <div v-show="showCertificateModal">
       <CertificateModalVue
         @hideCertificate="toggleCertificateModal"
-        :inscriptions="inscriptions"
-        :index="2"
+        :certificates="certificates"
+        :index="index"
       />
     </div>
 
@@ -168,11 +168,20 @@
                   </div>
                   <div v-else>-</div>
                 </td>
-                <td @click="toggleCertificateModal">
+                <td
+                  @click="
+                    toggleCertificateModal(
+                      certificates.findIndex(
+                        (x) => x.id === inscription.certificate?.id
+                      )
+                    )
+                  "
+                >
                   <ValidationsChips :status="inscription.certificate?.status" />
                 </td>
 
-                <td @click="toggleCertificateModal">
+                <!-- TODO add the payment modal here -->
+                <td>
                   <ValidationsChips :status="inscription.payment?.status" />
                 </td>
 
@@ -194,7 +203,7 @@ import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
-import { Inscription, Race, Team } from "@/types/interface";
+import { Certificate, Inscription } from "@/types/interface";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -213,17 +222,17 @@ export default defineComponent({
       selectAllRows: false,
       showCertificateModal: false,
       index: 0,
-      races: [] as Race[],
-      teams: [] as Team[],
       search: null as unknown,
       race: null,
       certificateStatus: null,
       paymentStatus: null,
       inscriptions: [] as Inscription[],
+      certificates: [] as Certificate[],
     };
   },
   methods: {
-    toggleCertificateModal() {
+    toggleCertificateModal(index: number): void {
+      this.index = index;
       this.showCertificateModal = !this.showCertificateModal;
     },
     toggleSideBar(): void {
@@ -237,6 +246,11 @@ export default defineComponent({
     const response = await axios.get("inscriptions");
     if (response.status < 300) {
       this.inscriptions = response.data.data;
+    }
+
+    const certificatesResponse = await axios.get("certificates");
+    if (certificatesResponse.status < 300) {
+      this.certificates = certificatesResponse.data.data;
     }
   },
   watch: {
