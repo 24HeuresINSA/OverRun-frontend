@@ -68,9 +68,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import axios from "axios";
-import { edition } from "@/main";
+import { defineComponent } from "vue";
 export default defineComponent({
   data() {
     return {
@@ -92,7 +91,7 @@ export default defineComponent({
           description: this.description,
           maxTeamMembers: this.maxTeamMembers,
           minTeamMembers: this.minTeamMembers,
-          editionId: edition,
+          editionId: this.$store.getters.getEditionId,
         },
         {
           headers: {

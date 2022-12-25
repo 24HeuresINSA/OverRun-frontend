@@ -43,7 +43,6 @@
 </template>
 
 <script lang="ts">
-import { edition } from "@/main";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -52,7 +51,6 @@ export default defineComponent({
     return {
       name: null,
       description: null,
-      editionId: 1,
     };
   },
   methods: {
@@ -65,7 +63,7 @@ export default defineComponent({
         {
           name: this.name,
           description: this.description,
-          editionId: edition,
+          editionId: this.$store.getters.getEditionId,
         },
         {
           headers: {
@@ -76,7 +74,6 @@ export default defineComponent({
       if (response.status < 300) {
         this.closeModal();
       }
-      console.log(response);
     },
   },
 });

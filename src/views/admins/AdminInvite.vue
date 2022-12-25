@@ -137,7 +137,6 @@ export default defineComponent({
       const response = await axios.get("adminInvitations");
       if (response.status < 300) {
         this.adminInvites = response.data.data;
-        console.log(JSON.stringify(this.adminInvites));
       }
     },
     setSearch(search: string) {

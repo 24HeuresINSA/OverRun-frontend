@@ -242,13 +242,12 @@ export default defineComponent({
     async reloadTable() {
       const response = await axios.get("races", {
         params: {
+          editionId: this.$store.getters.getEditionId,
           search: this.search,
         },
       });
       if (response.status < 300) {
         this.races = response.data.data;
-        console.log(response);
-        console.log(JSON.stringify(this.races));
       }
     },
   },

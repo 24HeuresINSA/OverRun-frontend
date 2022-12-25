@@ -156,7 +156,11 @@ export default defineComponent({
       }
     },
     async reloadTable() {
-      const response = await axios.get("categories");
+      const response = await axios.get("categories", {
+        params: {
+          editionId: this.$store.getters.getEditionId,
+        },
+      });
       if (response.status < 300) {
         this.categories = response.data.data;
       }
@@ -167,14 +171,7 @@ export default defineComponent({
     },
   },
   async mounted() {
-    const response = await axios.get("categories", {
-      headers: {
-        Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-      },
-    });
-    if (response.status < 300) {
-      this.categories = response.data.data;
-    }
+    this.reloadTable();
   },
 });
 </script>

@@ -8,10 +8,6 @@ import store from "./store";
 import "./assets/global.css";
 import { MutationTypes } from "./store/modules/auth";
 
-console.log(axios.defaults.baseURL);
-
-export const edition = 1;
-
 router.beforeEach(async (to, from) => {
   const accessToken = localStorage.getItem("accessToken");
   const refreshToken = localStorage.getItem("refreshToken");
@@ -33,4 +29,6 @@ router.beforeEach(async (to, from) => {
   ] = `Bearer ${store.getters.getAccessToken}`;
 });
 
-createApp(App).use(router).use(store).mount("#app");
+store.dispatch("setEditionId").then(() => {
+  createApp(App).use(router).use(store).mount("#app");
+});

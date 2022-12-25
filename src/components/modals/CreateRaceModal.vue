@@ -144,9 +144,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import axios from "axios";
-import { edition } from "@/main";
+import { defineComponent } from "vue";
 
 export interface Discipline {
   id: number;
@@ -182,7 +181,6 @@ export default defineComponent({
       this.$emit("closeRaceModal");
     },
     selectDiscipline(id: number, name: string) {
-      console.log(id);
       let i = 0;
       let isAlreadySelected = false;
       this.selectedDisciplines.forEach(function (selectedDiscipline, index) {
@@ -202,7 +200,6 @@ export default defineComponent({
         };
         this.selectedDisciplines.push(discipline);
       }
-      console.log(this.selectedDisciplines);
     },
     isDisciplineSelected(id: number): boolean {
       this.selectedDisciplines.forEach(function (selectedDiscipline, index) {
@@ -223,7 +220,7 @@ export default defineComponent({
           maxTeams: this.maxTeams,
           disciplineIds: this.selectedDisciplines,
           categoryId: this.categoryId,
-          editionId: edition,
+          editionId: this.$store.getters.getEditionId,
         },
         {
           headers: {
@@ -235,29 +232,24 @@ export default defineComponent({
         this.closeModal();
         (e.target as HTMLFormElement)?.reset();
       }
-      console.log(response);
     },
   },
   async mounted() {
     let response = await axios.get("disciplines", {
-      headers: {
-        Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+      params: {
+        editionId: this.$store.getters.getEditionId,
       },
     });
     if (response.status < 300) {
       this.disciplines = response.data.data;
-      console.log(response);
-      console.log(JSON.stringify(this.disciplines));
     }
     response = await axios.get("categories", {
-      headers: {
-        Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+      params: {
+        editionId: this.$store.getters.getEditionId,
       },
     });
     if (response.status < 300) {
       this.categories = response.data.data;
-      console.log(response);
-      console.log(JSON.stringify(this.categories));
     }
   },
 });

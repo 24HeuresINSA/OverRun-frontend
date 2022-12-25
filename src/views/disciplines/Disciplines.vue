@@ -149,6 +149,7 @@ export default defineComponent({
     async reloadTable() {
       const response = await axios.get("disciplines", {
         params: {
+          editionId: this.$store.getters.getEditionId,
           search: this.search,
         },
       });
@@ -161,15 +162,8 @@ export default defineComponent({
       this.reloadTable();
     },
   },
-  async mounted() {
-    const response = await axios.get("disciplines", {
-      headers: {
-        Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-      },
-    });
-    if (response.status < 300) {
-      this.disciplines = response.data.data;
-    }
+  mounted() {
+    this.reloadTable();
   },
 });
 </script>

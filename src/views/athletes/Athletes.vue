@@ -154,7 +154,6 @@ export default defineComponent({
       const response = await axios.get("athletes");
       if (response.status < 300) {
         this.athletes = response.data.data;
-        console.log(this.athletes);
       }
     },
     setSearch(search: string) {

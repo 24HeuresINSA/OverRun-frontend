@@ -150,7 +150,7 @@
                   </router-link>
                 </td>
                 <td>
-                  <div v-if="inscription.race">
+                  <div v-if="inscription?.team?.id">
                     <router-link
                       :to="{
                         name: 'TeamDetails',
@@ -242,7 +242,7 @@ export default defineComponent({
       this.search = search;
     },
   },
-  async mounted() {
+  async beforeMount() {
     const response = await axios.get("inscriptions");
     if (response.status < 300) {
       this.inscriptions = response.data.data;

@@ -146,8 +146,6 @@ export default defineComponent({
       const response = await axios.get("admins");
       if (response.status < 300) {
         this.admins = response.data.data;
-        console.log(response);
-        console.log(JSON.stringify(this.admins));
       }
     },
     setSearch(search: string) {
