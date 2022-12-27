@@ -124,6 +124,7 @@
                 <td>{{ inscription.athlete.user.email }}</td>
                 <td>
                   <router-link
+                    v-if="inscription.team?.id"
                     :to="{
                       name: 'TeamDetails',
                       params: { id: inscription.team.id },

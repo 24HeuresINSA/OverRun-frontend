@@ -107,10 +107,10 @@
                     {{ race.name }}
                   </router-link>
                 </td>
-                <td>{{ race.teams.length }}/{{ race.maxTeams }}</td>
                 <td>
                   {{ race.inscriptions.length }}/{{ race.maxParticipants }}
                 </td>
+                <td>{{ race.teams.length }}/{{ race.maxTeams }}</td>
                 <td>
                   <router-link
                     v-for="discipline in race.disciplines"
