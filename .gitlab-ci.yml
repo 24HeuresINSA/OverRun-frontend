@@ -18,6 +18,16 @@ build:
   only:
     - main
 
+mr-build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE .
+  only:
+    - merge_requests
+
 deploy:
   image: curlimages/curl
   stage: deploy
