@@ -10,7 +10,7 @@
     "@types/axios": "^0.14.0",
     "@types/chart.js": "^2.9.35",
     "axios": "^0.26.0",
-    "bootstrap-icons": "^1.7.2",
+    "bootstrap-icons": "^1.10.3",
     "chart.js": "^3.7.0",
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
