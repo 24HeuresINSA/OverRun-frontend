@@ -154,7 +154,6 @@ export default defineComponent({
       const response = await axios.get(`athletes/${this.$route.params.id}`);
       if (response.status < 300) {
         this.athlete = response.data;
-        console.log(this.athlete);
       }
     },
   },
