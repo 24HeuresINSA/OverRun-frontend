@@ -11,13 +11,9 @@ import { MutationTypes } from "./store/modules/auth";
 router.beforeEach(async (to, from) => {
   const accessToken = localStorage.getItem("accessToken");
   const refreshToken = localStorage.getItem("refreshToken");
-  const userId = localStorage.getItem("userId");
-  const adminId = localStorage.getItem("adminId");
   if (accessToken && refreshToken) {
     store.commit(MutationTypes.SET_ACCESS_TOKEN, accessToken);
     store.commit(MutationTypes.SET_REFRESH_TOKEN, refreshToken);
-    store.commit(MutationTypes.SET_USER, userId);
-    store.commit(MutationTypes.SET_ADMIN_ID, adminId);
   }
 
   if (store.getters.getAccessToken === "" && to.name !== "Login") {

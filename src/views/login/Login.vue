@@ -115,8 +115,6 @@ export default defineComponent({
         if (this.persistentLogin) {
           localStorage.setItem("accessToken", response.data.accessToken);
           localStorage.setItem("refreshToken", response.data.refreshToken);
-          localStorage.setItem("userId", JSON.parse(jsonPayload).id);
-          localStorage.setItem("adminId", JSON.parse(jsonPayload).adminId);
         }
 
         if (this.$store.getters.getAdminId === null) {

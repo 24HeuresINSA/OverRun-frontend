@@ -1,13 +1,11 @@
-import { MutationTree } from "vuex";
 import {
-  createStore,
-  Store as VuexStore,
+  ActionContext,
   CommitOptions,
   DispatchOptions,
+  GetterTree,
+  MutationTree,
+  Store as VuexStore,
 } from "vuex";
-import { ActionTree, ActionContext } from "vuex";
-import { GetterTree } from "vuex";
-import axios from "axios";
 
 export const state = {
   accessToken: "",
@@ -51,6 +49,8 @@ export const mutations: MutationTree<State> & Mutations = {
     state.user = null;
     state.accessToken = "";
     state.refreshToken = "";
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
   },
 };
 
