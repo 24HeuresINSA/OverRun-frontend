@@ -1,9 +1,9 @@
-process.env.VUE_APP_API_BASE_URL = "https://overrun.traefik.me/api/v1";
+process.env.VUE_APP_API_BASE_URL = "https://overrun.24heures.org/api/v1";
 
 module.exports = {
   devServer: {
     disableHostCheck: true,
-    public: "https://overrun.traefik.me",
+    public: "https://overrun.24heures.org",
   },
   publicPath: "/admin",
   outputDir: "dist/admin",
