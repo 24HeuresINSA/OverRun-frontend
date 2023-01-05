@@ -91,7 +91,7 @@ export default defineComponent({
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
+            Authorization: `Bearer ${this.$store.getters["auth/getAccessToken"]}`,
           },
         }
       );
@@ -111,7 +111,7 @@ export default defineComponent({
         // 4: Unseen
         // 5: Rejected
         status,
-        statusUpdatedById: this.$store.getters.getAdminId,
+        statusUpdatedById: this.$store.getters["auth/getAdminId"],
       });
       if (response.status === 200) {
         if (status === 1) this.$emit("validate");

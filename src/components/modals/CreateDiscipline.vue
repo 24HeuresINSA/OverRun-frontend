@@ -58,19 +58,11 @@ export default defineComponent({
       this.$emit("closeDisciplineModal");
     },
     async createDiscipline() {
-      const response = await axios.post(
-        "disciplines",
-        {
-          name: this.name,
-          description: this.description,
-          editionId: this.$store.getters.getEditionId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-          },
-        }
-      );
+      const response = await axios.post("disciplines", {
+        name: this.name,
+        description: this.description,
+        editionId: this.$store.getters["edition/getEditionId"],
+      });
       if (response.status < 300) {
         this.closeModal();
       }

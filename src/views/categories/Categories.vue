@@ -158,7 +158,7 @@ export default defineComponent({
     async reloadTable() {
       const response = await axios.get("categories", {
         params: {
-          editionId: this.$store.getters.getEditionId,
+          editionId: this.$store.getters["edition/getEditionId"],
         },
       });
       if (response.status < 300) {

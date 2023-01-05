@@ -185,14 +185,7 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
     async reloadTable() {
-      const response = await axios.get(
-        `inscriptions/${this.$route.params.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-          },
-        }
-      );
+      const response = await axios.get(`inscriptions/${this.$route.params.id}`);
       if (response.status < 300) {
         this.inscription = response.data;
       }

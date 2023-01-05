@@ -84,21 +84,13 @@ export default defineComponent({
       this.$emit("closeCategoryModal");
     },
     async createCategory() {
-      const response = await axios.post(
-        "categories",
-        {
-          name: this.name,
-          description: this.description,
-          maxTeamMembers: this.maxTeamMembers,
-          minTeamMembers: this.minTeamMembers,
-          editionId: this.$store.getters.getEditionId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-          },
-        }
-      );
+      const response = await axios.post("categories", {
+        name: this.name,
+        description: this.description,
+        maxTeamMembers: this.maxTeamMembers,
+        minTeamMembers: this.minTeamMembers,
+        editionId: this.$store.getters["edition/getEditionId"],
+      });
       if (response.status < 300) {
         this.closeModal();
       }

@@ -47,4 +47,5 @@ export default {
   getters,
   actions,
   mutations,
+  namespaced: true,
 };

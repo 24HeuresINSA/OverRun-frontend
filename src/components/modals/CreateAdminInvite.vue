@@ -30,8 +30,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import axios from "axios";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   data() {
@@ -44,17 +44,9 @@ export default defineComponent({
       this.$emit("closeAdminInviteModal");
     },
     async sendInvite(e: Event) {
-      const response = await axios.post(
-        "adminInvitations",
-        {
-          email: this.email,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-          },
-        }
-      );
+      const response = await axios.post("adminInvitations", {
+        email: this.email,
+      });
       if (response.status < 300) {
         this.closeModal();
         (e.target as HTMLFormElement)?.reset();

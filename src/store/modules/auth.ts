@@ -118,6 +118,7 @@ export default {
   getters,
   // actions,
   mutations,
+  namespaced: true,
 };
 
 export type Store = Omit<

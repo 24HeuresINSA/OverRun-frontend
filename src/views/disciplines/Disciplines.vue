@@ -149,7 +149,7 @@ export default defineComponent({
     async reloadTable() {
       const response = await axios.get("disciplines", {
         params: {
-          editionId: this.$store.getters.getEditionId,
+          editionId: this.$store.getters["edition/getEditionId"],
           search: this.search,
         },
       });

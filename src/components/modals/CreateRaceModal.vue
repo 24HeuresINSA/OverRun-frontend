@@ -210,24 +210,16 @@ export default defineComponent({
       return false;
     },
     async createRace(e: Event) {
-      const response = await axios.post(
-        "races",
-        {
-          name: this.name,
-          registrationPrice: this.registrationPrice,
-          vaRegistrationPrice: this.vaRegistrationPrice,
-          maxParticipants: this.maxParticipants,
-          maxTeams: this.maxTeams,
-          disciplineIds: this.selectedDisciplines,
-          categoryId: this.categoryId,
-          editionId: this.$store.getters.getEditionId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-          },
-        }
-      );
+      const response = await axios.post("races", {
+        name: this.name,
+        registrationPrice: this.registrationPrice,
+        vaRegistrationPrice: this.vaRegistrationPrice,
+        maxParticipants: this.maxParticipants,
+        maxTeams: this.maxTeams,
+        disciplineIds: this.selectedDisciplines,
+        categoryId: this.categoryId,
+        editionId: this.$store.getters["edition/getEditionId"],
+      });
       if (response.status < 300) {
         this.closeModal();
         (e.target as HTMLFormElement)?.reset();
@@ -237,7 +229,7 @@ export default defineComponent({
   async mounted() {
     let response = await axios.get("disciplines", {
       params: {
-        editionId: this.$store.getters.getEditionId,
+        editionId: this.$store.getters["edition/getEditionId"],
       },
     });
     if (response.status < 300) {
@@ -245,7 +237,7 @@ export default defineComponent({
     }
     response = await axios.get("categories", {
       params: {
-        editionId: this.$store.getters.getEditionId,
+        editionId: this.$store.getters["edition/getEditionId"],
       },
     });
     if (response.status < 300) {

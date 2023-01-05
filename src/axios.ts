@@ -19,13 +19,16 @@ axios.interceptors.response.use(
     if (err?.response?.status === 403) {
       await axiosRefeshInstance
         .post("refresh", {
-          refreshToken: store.getters.getRefreshToken,
+          refreshToken: store.getters["auth/getRefreshToken"],
         })
         .then((response) => {
           if (response.status === 200) {
             const { accessToken, refreshToken } = response.data;
-            store.commit(MutationTypes.SET_ACCESS_TOKEN, accessToken);
-            store.commit(MutationTypes.SET_REFRESH_TOKEN, refreshToken);
+            store.commit(`auth/${MutationTypes.SET_ACCESS_TOKEN}`, accessToken);
+            store.commit(
+              `auth/${MutationTypes.SET_REFRESH_TOKEN}`,
+              refreshToken
+            );
 
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
@@ -33,10 +36,10 @@ axios.interceptors.response.use(
           }
         })
         .catch((error) => {
-          store.commit(MutationTypes.SET_ACCESS_TOKEN, "");
-          store.commit(MutationTypes.SET_REFRESH_TOKEN, "");
-          store.commit(MutationTypes.SET_USER, "");
-          store.commit(MutationTypes.SET_ADMIN_ID, "");
+          store.commit(`auth/${MutationTypes.SET_ACCESS_TOKEN}`, "");
+          store.commit(`auth/${MutationTypes.SET_REFRESH_TOKEN}`, "");
+          store.commit(`auth/${MutationTypes.SET_USER}`, "");
+          store.commit(`auth/${MutationTypes.SET_ADMIN_ID}`, "");
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
           localStorage.removeItem("userId");

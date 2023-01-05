@@ -242,7 +242,7 @@ export default defineComponent({
     async reloadTable() {
       const response = await axios.get("races", {
         params: {
-          editionId: this.$store.getters.getEditionId,
+          editionId: this.$store.getters["edition/getEditionId"],
           search: this.search,
         },
       });

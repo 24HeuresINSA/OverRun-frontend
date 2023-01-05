@@ -117,26 +117,18 @@ export default defineComponent({
       this.$emit("toggleSideBar");
     },
     async logout() {
-      const res = await axios.post(
-        "logout",
-        { refreshToken: this.$store.getters.getRefreshToken },
-        {
-          headers: {
-            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-          },
-        }
-      );
+      const res = await axios.post("logout", {
+        refreshToken: this.$store.getters["auth/getRefreshToken"],
+      });
       if (res.status !== 200) return;
-      this.$store.commit(MutationTypes.LOGOUT, undefined);
+      this.$store.commit(`auth/${MutationTypes.LOGOUT}`);
       this.$router.push({ name: "Login" });
     },
   },
   async mounted() {
-    const admins = await axios.get("admins/" + this.$store.getters.getAdminId, {
-      headers: {
-        Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-      },
-    });
+    const admins = await axios.get(
+      "admins/" + this.$store.getters["auth/getAdminId"]
+    );
     this.pseudo = admins.data.user.username;
   },
 });

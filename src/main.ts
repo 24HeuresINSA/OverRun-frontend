@@ -12,19 +12,19 @@ router.beforeEach(async (to, from) => {
   const accessToken = localStorage.getItem("accessToken");
   const refreshToken = localStorage.getItem("refreshToken");
   if (accessToken && refreshToken) {
-    store.commit(MutationTypes.SET_ACCESS_TOKEN, accessToken);
-    store.commit(MutationTypes.SET_REFRESH_TOKEN, refreshToken);
+    store.commit(`auth/${MutationTypes.SET_ACCESS_TOKEN}`, accessToken);
+    store.commit(`auth/${MutationTypes.SET_REFRESH_TOKEN}`, refreshToken);
   }
 
-  if (store.getters.getAccessToken === "" && to.name !== "Login") {
+  if (store.getters["auth/getAccessToken"] === "" && to.name !== "Login") {
     return { name: "Login" };
   }
 
   axios.defaults.headers.common[
     "Authorization"
-  ] = `Bearer ${store.getters.getAccessToken}`;
+  ] = `Bearer ${store.getters["auth/getAccessToken"]}`;
 });
 
-store.dispatch("setEditionId").then(() => {
+store.dispatch("edition/setEditionId").then(() => {
   createApp(App).use(router).use(store).mount("#app");
 });

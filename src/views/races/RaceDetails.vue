@@ -239,11 +239,7 @@ export default defineComponent({
       if (response.status < 300) {
         this.race = response.data;
 
-        const resTeams = await axios.get(`teams`, {
-          headers: {
-            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-          },
-        });
+        const resTeams = await axios.get(`teams`);
         if (resTeams.status < 300) {
           const teamsIds = this.race.teams.map((team: any) => team.id);
           this.teams = resTeams.data.data.filter((team: Team) =>
@@ -251,11 +247,7 @@ export default defineComponent({
           );
         }
 
-        const resInscritptions = await axios.get(`inscriptions`, {
-          headers: {
-            Authorization: `Bearer ${this.$store.getters.getAccessToken}`,
-          },
-        });
+        const resInscritptions = await axios.get(`inscriptions`);
         if (resInscritptions.status < 300) {
           const inscriptionsIds = this.race.inscriptions.map(
             (inscription: any) => inscription.id
