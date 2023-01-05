@@ -15,7 +15,12 @@ export interface Athlete {
 
 export interface Admin {
   id: number;
-  adminInscription: Id;
+  adminInscription: AdminInscription;
+}
+
+export interface AdminInscription {
+  id: number;
+  athleteId: number;
 }
 
 export interface Member {

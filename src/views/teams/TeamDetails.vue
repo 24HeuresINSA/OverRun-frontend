@@ -63,7 +63,7 @@
               <tr v-for="member in team.members" :key="member.id">
                 <th scope="row">
                   <span
-                    v-if="isTeamAdmin(member.id)"
+                    v-show="isTeamAdmin(member.athlete.id)"
                     class="material-icons-outlined"
                   >
                     military_tech
@@ -128,7 +128,9 @@ export default defineComponent({
       return team.members.filter((member: Member) => member.validated).length;
     },
     isTeamAdmin(id: number): boolean {
-      return this.team.admins.some((admin: Admin) => admin.id === id);
+      return this.team.admins.some(
+        (admin: Admin) => admin.adminInscription.athleteId === id
+      );
     },
   },
   beforeMount() {
