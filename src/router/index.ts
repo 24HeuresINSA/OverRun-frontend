@@ -112,12 +112,12 @@ const routes: Array<RouteRecordRaw> = [
     component: TeamDetailsVue,
   },
   {
-    path: "/edtions",
+    path: "/editions",
     name: "Editions",
     component: EditionVue,
   },
   {
-    path: "/edtions/:id",
+    path: "/editions/:id",
     name: "EditionsDetails",
     component: EditionDetailsVue,
   },
