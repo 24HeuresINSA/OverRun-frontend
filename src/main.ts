@@ -25,6 +25,6 @@ router.beforeEach(async (to, from) => {
   ] = `Bearer ${store.getters["auth/getAccessToken"]}`;
 });
 
-store.dispatch("edition/setEditionId").then(() => {
+store.dispatch("edition/setEdition").then(() => {
   createApp(App).use(router).use(store).mount("#app");
 });
