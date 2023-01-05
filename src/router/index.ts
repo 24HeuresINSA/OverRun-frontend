@@ -1,22 +1,24 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import DashboardVue from '@/views/dashboard/Dashboard.vue';
-import AdminsVue from '@/views/admins/Admins.vue';
-import AdminInviteVue from '@/views/admins/AdminInvite.vue';
-import AthletesVue from '@/views/athletes/Athletes.vue';
-import AthleteDetailsVue from '@/views/athletes/AthleteDetails.vue';
-import CategoriesVue from '@/views/categories/Categories.vue';
-import CategoryDetailsVue from '@/views/categories/CategoryDetails.vue';
-import DisciplinesVue from '@/views/disciplines/Disciplines.vue';
-import DisciplineDetailsVue from '@/views/disciplines/DisciplineDetails.vue';
-import InscriptionsVue from '@/views/inscriptions/Inscriptions.vue';
-import InscriptionDetailsVue from '@/views/inscriptions/InscriptionDetails.vue';
-import PaymentsVue from '@/views/payments/Payments.vue';
-import PaymentDetailsVue from '@/views/payments/PaymentDetails.vue';
-import RacesVue from '@/views/races/Races.vue';
-import RaceDetailsVue from '@/views/races/RaceDetails.vue';
-import TeamsVue from '@/views/teams/Teams.vue';
-import TeamDetailsVue from '@/views/teams/TeamDetails.vue';
-import LoginVue from '@/views/login/Login.vue';
+import AdminInviteVue from "@/views/admins/AdminInvite.vue";
+import AdminsVue from "@/views/admins/Admins.vue";
+import AthleteDetailsVue from "@/views/athletes/AthleteDetails.vue";
+import AthletesVue from "@/views/athletes/Athletes.vue";
+import CategoriesVue from "@/views/categories/Categories.vue";
+import CategoryDetailsVue from "@/views/categories/CategoryDetails.vue";
+import DashboardVue from "@/views/dashboard/Dashboard.vue";
+import DisciplineDetailsVue from "@/views/disciplines/DisciplineDetails.vue";
+import DisciplinesVue from "@/views/disciplines/Disciplines.vue";
+import EditionVue from "@/views/edition/Edition.vue";
+import EditionDetailsVue from "@/views/edition/EditionDetails.vue";
+import InscriptionDetailsVue from "@/views/inscriptions/InscriptionDetails.vue";
+import InscriptionsVue from "@/views/inscriptions/Inscriptions.vue";
+import LoginVue from "@/views/login/Login.vue";
+import PaymentDetailsVue from "@/views/payments/PaymentDetails.vue";
+import PaymentsVue from "@/views/payments/Payments.vue";
+import RaceDetailsVue from "@/views/races/RaceDetails.vue";
+import RacesVue from "@/views/races/Races.vue";
+import TeamDetailsVue from "@/views/teams/TeamDetails.vue";
+import TeamsVue from "@/views/teams/Teams.vue";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -50,9 +52,9 @@ const routes: Array<RouteRecordRaw> = [
     component: CategoriesVue,
   },
   {
-    path: "/categories/:id", 
-    name: "CategoryDetails", 
-    component: CategoryDetailsVue
+    path: "/categories/:id",
+    name: "CategoryDetails",
+    component: CategoryDetailsVue,
   },
   {
     path: "/disciplines",
@@ -60,9 +62,9 @@ const routes: Array<RouteRecordRaw> = [
     component: DisciplinesVue,
   },
   {
-    path: "/disciplines/:id", 
-    name: "DisciplineDetails", 
-    component: DisciplineDetailsVue
+    path: "/disciplines/:id",
+    name: "DisciplineDetails",
+    component: DisciplineDetailsVue,
   },
   {
     path: "/inscriptions",
@@ -70,24 +72,24 @@ const routes: Array<RouteRecordRaw> = [
     component: InscriptionsVue,
   },
   {
-    path: "/inscriptions/:id", 
-    name: "InscriptionDetails", 
-    component: InscriptionDetailsVue
+    path: "/inscriptions/:id",
+    name: "InscriptionDetails",
+    component: InscriptionDetailsVue,
   },
   {
     path: "/login",
-    name: "Login", 
-    component: LoginVue
+    name: "Login",
+    component: LoginVue,
   },
   {
-    path: "/payments", 
-    name: "Payments", 
-    component: PaymentsVue
+    path: "/payments",
+    name: "Payments",
+    component: PaymentsVue,
   },
   {
-    path: '/payments/:id', 
+    path: "/payments/:id",
     name: "PaymentDetails",
-    component: PaymentDetailsVue
+    component: PaymentDetailsVue,
   },
   {
     path: "/races",
@@ -105,15 +107,25 @@ const routes: Array<RouteRecordRaw> = [
     component: TeamsVue,
   },
   {
-    path: "/teams/:id", 
-    name: "TeamDetails", 
-    component: TeamDetailsVue
+    path: "/teams/:id",
+    name: "TeamDetails",
+    component: TeamDetailsVue,
+  },
+  {
+    path: "/edtions",
+    name: "Editions",
+    component: EditionVue,
+  },
+  {
+    path: "/edtions/:id",
+    name: "EditionsDetails",
+    component: EditionDetailsVue,
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;

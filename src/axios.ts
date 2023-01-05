@@ -42,8 +42,6 @@ axios.interceptors.response.use(
           store.commit(`auth/${MutationTypes.SET_ADMIN_ID}`, "");
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
-          localStorage.removeItem("userId");
-          localStorage.removeItem("adminId");
           return router.push({ name: "Login" });
         });
     }

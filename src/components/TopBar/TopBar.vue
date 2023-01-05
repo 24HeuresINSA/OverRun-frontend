@@ -71,7 +71,7 @@
               aria-expanded="false"
             >
               <div class="centered-text">
-                <p>Edition</p>
+                <p>{{ editionName }}</p>
               </div>
               <div class="h-100 w-10" id="edition-arrow">
                 <span class="material-icons d-inline" id="test">
@@ -87,7 +87,10 @@
             >
               <li>
                 <a class="dropdown-item text-dark pt-2 pb-2" href="#">
-                  <span class="material-icons-outlined icon d-inline m-0 p-0">
+                  <span
+                    class="material-icons-outlined icon d-inline m-0 p-0"
+                    @click="editionSettings"
+                  >
                     settings
                   </span>
                   <p class="d-inline">Paramètre</p>
@@ -107,6 +110,11 @@ import axios from "axios";
 import { defineComponent } from "vue";
 
 export default defineComponent({
+  computed: {
+    editionName(): string {
+      return this.$store.getters["edition/getEditionName"];
+    },
+  },
   data() {
     return {
       pseudo: "",
@@ -123,6 +131,9 @@ export default defineComponent({
       if (res.status !== 200) return;
       this.$store.commit(`auth/${MutationTypes.LOGOUT}`);
       this.$router.push({ name: "Login" });
+    },
+    editionSettings() {
+      this.$router.push({ name: "Editions" });
     },
   },
   async mounted() {

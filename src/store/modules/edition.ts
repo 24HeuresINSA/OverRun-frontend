@@ -24,11 +24,19 @@ export const mutations: MutationTree<State> & Mutations = {
 
 export type Getters = {
   getEditionId(state: State): number;
+  getEdition(state: State): Edition;
+  getEditionName(state: State): string;
 };
 
 export const getters: GetterTree<State, State> & Getters = {
   getEditionId: (state) => {
     return state.edition.id;
+  },
+  getEdition: (state) => {
+    return state.edition;
+  },
+  getEditionName: (state) => {
+    return state.edition.name;
   },
 };
 
