@@ -9,9 +9,7 @@
       v-model="search"
     />
     <button class="btn btn-outline-secondary" type="button" id="search-button">
-      <span class="material-icons-outlined">
-        search
-      </span>
+      <span class="material-icons-outlined"> search </span>
     </button>
   </div>
 </template>
@@ -20,7 +18,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  data(){
+  data() {
     return {
       search: null,
     };
@@ -28,18 +26,16 @@ export default defineComponent({
   watch: {
     search(newSearch, oldSearch) {
       this.$emit("search", this.search);
-    }
-  }
-})
-
-
+    },
+  },
+});
 </script>
 
 <style scoped>
-.input-group{
+.input-group {
   height: 20px;
-    width: 300px;
-    float: right;
+  width: 300px;
+  float: right;
 }
 
 input {
@@ -57,11 +53,8 @@ button {
   border-color: #ced4da;
 }
 
-
-
 button:hover {
   background: #374785;
   box-shadow: none;
 }
-
 </style>

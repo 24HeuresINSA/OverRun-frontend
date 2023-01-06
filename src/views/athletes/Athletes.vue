@@ -151,7 +151,11 @@ export default defineComponent({
       }
     },
     async reloadTable() {
-      const response = await axios.get("athletes");
+      const response = await axios.get("athletes", {
+        params: {
+          search: this.search,
+        },
+      });
       if (response.status < 300) {
         this.athletes = response.data.data;
       }
@@ -162,7 +166,7 @@ export default defineComponent({
   },
   watch: {
     search(newSearch, oldSearch) {
-      console.log(this.search);
+      this.reloadTable();
     },
   },
   mounted() {

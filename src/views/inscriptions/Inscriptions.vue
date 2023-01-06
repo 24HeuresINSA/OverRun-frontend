@@ -222,7 +222,7 @@ export default defineComponent({
       selectAllRows: false,
       showCertificateModal: false,
       index: 0,
-      search: null as unknown,
+      search: "",
       race: null,
       certificateStatus: null,
       paymentStatus: null,
@@ -241,24 +241,31 @@ export default defineComponent({
     setSearch(search: string) {
       this.search = search;
     },
+    async reloadTable() {
+      const response = await axios.get("inscriptions", {
+        params: {
+          search: this.search,
+        },
+      });
+      if (response.status < 300) {
+        this.inscriptions = response.data.data;
+      }
+
+      const certificatesResponse = await axios.get("certificates");
+      if (certificatesResponse.status < 300) {
+        this.certificates = certificatesResponse.data.data;
+      }
+    },
   },
   async beforeMount() {
-    const response = await axios.get("inscriptions");
-    if (response.status < 300) {
-      this.inscriptions = response.data.data;
-    }
-
-    const certificatesResponse = await axios.get("certificates");
-    if (certificatesResponse.status < 300) {
-      this.certificates = certificatesResponse.data.data;
-    }
+    await this.reloadTable();
   },
   watch: {
     race(newRace, oldRace) {},
     certficateStatus(newStatus, oldStatus) {},
     paymentStatus(newStatus, oldStatus) {},
     search(newSearch, oldSearch) {
-      console.log(this.search);
+      this.reloadTable();
     },
   },
 });
