@@ -79,6 +79,7 @@
             ><p class="d-inline fw-bolder me-2">Equipe:</p>
             <p class="d-inline">
               <router-link
+                v-if="inscription.team"
                 :to="{
                   name: 'TeamDetails',
                   params: { id: inscription.team.id },
