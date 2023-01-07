@@ -136,7 +136,7 @@ export default defineComponent({
       hideSideBar: false,
       filterMenuActive: false,
       selectAllRows: false,
-      search: null as unknown,
+      search: "",
       athletes: [] as Athlete[],
     };
   },
