@@ -18,7 +18,7 @@
         </div>
         <div class="col-6"></div>
         <div class="col-2">
-          <SearchBarVue :search="setSearch" />
+          <SearchBarVue @search="setSearch" />
         </div>
       </div>
       <div class="row m-2 mt-4">
@@ -143,7 +143,11 @@ export default defineComponent({
       }
     },
     async reloadTable() {
-      const response = await axios.get("admins");
+      const response = await axios.get("admins", {
+        params: {
+          search: this.search,
+        },
+      });
       if (response.status < 300) {
         this.admins = response.data.data;
       }
@@ -157,7 +161,7 @@ export default defineComponent({
   },
   watch: {
     search(newSearch, oldSearch) {
-      console.log(this.search);
+      this.reloadTable();
     },
   },
 });

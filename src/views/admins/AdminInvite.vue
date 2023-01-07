@@ -134,7 +134,11 @@ export default defineComponent({
       }
     },
     async reloadTable() {
-      const response = await axios.get("adminInvitations");
+      const response = await axios.get("adminInvitations", {
+        params: {
+          search: this.search,
+        },
+      });
       if (response.status < 300) {
         this.adminInvites = response.data.data;
       }
@@ -148,7 +152,7 @@ export default defineComponent({
   },
   watch: {
     search(newValue, oldValue) {
-      console.log(this.search);
+      this.reloadTable();
     },
   },
 });

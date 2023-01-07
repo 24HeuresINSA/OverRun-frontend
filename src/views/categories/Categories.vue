@@ -159,6 +159,7 @@ export default defineComponent({
       const response = await axios.get("categories", {
         params: {
           editionId: this.$store.getters["edition/getEditionId"],
+          search: this.search,
         },
       });
       if (response.status < 300) {
