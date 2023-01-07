@@ -13,7 +13,9 @@
         </div>
         <div class="col-6"></div>
         <div class="col-2 text-end">
-          <button class="btn btn-warning">Modifier</button>
+          <button class="btn btn-warning" @click="toogleDisciplineModal">
+            Modifier
+          </button>
         </div>
       </div>
       <div class="row mt-4 m-2">
@@ -56,10 +58,16 @@
         </div>
       </div>
     </div>
+    <UpdateDiscipline
+      :discipline="discipline"
+      v-show="showUpdateDisciplineModal"
+      @closeDisciplineModal="toogleDisciplineModal"
+    />
   </div>
 </template>
 
 <script lang="ts">
+import UpdateDiscipline from "@/components/modals/discipline/UpdateDiscipline.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import { Discipline } from "@/types/interface";
@@ -70,16 +78,21 @@ export default defineComponent({
   components: {
     SideBar,
     TopBar,
+    UpdateDiscipline,
   },
   data() {
     return {
       hideSideBar: false,
       discipline: {} as Discipline,
+      showUpdateDisciplineModal: false,
     };
   },
   methods: {
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
+    },
+    toogleDisciplineModal(): void {
+      this.showUpdateDisciplineModal = !this.showUpdateDisciplineModal;
     },
     async reloadTable() {
       const response = await axios.get(`disciplines/${this.$route.params.id}`);

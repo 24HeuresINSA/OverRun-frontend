@@ -5,6 +5,11 @@
         <div class="col">
           <h4>Creation discipline</h4>
         </div>
+        <div class="col-1">
+          <button id="close-arrow" @click="closeModal">
+            <span class="material-icons-outlined"> close </span>
+          </button>
+        </div>
       </div>
       <hr class="dropdown-divider my-2" />
       <form class="mx-5 my-4 text-start" @submit.prevent="createDiscipline">
@@ -82,5 +87,12 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   z-index: 10001;
+}
+
+#close-arrow {
+  margin-top: -1vh;
+  margin-right: 50px;
+  background: none;
+  border: none;
 }
 </style>

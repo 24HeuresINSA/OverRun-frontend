@@ -13,7 +13,9 @@
         </div>
         <div class="col-6"></div>
         <div class="col-2 text-end">
-          <button class="btn btn-warning">Modifier</button>
+          <button class="btn btn-warning" @click="toogleCategoryModal">
+            Modifier
+          </button>
         </div>
       </div>
       <div class="row mt-4 m-2">
@@ -75,10 +77,16 @@
         </div>
       </div>
     </div>
+    <UpdateCategory
+      :category="categorie"
+      v-show="showUpdateCategoryModal"
+      @closeCategoryModal="toogleCategoryModal"
+    />
   </div>
 </template>
 
 <script lang="ts">
+import UpdateCategory from "@/components/modals/category/UpdateCategory.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import { Category } from "@/types/interface";
@@ -89,17 +97,22 @@ export default defineComponent({
   components: {
     SideBar,
     TopBar,
+    UpdateCategory,
   },
   data() {
     return {
       hideSideBar: false,
       showRaces: true,
+      showUpdateCategoryModal: false,
       categorie: {} as Category,
     };
   },
   methods: {
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
+    },
+    toogleCategoryModal() {
+      this.showUpdateCategoryModal = !this.showUpdateCategoryModal;
     },
     async reloadTable() {
       const response = await axios.get(`categories/${this.$route.params.id}`);

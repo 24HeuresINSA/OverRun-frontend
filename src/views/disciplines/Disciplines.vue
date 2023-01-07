@@ -106,7 +106,7 @@
 </template>
 
 <script lang="ts">
-import CreateDisciplineVue from "@/components/modals/CreateDiscipline.vue";
+import CreateDisciplineVue from "@/components/modals/discipline/CreateDiscipline.vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
@@ -159,6 +159,10 @@ export default defineComponent({
     },
     setSearch(search: string) {
       this.search = search;
+    },
+  },
+  watch: {
+    search() {
       this.reloadTable();
     },
   },

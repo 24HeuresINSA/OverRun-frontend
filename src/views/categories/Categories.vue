@@ -116,7 +116,7 @@
 </template>
 
 <script lang="ts">
-import CreateCategoryVue from "@/components/modals/CreateCategory.vue";
+import CreateCategoryVue from "@/components/modals/category/CreateCategory.vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";

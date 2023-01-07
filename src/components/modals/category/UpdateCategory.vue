@@ -3,11 +3,16 @@
     <div class="col bg-light custom-modal m-auto rounded-3 mt-5">
       <div class="row pt-3">
         <div class="col">
-          <h4>Creation catégorie</h4>
+          <h4>Mise à jour catégorie</h4>
+        </div>
+        <div class="col-1">
+          <button id="close-arrow" @click="closeModal">
+            <span class="material-icons-outlined"> close </span>
+          </button>
         </div>
       </div>
       <hr class="dropdown-divider my-2" />
-      <form class="mx-5 my-4 text-start" @submit.prevent="createCategory">
+      <form class="mx-5 my-4 text-start" @submit.prevent="updateCategory">
         <div class="mb-3 fw-bold">
           <label for="inputName" class="form-label">Nom de la catégorie</label>
           <input
@@ -15,7 +20,7 @@
             class="form-control"
             id="inputName"
             aria-describedby="emailHelp"
-            v-model="name"
+            v-model="category.name"
             required
           />
         </div>
@@ -26,7 +31,7 @@
             class="form-control"
             id="inputDescription"
             aria-describedby="emailHelp"
-            v-model="description"
+            v-model="category.description"
             required
           />
         </div>
@@ -40,7 +45,7 @@
             class="form-control"
             id="inputMinTeamMember"
             aria-describedby="emailHelp"
-            v-model="minTeamMembers"
+            v-model="category.minTeamMembers"
             required
           />
         </div>
@@ -54,7 +59,7 @@
             class="form-control"
             id="inputMaxTeamMember"
             aria-describedby="emailHelp"
-            v-model="maxTeamMembers"
+            v-model="category.maxTeamMembers"
             required
           />
         </div>
@@ -68,33 +73,30 @@
 </template>
 
 <script lang="ts">
+import { Category } from "@/types/category";
 import axios from "axios";
 import { defineComponent } from "vue";
 export default defineComponent({
-  data() {
-    return {
-      name: null,
-      description: null,
-      maxTeamMembers: null,
-      minTeamMembers: null,
-    };
+  name: "UpdateCategory",
+  props: {
+    category: {
+      type: Object as () => Category,
+      required: true,
+    },
   },
+
   methods: {
     closeModal() {
       this.$emit("closeCategoryModal");
     },
-    async createCategory() {
-      const response = await axios.post("categories", {
-        name: this.name,
-        description: this.description,
-        maxTeamMembers: this.maxTeamMembers,
-        minTeamMembers: this.minTeamMembers,
-        editionId: this.$store.getters["edition/getEditionId"],
-      });
+    async updateCategory() {
+      const response = await axios.put(
+        `categories/${this.category.id}`,
+        this.category
+      );
       if (response.status < 300) {
         this.closeModal();
       }
-      console.log(response);
     },
   },
 });
@@ -111,5 +113,12 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   z-index: 10001;
+}
+
+#close-arrow {
+  margin-top: -1vh;
+  margin-right: 50px;
+  background: none;
+  border: none;
 }
 </style>
