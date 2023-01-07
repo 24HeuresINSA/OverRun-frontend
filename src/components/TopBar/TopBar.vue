@@ -86,11 +86,12 @@
               aria-labelledby="dropdownEditionLink"
             >
               <li>
-                <a class="dropdown-item text-dark pt-2 pb-2" href="#">
-                  <span
-                    class="material-icons-outlined icon d-inline m-0 p-0"
-                    @click="editionSettings"
-                  >
+                <a
+                  class="dropdown-item text-dark pt-2 pb-2"
+                  href="#"
+                  @click="editionSettings"
+                >
+                  <span class="material-icons-outlined icon d-inline m-0 p-0">
                     settings
                   </span>
                   <p class="d-inline">Paramètre</p>
