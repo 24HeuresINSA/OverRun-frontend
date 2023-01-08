@@ -244,6 +244,7 @@ export default defineComponent({
     async reloadTable() {
       const response = await axios.get("inscriptions", {
         params: {
+          editionId: this.$store.getters["edition/getEditionId"],
           search: this.search,
         },
       });

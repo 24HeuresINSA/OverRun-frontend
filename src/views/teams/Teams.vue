@@ -160,6 +160,7 @@ export default defineComponent({
     async reloadTable() {
       const response = await axios.get("teams", {
         params: {
+          editionId: this.$store.getters["edition/getEditionId"],
           search: this.search,
         },
       });
