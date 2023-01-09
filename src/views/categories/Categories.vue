@@ -8,6 +8,12 @@
       <CreateCategoryVue @closeCategoryModal="toggleCategoryModal" />
     </div>
 
+    <ConfirmationDeletionModal
+      v-show="showDeletionModal"
+      @closeConfirmationDeletionModal="toggleDeletionModal(-1)"
+      @confirmDeletion="deleteCategory(categoryToDelete)"
+    />
+
     <div
       class="container-fluid main-container"
       :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }"
@@ -98,13 +104,14 @@
                   </div>
                 </td>
                 <td>
-                  <a
-                    href=""
+                  <div class="error" v-show="error">Suppression impossible</div>
+                  <button
                     class="badge bg-danger"
-                    @click.prevent="deleteCategory(category.id)"
+                    @click="toggleDeletionModal(category.id)"
                   >
-                    Supprimer</a
-                  >
+                    <!-- @click.prevent="deleteCategory(category.id)" -->
+                    Supprimer
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -117,6 +124,7 @@
 
 <script lang="ts">
 import CreateCategoryVue from "@/components/modals/category/CreateCategory.vue";
+import ConfirmationDeletionModal from "@/components/modals/ConfirmDeletionModal.vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
@@ -130,6 +138,7 @@ export default defineComponent({
     TopBar,
     SearchBarVue,
     CreateCategoryVue,
+    ConfirmationDeletionModal,
   },
   data() {
     return {
@@ -137,8 +146,11 @@ export default defineComponent({
       filterMenuActive: false,
       selectAllRows: false,
       showCategoryModal: false,
+      showDeletionModal: false,
       categories: [] as Category[],
       search: null as unknown,
+      categoryToDelete: -1,
+      error: false,
     };
   },
   methods: {
@@ -146,14 +158,18 @@ export default defineComponent({
       this.showCategoryModal = !this.showCategoryModal;
       this.reloadTable();
     },
+    toggleDeletionModal(toDelete: number) {
+      this.showDeletionModal = !this.showDeletionModal;
+      this.categoryToDelete = this.showDeletionModal ? toDelete : -1;
+    },
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
     async deleteCategory(id: number) {
       const response = await axios.delete("categories/" + id);
-      if (response.status < 300) {
-        this.reloadTable();
-      }
+      this.error = response.status >= 300;
+      if (this.error) return;
+      this.reloadTable();
     },
     async reloadTable() {
       const response = await axios.get("categories", {
@@ -177,4 +193,8 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style>
+.error {
+  color: red;
+}
+</style>
