@@ -72,7 +72,6 @@
                 />
               </div>
             </div>
-            <!-- checkbox in one line with label "active" -->
             <div class="row mt-4">
               <div class="col-2">
                 <div

@@ -3,6 +3,9 @@
     <TopBar @toggleSideBar="toggleSideBar" />
 
     <SideBar :hide="hideSideBar" activeVue="" />
+    <CreationEditionModal @closeCreationEditionModal="toggleCreationEditionModal"
+      v-show="showCreationEditionModal"
+      @createdEditionSuccess="reloadTable"/> 
 
     <div
       class="container-fluid main-container"
@@ -11,6 +14,24 @@
       <div class="row m-2 mt-4">
         <div class="col-4 text-start border-bottom p-0">
           <h2>Editions</h2>
+        </div>
+      </div>
+
+      <div class="row m-2 mt-4">
+        <div class="col text-end">
+          <div
+            class="btn-group"
+            role="group"
+            aria-label="Basic mixed styles example"
+          >
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="toggleCreationEditionModal"
+            >
+              Ajouter édition
+            </button>
+          </div>
         </div>
       </div>
 
@@ -64,6 +85,7 @@
 </template>
 
 <script lang="ts">
+import CreationEditionModal from "@/components/modals/CreateEditionModal.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import { dateFormat } from "@/types/dateFormat";
@@ -75,16 +97,21 @@ export default defineComponent({
   components: {
     SideBar,
     TopBar,
+    CreationEditionModal,
   },
   data() {
     return {
       hideSideBar: false,
       editions: [] as Edition[],
+      showCreationEditionModal: false,
     };
   },
   methods: {
     toggleSideBar() {
       this.hideSideBar = !this.hideSideBar;
+    },
+    toggleCreationEditionModal() {
+      this.showCreationEditionModal = !this.showCreationEditionModal;
     },
     async reloadTable() {
       const response = await axios.get("/editions");

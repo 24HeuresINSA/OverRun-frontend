@@ -45,6 +45,6 @@ axios.interceptors.response.use(
           return router.push({ name: "Login" });
         });
     }
-    return Promise.reject(err);
+    return err.response;
   }
 );

@@ -36,7 +36,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   data() {
     return {
-      email: null,
+      email: null
     };
   },
   methods: {
