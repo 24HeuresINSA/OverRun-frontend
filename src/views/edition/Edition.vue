@@ -3,9 +3,11 @@
     <TopBar @toggleSideBar="toggleSideBar" />
 
     <SideBar :hide="hideSideBar" activeVue="" />
-    <CreationEditionModal @closeCreationEditionModal="toggleCreationEditionModal"
+    <CreationEditionModal
+      @closeCreationEditionModal="toggleCreationEditionModal"
       v-show="showCreationEditionModal"
-      @createdEditionSuccess="reloadTable"/> 
+      @createdEditionSuccess="reloadTable"
+    />
 
     <div
       class="container-fluid main-container"
