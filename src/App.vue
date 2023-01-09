@@ -1,24 +1,22 @@
 <template>
- 
-  <router-view/>
-
+  <router-view />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapGetters } from "vuex";
 
-export default defineComponent ({
+export default defineComponent({
   components: {},
-  data () {
-    return {}
+  data() {
+    return {};
   },
   methods: {},
   computed: {
     ...mapGetters("auth", {
       getLoginApiStatus: "getLoginApiStatus",
     }),
-  }
+  },
 });
 </script>
 

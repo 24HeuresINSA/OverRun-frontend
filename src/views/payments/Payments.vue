@@ -147,10 +147,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
-import SearchBarVue from "@/components/searchBar/SearchBar.vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   components: {
@@ -174,7 +174,9 @@ export default defineComponent({
       this.search = search;
     },
   },
-  mounted() {},
+  mounted() {
+    // TODO : Load table with payment data
+  },
   watch: {
     search(newSearch, oldSearch) {
       console.log(this.search);

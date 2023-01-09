@@ -196,7 +196,7 @@
 
 <script lang="ts">
 import CertificateModalVue from "@/components/CertificateModal/CertificateModal.vue";
-import Doughnut from "@/components/charts/Doughnut.vue";
+// import Doughnut from "@/components/charts/Doughnut.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationChips from "@/components/validationChips/ValidationsChips.vue";
@@ -209,7 +209,7 @@ export default defineComponent({
     SideBar,
     TopBar,
     CertificateModalVue,
-    Doughnut,
+    // Doughnut,
     ValidationChips,
   },
 

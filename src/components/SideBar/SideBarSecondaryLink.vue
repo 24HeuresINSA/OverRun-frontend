@@ -1,13 +1,19 @@
 <template>
-   <router-link :to="{ name : route}"> 
-  <div class="container-fluid " id="side-bar-secondary-link"  :class="{active: activeVue === route}">
-    <div class="row text-start m-0 p-0">
-      <div class="col-1 p-0" id="left-icon-column"></div>
-      <div class="col p-0">
-        <span class="centered-element text-start" id="text"> ꞏ {{ title }} </span>
+  <router-link :to="{ name: route }">
+    <div
+      class="container-fluid"
+      id="side-bar-secondary-link"
+      :class="{ active: activeVue === route }"
+    >
+      <div class="row text-start m-0 p-0">
+        <div class="col-1 p-0" id="left-icon-column"></div>
+        <div class="col p-0">
+          <span class="centered-element text-start" id="text">
+            ꞏ {{ title }}
+          </span>
+        </div>
       </div>
     </div>
-  </div>
   </router-link>
 </template>
 
@@ -16,24 +22,24 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   props: {
-    'route': String,
-    'title': String, 
-    'activeVue': String
-  }, 
-  data () {
+    route: String,
+    title: String,
+    activeVue: String,
+  },
+  data() {
     return {
       dropteddown: false,
       isActive: false,
-    }
+    };
   },
   methods: {
-    toggleDropdown () {
-      if(!this.isActive) {
-        this.$emit('dropDown', this.title);
+    toggleDropdown() {
+      if (!this.isActive) {
+        this.$emit("dropDown", this.title);
         this.dropteddown = !this.dropteddown;
       }
-    }
-  }
+    },
+  },
 });
 </script>
 
@@ -65,7 +71,7 @@ export default defineComponent({
 
 a {
   text-decoration: none;
-  color: white
+  color: white;
 }
 
 #text {

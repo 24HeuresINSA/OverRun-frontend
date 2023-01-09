@@ -262,9 +262,6 @@ export default defineComponent({
     await this.reloadTable();
   },
   watch: {
-    race(newRace, oldRace) {},
-    certficateStatus(newStatus, oldStatus) {},
-    paymentStatus(newStatus, oldStatus) {},
     search(newSearch, oldSearch) {
       this.reloadTable();
     },

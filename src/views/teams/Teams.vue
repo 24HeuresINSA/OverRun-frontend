@@ -156,7 +156,9 @@ export default defineComponent({
       this.search = search;
       this.reloadTable();
     },
-    deleteTeam(id: number) {},
+    deleteTeam(id: number) {
+      // TODO : call API
+    },
     async reloadTable() {
       const response = await axios.get("teams", {
         params: {

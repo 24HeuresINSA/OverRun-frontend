@@ -98,9 +98,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   components: {
@@ -117,7 +117,9 @@ export default defineComponent({
       this.hideSideBar = !this.hideSideBar;
     },
   },
-  mounted() {},
+  mounted() {
+    // TODO : Load payment details
+  },
 });
 </script>
 

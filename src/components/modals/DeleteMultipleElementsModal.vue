@@ -30,7 +30,6 @@
         <div class="text-center">
           <button type="submit" class="btn btn-primary mb-3">Submit</button>
         </div>
-        
       </form>
     </div>
   </div>
@@ -40,15 +39,14 @@
 import { defineComponent } from "vue";
 export default defineComponent({
   methods: {
-    closeModal () {
-      this.$emit('closeAdminInviteModal');
-    }
-  }
+    closeModal() {
+      this.$emit("closeAdminInviteModal");
+    },
+  },
 });
 </script>
 
 <style scoped>
-
 .custom-modal {
   width: 30%;
 }
@@ -60,5 +58,4 @@ export default defineComponent({
   height: 100%;
   z-index: 10001;
 }
-
 </style>

@@ -78,7 +78,8 @@ export default defineComponent({
     },
   },
   mounted() {
-    var self = this;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
     window.addEventListener("keyup", function (event) {
       if (event.key === "Escape") {
         self.closeModal();

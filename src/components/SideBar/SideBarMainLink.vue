@@ -1,47 +1,57 @@
 <template>
-  <div class="container-fluid text-light" id="side-bar-main-link" @mouseover="hover = true" @mouseout="hover = false" :class="{active: activeVue === route}">
-    <router-link :to="{ name: route}">
-    <div class="row text-start m-0 p-0">
-      <div class="col-1 p-0" id="left-icon-column">
-        <div v-if="hover">
-             <span class="material-icons centered-element" id="left-icon">
-          {{ icon }}
-          </span>
+  <div
+    class="container-fluid text-light"
+    id="side-bar-main-link"
+    @mouseover="hover = true"
+    @mouseout="hover = false"
+    :class="{ active: activeVue === route }"
+  >
+    <router-link :to="{ name: route }">
+      <div class="row text-start m-0 p-0">
+        <div class="col-1 p-0" id="left-icon-column">
+          <div v-if="hover">
+            <span class="material-icons centered-element" id="left-icon">
+              {{ icon }}
+            </span>
+          </div>
+          <div v-else>
+            <span
+              class="material-icons-outlined centered-element"
+              id="left-icon"
+            >
+              {{ icon }}
+            </span>
+          </div>
         </div>
-        <div v-else>
-          <span class="material-icons-outlined centered-element" id="left-icon">
-          {{ icon }}
+        <div class="col p-0">
+          <span class="centered-element text-start" id="text">
+            {{ title }}
           </span>
         </div>
       </div>
-      <div class="col p-0">
-        <span class="centered-element text-start" id="text"> {{ title }} </span>
-      </div>
-    </div>
-     </router-link>
+    </router-link>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 
-export default defineComponent ({
+export default defineComponent({
   props: {
-    'route': String,
-    'title': String,
-    'icon': String,
-    'activeVue': String
+    route: String,
+    title: String,
+    icon: String,
+    activeVue: String,
   },
-  data () {
+  data() {
     return {
       hover: false,
-    }
-  }
+    };
+  },
 });
 </script>
 
 <style scoped>
-
 #side-bar-main-link {
   height: 50px;
   line-height: 50px;
@@ -53,7 +63,7 @@ export default defineComponent ({
 
 #side-bar-main-link:hover {
   background: #24305e;
-   font-weight: bolder;
+  font-weight: bolder;
 }
 
 .active {
@@ -66,8 +76,7 @@ export default defineComponent ({
 }
 
 #left-icon-column {
-    width: 20px;
-   
+  width: 20px;
 }
 
 #left-icon {
@@ -75,8 +84,8 @@ export default defineComponent ({
 }
 
 #text {
-    margin-top: 2px;
-    margin-left: 20px;
+  margin-top: 2px;
+  margin-left: 20px;
 }
 
 .centered-element {
@@ -88,7 +97,6 @@ export default defineComponent ({
 
 a {
   text-decoration: none;
-  color: white
+  color: white;
 }
-
 </style>
