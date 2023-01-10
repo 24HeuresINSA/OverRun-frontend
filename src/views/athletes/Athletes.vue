@@ -3,6 +3,13 @@
     <TopBar @toggleSideBar="toggleSideBar" />
 
     <SideBar :hide="hideSideBar" activeVue="Athletes" />
+
+    <ConfirmationDeletionModal
+      v-show="showDeletionModal"
+      @closeConfirmationDeletionModal="toggleDeletionModal(-1)"
+      @confirmDeletion="deleteAthlete(athleteToDelete)"
+    />
+
     <div
       class="container-fluid main-container"
       :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }"
@@ -79,13 +86,15 @@
                   }}
                 </td>
                 <td>
-                  <a
-                    href=""
+                  <div class="error" v-show="hasError(athlete.id)">
+                    Suppression impossible
+                  </div>
+                  <button
                     class="badge bg-danger"
-                    @click.prevent="deleteAthlete(athlete.id)"
+                    @click="toggleDeletionModal(athlete.id)"
                   >
-                    Supprimer</a
-                  >
+                    Supprimer
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -97,6 +106,7 @@
 </template>
 
 <script lang="ts">
+import ConfirmationDeletionModal from "@/components/modals/ConfirmDeletionModal.vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
@@ -130,27 +140,41 @@ export default defineComponent({
     SideBar,
     TopBar,
     SearchBarVue,
+    ConfirmationDeletionModal,
   },
   data() {
     return {
       hideSideBar: false,
       filterMenuActive: false,
       selectAllRows: false,
+      showDeletionModal: false,
       search: "",
       athletes: [] as Athlete[],
+      athleteToDelete: -1,
+      athleteError: -1,
     };
   },
   methods: {
+    hasError(id: number) {
+      return id === this.athleteError;
+    },
+    toggleDeletionModal(toDelete: number) {
+      this.showDeletionModal = !this.showDeletionModal;
+      this.athleteToDelete = this.showDeletionModal ? toDelete : -1;
+    },
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
     async deleteAthlete(id: number) {
       const response = await axios.delete("athletes/" + id);
-      if (response.status < 300) {
-        this.reloadTable();
+      if (response.status >= 300) {
+        this.athleteError = id;
+        return;
       }
+      this.reloadTable();
     },
     async reloadTable() {
+      this.athleteError = -1;
       const response = await axios.get("athletes", {
         params: {
           search: this.search,
@@ -175,4 +199,8 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style>
+.error {
+  color: red;
+}
+</style>

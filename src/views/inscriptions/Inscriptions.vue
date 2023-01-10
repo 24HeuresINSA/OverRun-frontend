@@ -10,6 +10,11 @@
         :index="index"
       />
     </div>
+    <ConfirmationDeletionModal
+      v-show="showDeletionModal"
+      @closeConfirmationDeletionModal="toggleDeletionModal(-1)"
+      @confirmDeletion="deleteInscription(inscriptionToDelete)"
+    />
 
     <div
       class="container-fluid main-container"
@@ -186,7 +191,15 @@
                 </td>
 
                 <td>
-                  <a href="" class="badge bg-danger"> Supprimer</a>
+                  <div class="error" v-show="hasError(inscription.id)">
+                    Suppression impossible
+                  </div>
+                  <button
+                    class="badge bg-danger"
+                    @click="toggleDeletionModal(inscription.id)"
+                  >
+                    Supprimer
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -199,6 +212,7 @@
 
 <script lang="ts">
 import CertificateModalVue from "@/components/CertificateModal/CertificateModal.vue";
+import ConfirmationDeletionModal from "@/components/modals/ConfirmDeletionModal.vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
@@ -214,6 +228,7 @@ export default defineComponent({
     SearchBarVue,
     CertificateModalVue,
     ValidationsChips,
+    ConfirmationDeletionModal,
   },
   data() {
     return {
@@ -221,9 +236,12 @@ export default defineComponent({
       filterMenuActive: false,
       selectAllRows: false,
       showCertificateModal: false,
+      showDeletionModal: false,
       index: 0,
       search: "",
       race: null,
+      inscriptionToDelete: -1,
+      inscriptionError: -1,
       certificateStatus: null,
       paymentStatus: null,
       inscriptions: [] as Inscription[],
@@ -231,6 +249,9 @@ export default defineComponent({
     };
   },
   methods: {
+    hasError(id: number) {
+      return id === this.inscriptionError;
+    },
     toggleCertificateModal(index: number): void {
       this.index = index;
       this.showCertificateModal = !this.showCertificateModal;
@@ -241,7 +262,16 @@ export default defineComponent({
     setSearch(search: string) {
       this.search = search;
     },
+    toggleDeletionModal(toDelete: number) {
+      this.showDeletionModal = !this.showDeletionModal;
+      this.inscriptionToDelete = this.showDeletionModal ? toDelete : -1;
+    },
+    async deleteInscription(id: number) {
+      // TODO
+      this.inscriptionError = id;
+    },
     async reloadTable() {
+      this.inscriptionError = -1;
       const response = await axios.get("inscriptions", {
         params: {
           editionId: this.$store.getters["edition/getEditionId"],
@@ -269,4 +299,8 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style>
+.error {
+  color: red;
+}
+</style>

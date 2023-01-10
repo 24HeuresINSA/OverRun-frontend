@@ -8,6 +8,12 @@
       <CreateRaceModalVue @closeRaceModal="toggleRaceModal" />
     </div>
 
+    <ConfirmationDeletionModal
+      v-show="showDeletionModal"
+      @closeConfirmationDeletionModal="toggleDeletionModal(-1)"
+      @confirmDeletion="deleteRace(raceToDelete)"
+    />
+
     <div
       class="container-fluid main-container"
       :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }"
@@ -140,13 +146,15 @@
                 <td>{{ race.registrationPrice }}</td>
                 <td>{{ race.vaRegistrationPrice }}</td>
                 <td>
-                  <a
-                    href=""
+                  <div class="error" v-show="hasError(race.id)">
+                    Suppression impossible
+                  </div>
+                  <button
                     class="badge bg-danger"
-                    @click.prevent="deleteRace(race.id)"
+                    @click="toggleDeletionModal(race.id)"
                   >
-                    Supprimer</a
-                  >
+                    Supprimer
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -158,6 +166,7 @@
 </template>
 
 <script lang="ts">
+import ConfirmationDeletionModal from "@/components/modals/ConfirmDeletionModal.vue";
 import CreateRaceModalVue from "@/components/modals/CreateRaceModal.vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
@@ -208,6 +217,7 @@ export default defineComponent({
     TopBar,
     SearchBarVue,
     CreateRaceModalVue,
+    ConfirmationDeletionModal,
   },
   data() {
     return {
@@ -215,13 +225,23 @@ export default defineComponent({
       filterMenuActive: false,
       selectAllRows: false,
       showRaceModal: false,
+      showDeletionModal: false,
       search: null as unknown,
       races: [] as Race[],
       race: null,
       teams: [{ id: 0, name: 0, members: [] }],
+      raceToDelete: -1,
+      raceError: -1,
     };
   },
   methods: {
+    hasError(id: number) {
+      return id === this.raceError;
+    },
+    toggleDeletionModal(toDelete: number) {
+      this.showDeletionModal = !this.showDeletionModal;
+      this.raceToDelete = this.showDeletionModal ? toDelete : -1;
+    },
     toggleRaceModal() {
       this.showRaceModal = !this.showRaceModal;
       this.reloadTable();
@@ -235,11 +255,14 @@ export default defineComponent({
     },
     async deleteRace(id: number) {
       const response = await axios.delete("races/" + id);
-      if (response.status < 300) {
-        this.reloadTable();
+      if (response.status >= 300) {
+        this.raceError = id;
+        return;
       }
+      this.reloadTable();
     },
     async reloadTable() {
+      this.raceError = -1;
       const response = await axios.get("races", {
         params: {
           editionId: this.$store.getters["edition/getEditionId"],
@@ -261,5 +284,8 @@ export default defineComponent({
 a {
   text-decoration: none;
   text-align: center;
+}
+.error {
+  color: red;
 }
 </style>

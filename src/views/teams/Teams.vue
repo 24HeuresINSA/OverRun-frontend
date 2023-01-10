@@ -3,6 +3,13 @@
     <TopBar @toggleSideBar="toggleSideBar" />
 
     <SideBar :hide="hideSideBar" activeVue="Teams" />
+
+    <ConfirmationDeletionModal
+      v-show="showDeletionModal"
+      @closeConfirmationDeletionModal="toggleDeletionModal(-1)"
+      @confirmDeletion="deleteTeam(teamToDelete)"
+    />
+
     <div
       class="container-fluid main-container"
       :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }"
@@ -108,13 +115,15 @@
                   {{ team.members.length }}
                 </td>
                 <td>
-                  <a
-                    href=""
+                  <div class="error" v-show="hasError(team.id)">
+                    Suppression impossible
+                  </div>
+                  <button
                     class="badge bg-danger"
-                    @click.prevent="deleteTeam(team.id)"
+                    @click="toggleDeletionModal(team.id)"
                   >
-                    Supprimer</a
-                  >
+                    Supprimer
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -126,6 +135,7 @@
 </template>
 
 <script lang="ts">
+import ConfirmationDeletionModal from "@/components/modals/ConfirmDeletionModal.vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
@@ -138,17 +148,28 @@ export default defineComponent({
     SideBar,
     TopBar,
     SearchBarVue,
+    ConfirmationDeletionModal,
   },
   data() {
     return {
+      showDeletionModal: false,
       hideSideBar: false,
       filterMenuActive: false,
       selectAllRows: false,
       search: null as unknown,
       teams: [] as Team[],
+      teamToDelete: -1,
+      teamError: -1,
     };
   },
   methods: {
+    hasError(id: number) {
+      return id === this.teamError;
+    },
+    toggleDeletionModal(toDelete: number) {
+      this.showDeletionModal = !this.showDeletionModal;
+      this.teamToDelete = this.showDeletionModal ? toDelete : -1;
+    },
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
@@ -158,8 +179,10 @@ export default defineComponent({
     },
     deleteTeam(id: number) {
       // TODO : call API
+      this.teamError = id;
     },
     async reloadTable() {
+      this.teamError = -1;
       const response = await axios.get("teams", {
         params: {
           editionId: this.$store.getters["edition/getEditionId"],
@@ -186,4 +209,8 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style>
+.error {
+  color: red;
+}
+</style>

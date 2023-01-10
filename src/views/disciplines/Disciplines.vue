@@ -8,6 +8,12 @@
       <CreateDisciplineVue @closeDisciplineModal="toggleDisciplineModal" />
     </div>
 
+    <ConfirmationDeletionModal
+      v-show="showDeletionModal"
+      @closeConfirmationDeletionModal="toggleDeletionModal(-1)"
+      @confirmDeletion="deleteDiscipline(disciplineToDelete)"
+    />
+
     <div
       class="container-fluid main-container"
       :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }"
@@ -88,13 +94,15 @@
                 </td>
                 <td>{{ discipline.description }}</td>
                 <td>
-                  <a
-                    href=""
+                  <div class="error" v-show="hasError(discipline.id)">
+                    Suppression impossible
+                  </div>
+                  <button
                     class="badge bg-danger"
-                    @click.prevent="deleteDiscipline(discipline.id)"
+                    @click="toggleDeletionModal(discipline.id)"
                   >
-                    Supprimer</a
-                  >
+                    Supprimer
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -106,6 +114,7 @@
 </template>
 
 <script lang="ts">
+import ConfirmationDeletionModal from "@/components/modals/ConfirmDeletionModal.vue";
 import CreateDisciplineVue from "@/components/modals/discipline/CreateDiscipline.vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
@@ -120,6 +129,7 @@ export default defineComponent({
     TopBar,
     SearchBarVue,
     CreateDisciplineVue,
+    ConfirmationDeletionModal,
   },
   data() {
     return {
@@ -127,11 +137,17 @@ export default defineComponent({
       filterMenuActive: false,
       selectAllRows: false,
       showDisciplineModal: false,
+      showDeletionModal: false,
       search: null as unknown,
       disciplines: [] as Discipline[],
+      disciplineToDelete: -1,
+      disciplineError: -1,
     };
   },
   methods: {
+    hasError(id: number) {
+      return id === this.disciplineError;
+    },
     toggleDisciplineModal() {
       this.showDisciplineModal = !this.showDisciplineModal;
       this.reloadTable();
@@ -139,14 +155,21 @@ export default defineComponent({
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
+    toggleDeletionModal(toDelete: number) {
+      this.showDeletionModal = !this.showDeletionModal;
+      this.disciplineToDelete = this.showDeletionModal ? toDelete : -1;
+    },
     async deleteDiscipline(id: number) {
       const response = await axios.delete("disciplines/" + id);
-      if (response.status < 300) {
-        this.disciplines = response.data.data;
-        this.reloadTable();
+      if (response.status >= 300) {
+        this.disciplineError = id;
+        return;
       }
+      this.disciplines = response.data.data;
+      this.reloadTable();
     },
     async reloadTable() {
+      this.disciplineError = -1;
       const response = await axios.get("disciplines", {
         params: {
           editionId: this.$store.getters["edition/getEditionId"],
@@ -172,4 +195,8 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style>
+.error {
+  color: red;
+}
+</style>

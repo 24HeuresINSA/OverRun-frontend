@@ -4,6 +4,12 @@
 
     <SideBar :hide="hideSideBar" activeVue="Admins" />
 
+    <ConfirmationDeletionModal
+      v-show="showDeletionModal"
+      @closeConfirmationDeletionModal="toggleDeletionModal(-1)"
+      @confirmDeletion="deleteAdmin(adminToDelete)"
+    />
+
     <div v-show="showAdminInviteModal">
       <CreateAdminInviteVue @closeAdminInviteModal="toggleAdminInviteModal" />
     </div>
@@ -77,13 +83,15 @@
                   {{ admin.user.email }}
                 </td>
                 <td>
-                  <a
-                    href=""
+                  <div class="error" v-show="hasError(admin.id)">
+                    Suppression impossible
+                  </div>
+                  <button
                     class="badge bg-danger"
-                    @click.prevent="deleteAdmin(admin.id)"
+                    @click="toggleDeletionModal(admin.id)"
                   >
-                    Supprimer</a
-                  >
+                    Supprimer
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -95,6 +103,7 @@
 </template>
 
 <script lang="ts">
+import ConfirmationDeletionModal from "@/components/modals/ConfirmDeletionModal.vue";
 import CreateAdminInviteVue from "@/components/modals/CreateAdminInvite.vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
@@ -119,30 +128,44 @@ export default defineComponent({
     TopBar,
     CreateAdminInviteVue,
     SearchBarVue,
+    ConfirmationDeletionModal,
   },
   data() {
     return {
       hideSideBar: false,
       showAdminInviteModal: false,
+      showDeletionModal: false,
       selectAllRows: false,
       search: null as unknown,
       admins: [] as Admin[],
+      adminToDelete: -1,
+      adminError: -1,
     };
   },
   methods: {
+    hasError(id: number) {
+      return id === this.adminError;
+    },
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
+    },
+    toggleDeletionModal(toDelete: number) {
+      this.showDeletionModal = !this.showDeletionModal;
+      this.adminToDelete = this.showDeletionModal ? toDelete : -1;
     },
     toggleAdminInviteModal() {
       this.showAdminInviteModal = !this.showAdminInviteModal;
     },
     async deleteAdmin(id: number) {
       const response = await axios.delete("admins/" + id);
-      if (response.status < 300) {
-        this.reloadTable();
+      if (response.status >= 300) {
+        this.adminError = id;
+        return;
       }
+      this.reloadTable();
     },
     async reloadTable() {
+      this.adminError = -1;
       const response = await axios.get("admins", {
         params: {
           search: this.search,
@@ -167,4 +190,8 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style>
+.error {
+  color: red;
+}
+</style>
