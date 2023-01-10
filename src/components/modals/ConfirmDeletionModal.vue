@@ -33,11 +33,6 @@
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "ConfirmationDeletionModal",
-  data() {
-    return {
-      error: false,
-    };
-  },
   methods: {
     closeModal() {
       this.$emit("closeConfirmationDeletionModal");
