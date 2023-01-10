@@ -104,7 +104,9 @@
                   </div>
                 </td>
                 <td>
-                  <div class="error" v-show="error">Suppression impossible</div>
+                  <div class="error" v-show="hasError(category.id)">
+                    Suppression impossible
+                  </div>
                   <button
                     class="badge bg-danger"
                     @click="toggleDeletionModal(category.id)"
@@ -150,10 +152,13 @@ export default defineComponent({
       categories: [] as Category[],
       search: null as unknown,
       categoryToDelete: -1,
-      error: false,
+      categoryError: -1,
     };
   },
   methods: {
+    hasError(id: number) {
+      return id === this.categoryError;
+    },
     toggleCategoryModal() {
       this.showCategoryModal = !this.showCategoryModal;
       this.reloadTable();
@@ -167,11 +172,14 @@ export default defineComponent({
     },
     async deleteCategory(id: number) {
       const response = await axios.delete("categories/" + id);
-      this.error = response.status >= 300;
-      if (this.error) return;
+      if (response.status >= 300) {
+        this.categoryError = id;
+        return;
+      }
       this.reloadTable();
     },
     async reloadTable() {
+      this.categoryError = -1;
       const response = await axios.get("categories", {
         params: {
           editionId: this.$store.getters["edition/getEditionId"],
