@@ -167,7 +167,6 @@ export default defineComponent({
         },
       ],
       selectedDisciplines: [] as Discipline[],
-      selectedDisciplinesIds: [],
       name: null,
       registrationPrice: null,
       vaRegistrationPrice: null,
@@ -190,7 +189,6 @@ export default defineComponent({
         }
       });
       if (isAlreadySelected) {
-        this.selectedDisciplinesIds.splice(i, 1);
         this.selectedDisciplines.splice(i, 1);
       } else {
         const discipline: Discipline = {
