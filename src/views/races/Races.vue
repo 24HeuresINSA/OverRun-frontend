@@ -143,8 +143,8 @@
                     }}</a>
                   </router-link>
                 </td>
-                <td>{{ race.registrationPrice }}</td>
-                <td>{{ race.vaRegistrationPrice }}</td>
+                <td>{{ centimesToEuros(race.registrationPrice) }}</td>
+                <td>{{ centimesToEuros(race.vaRegistrationPrice) }}</td>
                 <td>
                   <div class="error" v-show="hasError(race.id)">
                     Suppression impossible
@@ -272,6 +272,9 @@ export default defineComponent({
       if (response.status < 300) {
         this.races = response.data.data;
       }
+    },
+    centimesToEuros(centimes: number) {
+      return centimes / 100;
     },
   },
   mounted() {

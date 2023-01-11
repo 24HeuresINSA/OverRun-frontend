@@ -21,10 +21,11 @@
         </div>
         <div class="mb-3 fw-bold">
           <label for="inputRegularPrice" class="form-label"
-            >Prix de l'inscription classique:</label
+            >Prix de l'inscription classique (en €):</label
           >
           <input
             type="number"
+            step="0.01"
             min="0"
             class="form-control"
             id="inputRegularPrice"
@@ -35,10 +36,11 @@
         </div>
         <div class="mb-3 fw-bold">
           <label for="inputVaPrice" class="form-label"
-            >Prix de l'inscription VA:</label
+            >Prix de l'inscription VA (en €):</label
           >
           <input
             type="number"
+            step="0.01"
             min="0"
             class="form-control"
             id="inputVaPrice"
@@ -168,8 +170,8 @@ export default defineComponent({
       ],
       selectedDisciplines: [] as Discipline[],
       name: null,
-      registrationPrice: null,
-      vaRegistrationPrice: null,
+      registrationPrice: 0,
+      vaRegistrationPrice: 0,
       maxParticipants: null,
       maxTeams: null,
       categoryId: null,
@@ -207,11 +209,14 @@ export default defineComponent({
       });
       return false;
     },
+    euroToCentimes(euro: number): number {
+      return euro * 100;
+    },
     async createRace(e: Event) {
       const response = await axios.post("races", {
         name: this.name,
-        registrationPrice: this.registrationPrice,
-        vaRegistrationPrice: this.vaRegistrationPrice,
+        registrationPrice: this.euroToCentimes(this.registrationPrice),
+        vaRegistrationPrice: this.euroToCentimes(this.vaRegistrationPrice),
         maxParticipants: this.maxParticipants,
         maxTeams: this.maxTeams,
         disciplineIds: this.selectedDisciplines,
