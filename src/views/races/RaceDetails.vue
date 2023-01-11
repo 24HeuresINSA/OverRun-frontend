@@ -3,6 +3,13 @@
     <TopBar @toggleSideBar="toggleSideBar" />
 
     <SideBar :hide="hideSideBar" activeVue="Races" />
+
+    <UpdateRace
+      :race="race"
+      v-show="showUpdateRace"
+      @closeUpdateRace="toggleUpdateRace"
+      @updateRaceSuccess="reloadTable"
+    />
     <div
       class="container-fluid main-container"
       :class="{ fullScreen: hideSideBar, notFullScreen: !hideSideBar }"
@@ -13,7 +20,9 @@
         </div>
         <div class="col-6"></div>
         <div class="col-2 text-end">
-          <button class="btn btn-warning">Modifier</button>
+          <button class="btn btn-warning" @click="toggleUpdateRace">
+            Modifier
+          </button>
         </div>
       </div>
       <div class="row mt-4 m-2">
@@ -207,6 +216,7 @@
 </template>
 
 <script lang="ts">
+import UpdateRace from "@/components/modals/race/UpdateRace.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
@@ -219,12 +229,14 @@ export default defineComponent({
     SideBar,
     TopBar,
     ValidationsChips,
+    UpdateRace,
   },
   data() {
     return {
       hideSideBar: false,
       showAthletes: true,
       showTeams: true,
+      showUpdateRace: false,
       race: {} as Race,
       teams: [] as Team[],
       inscriptions: [] as Inscription[],
@@ -233,6 +245,9 @@ export default defineComponent({
   methods: {
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
+    },
+    toggleUpdateRace() {
+      this.showUpdateRace = !this.showUpdateRace;
     },
     async reloadTable() {
       const response = await axios.get(`races/${this.$route.params.id}`);

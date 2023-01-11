@@ -99,6 +99,8 @@ export interface Race {
   maxTeams: number;
   name: string;
   teams: Id[];
+  registrationPrice: number;
+  vaRegistrationPrice: number;
 }
 
 export interface Certificate {
