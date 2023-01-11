@@ -25,6 +25,7 @@
           >
           <input
             type="number"
+            step="0.01"
             min="0"
             class="form-control"
             id="inputRegularPrice"
@@ -39,6 +40,7 @@
           >
           <input
             type="number"
+            step="0.01"
             min="0"
             class="form-control"
             id="inputVaPrice"
@@ -207,11 +209,17 @@ export default defineComponent({
       });
       return false;
     },
+    euroToCentimes(euro: number): number {
+      return euro * 100;
+    },
+    centimesToEuro(centimes: number): number {
+      return centimes / 100;
+    },
     async updateRace() {
       const response = await axios.put("races/" + this.race.id, {
         name: this.race.name,
-        registrationPrice: this.race.registrationPrice,
-        vaRegistrationPrice: this.race.vaRegistrationPrice,
+        registrationPrice: this.euroToCentimes(this.race.registrationPrice),
+        vaRegistrationPrice: this.euroToCentimes(this.race.vaRegistrationPrice),
         maxParticipants: this.race.maxParticipants,
         maxTeams: this.race.maxTeams,
         disciplineIds: this.selectedRaceDisciplines,
@@ -249,6 +257,12 @@ export default defineComponent({
         duration: elt.duration,
       };
     });
+    this.race.registrationPrice = this.centimesToEuro(
+      this.race.registrationPrice
+    );
+    this.race.vaRegistrationPrice = this.centimesToEuro(
+      this.race.vaRegistrationPrice
+    );
   },
 });
 </script>
