@@ -189,9 +189,39 @@
                 <td>
                   <ValidationsChips :status="inscription.payment?.status" />
                 </td>
-
                 <td>
-                  <div class="error" v-show="hasError(inscription.id)">
+                  <button
+                    v-if="inscription.validated"
+                    class="badge bg-warning"
+                    @click="toggleInscription(inscription.id, false)"
+                  >
+                    Dévalider inscription
+                  </button>
+                  <!-- TODO: Update payment status with enumeration -->
+                  <button
+                    v-else-if="
+                      inscription.certificate?.status === 1 &&
+                      inscription.payment?.status === 1
+                    "
+                    class="badge bg-success"
+                    @click="toggleInscription(inscription.id, true)"
+                  >
+                    Valider l'inscription
+                  </button>
+                  <button
+                    v-else
+                    class="badge bg-secondary"
+                    @click="toggleInscription(inscription.id, true)"
+                  >
+                    Valider l'inscription
+                  </button>
+                </td>
+                <td>
+                  <div
+                    class="error"
+                    v-show="hasError(inscription.id)"
+                    @click="toggleInscription(inscription.id, true)"
+                  >
                     Suppression impossible
                   </div>
                   <button
@@ -269,6 +299,15 @@ export default defineComponent({
     async deleteInscription(id: number) {
       // TODO
       this.inscriptionError = id;
+    },
+    async toggleInscription(id: number, newStatus: boolean) {
+      const response = await axios.patch("inscriptions/" + id, {
+        validated: newStatus,
+      });
+      if (response.status >= 300) {
+        return;
+      }
+      this.reloadTable();
     },
     async reloadTable() {
       this.inscriptionError = -1;
