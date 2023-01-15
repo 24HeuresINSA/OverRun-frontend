@@ -98,7 +98,11 @@
                       params: { id: payment.inscription.athlete.id },
                     }"
                   >
-                    {{ payment.inscription.athlete.id }}
+                    {{
+                      payment.inscription.athlete.firstName +
+                      " " +
+                      payment.inscription.athlete.lastName
+                    }}
                   </router-link>
                 </td>
                 <td>
@@ -108,7 +112,7 @@
                       params: { id: payment.inscription.race.id },
                     }"
                   >
-                    {{ payment.inscription.race.id }}
+                    {{ payment.inscription.race.name }}
                   </router-link>
                 </td>
                 <td>{{ payment.raceAmount }}</td>

@@ -20,10 +20,11 @@ export enum PaymentStatus {
 }
 
 export interface Inscription {
-  athlete: { id: number; name: string };
+  athlete: Athlete;
   id: number;
   race: Race;
   edition: { id: number };
+  va: boolean;
 }
 
 export interface Race {
@@ -31,4 +32,10 @@ export interface Race {
   name: string;
   registrationPrice: number;
   vaRegistrationPrice: number;
+}
+
+export interface Athlete {
+  id: number;
+  firstName: string;
+  lastName: string;
 }
