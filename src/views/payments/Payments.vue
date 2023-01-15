@@ -9,7 +9,7 @@
     >
       <div class="row m-2 mt-4">
         <div class="col-4 text-start border-bottom p-0">
-          <h2>Payement</h2>
+          <h2>Paiement</h2>
         </div>
         <div class="col-6"></div>
         <div class="col-2">
@@ -69,12 +69,12 @@
                 <th scope="col">Athlète</th>
                 <th scope="col">Course</th>
                 <th scope="col">Montant payement</th>
-                <th scope="col">Montant dû</th>
-                <th scope="col">Status</th>
+                <th scope="col">Montant donation</th>
+                <th scope="col">Statut</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr v-for="payment in payments" :key="payment.id">
                 <th scope="row">
                   <input
                     class="form-check-input mt-0"
@@ -86,56 +86,35 @@
                 </th>
                 <td>
                   <router-link
-                    :to="{ name: 'PaymentDetails', params: { id: 'test' } }"
+                    :to="{ name: 'PaymentDetails', params: { id: payment.id } }"
                   >
-                    Random Payment
+                    {{ payment.id }}
                   </router-link>
                 </td>
                 <td>
                   <router-link
-                    :to="{ name: 'InscriptionDetails', params: { id: 'test' } }"
+                    :to="{
+                      name: 'InscriptionDetails',
+                      params: { id: payment.inscription.athlete.id },
+                    }"
                   >
-                    Random Athlete
+                    {{ payment.inscription.athlete.id }}
                   </router-link>
                 </td>
                 <td>
                   <router-link
-                    :to="{ name: 'RaceDetails', params: { id: 'test' } }"
+                    :to="{
+                      name: 'RaceDetails',
+                      params: { id: payment.inscription.race.id },
+                    }"
                   >
-                    Random Race
+                    {{ payment.inscription.race.id }}
                   </router-link>
                 </td>
-                <td>12.5</td>
-                <td>12.5</td>
+                <td>{{ payment.raceAmount }}</td>
+                <td>{{ payment.donationAmount }}</td>
                 <td>
-                  <a href="" class="badge rounded-pill bg-success"> Payé</a>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">
-                  <input
-                    class="form-check-input mt-0"
-                    type="checkbox"
-                    value=""
-                    aria-label="Checkbox for following text input"
-                    :checked="selectAllRows"
-                  />
-                </th>
-                <td>
-                  <router-link
-                    :to="{ name: 'PaymentDetails', params: { id: 'test' } }"
-                  >
-                    Random Payment
-                  </router-link>
-                </td>
-                <td>-</td>
-                <td>-</td>
-                <td>12.5</td>
-                <td>-</td>
-                <td>
-                  <a href="" class="badge rounded-pill bg-warning text-dark">
-                    A valider</a
-                  >
+                  <ValidationsChipsPayment :status="payment?.status" />
                 </td>
               </tr>
             </tbody>
@@ -150,6 +129,9 @@
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
+import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
+import { Payment } from "@/types/payment";
+import axios from "axios";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -157,6 +139,7 @@ export default defineComponent({
     SideBar,
     TopBar,
     SearchBarVue,
+    ValidationsChipsPayment,
   },
   data() {
     return {
@@ -164,6 +147,7 @@ export default defineComponent({
       filterMenuActive: false,
       selectAllRows: false,
       search: null as unknown,
+      payments: [] as Payment[],
     };
   },
   methods: {
@@ -173,9 +157,15 @@ export default defineComponent({
     setSearch(search: string) {
       this.search = search;
     },
+    async reloadTable() {
+      const response = await axios.get("payments");
+      if (response.status < 300) {
+        this.payments = response.data.data;
+      }
+    },
   },
   mounted() {
-    // TODO : Load table with payment data
+    this.reloadTable();
   },
   watch: {
     search(newSearch, oldSearch) {
