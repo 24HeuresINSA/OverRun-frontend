@@ -149,39 +149,36 @@
           <div class="container-fluid p-1 pt-3">
             <div class="row pt-1 pb-1">
               <div class="col border-bottom">
-                <h5>Payement à valider (idk)</h5>
+                <h5>Paiements en cours</h5>
               </div>
             </div>
             <div class="row">
               <table class="table table-striped table-hover">
                 <thead>
                   <tr>
-                    <th scope="col">Payement</th>
-                    <th scope="col">Valeur</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col">Prix de la course</th>
+                    <th scope="col">Don</th>
                   </tr>
                 </thead>
                 <tbody class="text-center">
-                  <tr>
+                  <tr v-for="payment in payments.slice(0, 5)" :key="payment.id">
                     <td>
-                      <a
-                        href=""
-                        class="badge rounded-pill bg-warning text-dark mx-1"
-                        >A valider</a
+                      <router-link
+                        :to="{
+                          name: 'PaymentDetails',
+                          params: { id: payment.id },
+                        }"
                       >
+                        <ValidationsChipsPayment :status="payment.status" />
+                      </router-link>
                     </td>
-
-                    <td>idk €</td>
-                  </tr>
-                  <tr>
                     <td>
-                      <a
-                        href=""
-                        class="badge rounded-pill bg-warning text-dark mx-1"
-                        >A valider</a
-                      >
+                      <p>{{ centimesToEuros(payment.raceAmount) }} €</p>
                     </td>
-
-                    <td>idk €</td>
+                    <td>
+                      <p>{{ centimesToEuros(payment.donationAmount) }} €</p>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -200,7 +197,9 @@ import CertificateModalVue from "@/components/CertificateModal/CertificateModal.
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationChips from "@/components/validationChips/ValidationsChips.vue";
+import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
 import { Certificate, Inscription } from "@/types/interface";
+import { Payment, PaymentStatus } from "@/types/payment";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -211,6 +210,7 @@ export default defineComponent({
     CertificateModalVue,
     // Doughnut,
     ValidationChips,
+    ValidationsChipsPayment,
   },
 
   data() {
@@ -219,6 +219,7 @@ export default defineComponent({
       showCertificateModal: false,
       inscriptions: [] as Inscription[],
       certificates: [] as Certificate[],
+      payments: [] as Payment[],
       index: 0,
       chartOptions: {
         hoverBorderWidth: 20,
@@ -245,6 +246,9 @@ export default defineComponent({
       this.index = index;
       this.showCertificateModal = !this.showCertificateModal;
     },
+    centimesToEuros(cents: number) {
+      return cents / 100;
+    },
     async reloadTable() {
       const inscriptionsResponse = await axios.get("inscriptions/");
       if (inscriptionsResponse.status < 300) {
@@ -258,6 +262,13 @@ export default defineComponent({
             return certificate.status !== 1;
           }
         );
+      }
+
+      const paymentResponse = await await axios.get("payments/");
+      if (paymentResponse.status < 300) {
+        this.payments = paymentResponse.data.data.filter((p: Payment) => {
+          return p.status !== PaymentStatus.VALIDATED;
+        });
       }
     },
     getValidatedInscriptionsLength() {

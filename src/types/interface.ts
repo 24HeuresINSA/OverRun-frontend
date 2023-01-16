@@ -1,3 +1,5 @@
+import { PaymentStatus } from "./payment";
+
 export interface User {
   id: number;
   email: string;
@@ -42,7 +44,7 @@ export interface VA {
 }
 export interface Payment {
   id: number;
-  status: number;
+  status: PaymentStatus;
 }
 
 export interface Inscription {
@@ -52,7 +54,7 @@ export interface Inscription {
   va: VA | null;
   race: Race;
   certificate: Certificate | null;
-  payment: Payment | null;
+  payment: Payment;
   teamAdmin: Id;
   validated: boolean;
 }

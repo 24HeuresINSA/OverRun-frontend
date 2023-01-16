@@ -68,7 +68,7 @@
                 <th scope="col">Transaction</th>
                 <th scope="col">Athlète</th>
                 <th scope="col">Course</th>
-                <th scope="col">Montant payement</th>
+                <th scope="col">Montant paiement</th>
                 <th scope="col">Montant donation</th>
                 <th scope="col">Statut</th>
               </tr>
@@ -118,7 +118,7 @@
                 <td>{{ payment.raceAmount }}</td>
                 <td>{{ payment.donationAmount }}</td>
                 <td>
-                  <ValidationsChipsPayment :status="payment?.status" />
+                  <ValidationsChipsPayment :status="payment.status" />
                 </td>
               </tr>
             </tbody>

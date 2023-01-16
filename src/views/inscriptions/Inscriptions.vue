@@ -80,7 +80,7 @@
             </select>
           </div>
           <div class="col-2 p-2 text-start">
-            <p class="fw-bolder mb-0">Statut Payement:</p>
+            <p class="fw-bolder mb-0">Statut Paiement:</p>
             <select
               class="form-select"
               aria-label="Default select example"
@@ -118,7 +118,7 @@
                 <th scope="col">Equipe</th>
                 <th scope="col">VA</th>
                 <th scope="col">Certificat</th>
-                <th scope="col">Payement</th>
+                <th scope="col">Paiement</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -185,9 +185,17 @@
                   <ValidationsChips :status="inscription.certificate?.status" />
                 </td>
 
-                <!-- TODO add the payment modal here -->
                 <td>
-                  <ValidationsChips :status="inscription.payment?.status" />
+                  <router-link
+                    :to="{
+                      name: 'PaymentDetails',
+                      params: { id: inscription.payment.id },
+                    }"
+                  >
+                    <ValidationsChipsPayment
+                      :status="inscription.payment.status"
+                    />
+                  </router-link>
                 </td>
                 <td>
                   <button
@@ -197,11 +205,10 @@
                   >
                     Dévalider inscription
                   </button>
-                  <!-- TODO: Update payment status with enumeration -->
                   <button
                     v-else-if="
                       inscription.certificate?.status === 1 &&
-                      inscription.payment?.status === 1
+                      inscription.payment?.status === PaymentStatus.VALIDATED
                     "
                     class="badge bg-success"
                     @click="toggleInscription(inscription.id, true)"
@@ -247,7 +254,9 @@ import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
+import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
 import { Certificate, Inscription } from "@/types/interface";
+import { PaymentStatus } from "@/types/payment";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -259,6 +268,7 @@ export default defineComponent({
     CertificateModalVue,
     ValidationsChips,
     ConfirmationDeletionModal,
+    ValidationsChipsPayment,
   },
   data() {
     return {
@@ -276,6 +286,7 @@ export default defineComponent({
       paymentStatus: null,
       inscriptions: [] as Inscription[],
       certificates: [] as Certificate[],
+      PaymentStatus,
     };
   },
   methods: {

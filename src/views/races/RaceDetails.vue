@@ -113,7 +113,7 @@
                 <th scope="col">Equipe</th>
                 <th scope="col">VA</th>
                 <th scope="col">Certificat</th>
-                <th scope="col">Payement</th>
+                <th scope="col">Paiement</th>
                 <th scope="col">Inscription</th>
               </tr>
             </thead>
@@ -151,7 +151,16 @@
                   <ValidationsChips :status="inscription.certificate?.status" />
                 </td>
                 <td>
-                  <ValidationsChips :status="inscription.payment?.status" />
+                  <router-link
+                    :to="{
+                      name: 'PaymentDetails',
+                      params: { id: inscription.payment.id },
+                    }"
+                  >
+                    <ValidationsChipsPayment
+                      :status="inscription.payment.status"
+                    />
+                  </router-link>
                 </td>
                 <td>
                   <ValidationsChips
@@ -220,6 +229,7 @@ import UpdateRace from "@/components/modals/race/UpdateRace.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
+import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
 import { Inscription, Member, Race, Team } from "@/types/interface";
 import axios from "axios";
 import { defineComponent } from "vue";
@@ -230,6 +240,7 @@ export default defineComponent({
     TopBar,
     ValidationsChips,
     UpdateRace,
+    ValidationsChipsPayment,
   },
   data() {
     return {

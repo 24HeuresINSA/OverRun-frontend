@@ -147,8 +147,15 @@
         <div class="col text-start">
           <span class="d-inline">
             <div class="d-inline fw-bolder me-2">
-              Payement:
-              <ValidationsChips :status="inscription.payment?.status" />
+              Paiement:
+              <router-link
+                :to="{
+                  name: 'PaymentDetails',
+                  params: { id: inscription.payment.id },
+                }"
+              >
+                <ValidationsChipsPayment :status="inscription.payment.status" />
+              </router-link>
             </div>
           </span>
         </div>
@@ -161,6 +168,7 @@
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
+import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
 import { Inscription } from "@/types/interface";
 import axios from "axios";
 import { defineComponent } from "vue";
@@ -170,6 +178,7 @@ export default defineComponent({
     SideBar,
     TopBar,
     ValidationsChips,
+    ValidationsChipsPayment,
   },
   data() {
     return {

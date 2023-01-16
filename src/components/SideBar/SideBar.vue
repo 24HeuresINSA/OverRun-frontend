@@ -57,7 +57,7 @@
       />
       <SideBarMainLink
         route="Payments"
-        title="Payements"
+        title="Paiements"
         icon="euro_symbol"
         :activeVue="activeVue"
       />
@@ -101,8 +101,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import SideBarMainLink from "./SideBarMainLink.vue";
-import SideBarSecondaryLink from "./SideBarSecondaryLink.vue";
 import SideBarMainLinkDropdown from "./SideBarMainLinkDropdown.vue";
+import SideBarSecondaryLink from "./SideBarSecondaryLink.vue";
 
 export default defineComponent({
   components: {
