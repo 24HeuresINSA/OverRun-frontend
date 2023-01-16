@@ -71,6 +71,7 @@
                 <th scope="col">Montant paiement</th>
                 <th scope="col">Montant donation</th>
                 <th scope="col">Statut</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
@@ -118,7 +119,32 @@
                 <td>{{ payment.raceAmount }}</td>
                 <td>{{ payment.donationAmount }}</td>
                 <td>
-                  <ValidationsChipsPayment :status="payment.status" />
+                  <router-link
+                    :to="{ name: 'PaymentDetails', params: { id: payment.id } }"
+                  >
+                    <ValidationsChipsPayment :status="payment.status" />
+                  </router-link>
+                </td>
+                <td>
+                  <button
+                    v-if="payment.status === PaymentStatus.VALIDATED"
+                    class="badge bg-danger"
+                    @click="rejectPayment(payment.id)"
+                  >
+                    Rejeter
+                  </button>
+                  <button
+                    v-else
+                    class="badge bg-warning"
+                    @click="
+                      approvePayment(
+                        payment.id,
+                        payment.helloassoPaymentReceiptUrl
+                      )
+                    "
+                  >
+                    Approuver
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -134,7 +160,7 @@ import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
-import { Payment } from "@/types/payment";
+import { Payment, PaymentStatus } from "@/types/payment";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -152,6 +178,7 @@ export default defineComponent({
       selectAllRows: false,
       search: null as unknown,
       payments: [] as Payment[],
+      PaymentStatus,
     };
   },
   methods: {
@@ -161,10 +188,32 @@ export default defineComponent({
     setSearch(search: string) {
       this.search = search;
     },
+    async rejectPayment(id: number) {
+      console.log(id);
+      const response = await axios.patch("/payments/" + id + "/refuse");
+      if (response.status >= 300) return;
+      this.reloadTable();
+    },
+    async approvePayment(id: number, receipt: string) {
+      console.log(id);
+      const receiptToSend =
+        receipt === null
+          ? "Validation manuelle, pas de reçu de la part de HelloAsso"
+          : receipt;
+      const response = await axios.patch("/payments/" + id + "/validate", {
+        data: {
+          paymentReceiptUrl: receiptToSend,
+        },
+      });
+      if (response.status >= 300) return;
+      this.reloadTable();
+    },
     async reloadTable() {
       const response = await axios.get("payments");
       if (response.status < 300) {
-        this.payments = response.data.data;
+        this.payments = response.data.data.sort((p1: Payment, p2: Payment) => {
+          return p1.id - p2.id;
+        });
       }
     },
   },
