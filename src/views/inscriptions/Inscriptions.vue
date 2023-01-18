@@ -155,7 +155,7 @@
                   </router-link>
                 </td>
                 <td>
-                  <div v-if="inscription?.team?.id">
+                  <div v-if="inscription.team?.id">
                     <router-link
                       :to="{
                         name: 'TeamDetails',
@@ -187,15 +187,20 @@
 
                 <td>
                   <router-link
+                    v-if="inscription.payment?.id"
                     :to="{
                       name: 'PaymentDetails',
                       params: { id: inscription.payment.id },
                     }"
                   >
                     <ValidationsChipsPayment
-                      :status="inscription.payment.status"
+                      :status="inscription.payment?.status"
                     />
                   </router-link>
+                  <ValidationsChipsPayment
+                    v-else
+                    :status="inscription.payment?.status"
+                  />
                 </td>
                 <td>
                   <button

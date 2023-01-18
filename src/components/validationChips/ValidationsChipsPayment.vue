@@ -26,7 +26,9 @@
       >Remboursé</a
     >
   </div>
-  <div v-else class="d-inline">-</div>
+  <div v-else class="d-inline">
+    <a class="badge text-dark rounded-pill bg-secondary mx-1">Non créé</a>
+  </div>
 </template>
 
 <script lang="ts">
@@ -38,7 +40,7 @@ export default defineComponent({
   props: {
     status: {
       type: Object as () => PaymentStatus,
-      required: true,
+      required: false,
     },
   },
   data() {

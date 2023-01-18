@@ -264,7 +264,7 @@ export default defineComponent({
         );
       }
 
-      const paymentResponse = await await axios.get("payments/");
+      const paymentResponse = await axios.get("payments/");
       if (paymentResponse.status < 300) {
         this.payments = paymentResponse.data.data.filter((p: Payment) => {
           return p.status !== PaymentStatus.VALIDATED;

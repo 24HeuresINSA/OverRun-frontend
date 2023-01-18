@@ -54,8 +54,7 @@ export interface Inscription {
   va: VA | null;
   race: Race;
   certificate: Certificate | null;
-  payment: Payment;
-  teamAdmin: Id;
+  payment: Payment | null;
   validated: boolean;
 }
 

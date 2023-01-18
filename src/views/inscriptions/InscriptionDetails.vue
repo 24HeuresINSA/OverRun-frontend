@@ -149,13 +149,20 @@
             <div class="d-inline fw-bolder me-2">
               Paiement:
               <router-link
+                v-if="inscription.payment?.id"
                 :to="{
                   name: 'PaymentDetails',
                   params: { id: inscription.payment.id },
                 }"
               >
-                <ValidationsChipsPayment :status="inscription.payment.status" />
+                <ValidationsChipsPayment
+                  :status="inscription.payment?.status"
+                />
               </router-link>
+              <ValidationsChipsPayment
+                v-else
+                :status="inscription.payment?.status"
+              />
             </div>
           </span>
         </div>
