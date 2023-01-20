@@ -6,7 +6,7 @@
     <a
       v-else-if="status > 1 && status < 5"
       class="badge text-dark rounded-pill bg-warning mx-1"
-      >A validé</a
+      >A valider</a
     >
     <a
       v-else-if="status === 5"

@@ -30,7 +30,16 @@
             >
               Filtrer
             </button>
+
             <button type="button" class="btn btn-danger">Supprimer</button>
+            <!-- TODO sync the validated paiements as well ? -->
+            <button
+              type="button"
+              class="badge bg-primary"
+              @click="reloadTable()"
+            >
+              Actualiser
+            </button>
           </div>
         </div>
       </div>
@@ -65,12 +74,12 @@
                     @change="selectAllRows = !selectAllRows"
                   />
                 </th>
-                <th scope="col">Transaction</th>
                 <th scope="col">Athlète</th>
                 <th scope="col">Course</th>
                 <th scope="col">Montant paiement</th>
                 <th scope="col">Montant donation</th>
                 <th scope="col">Statut</th>
+                <th scope="col"></th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -85,13 +94,6 @@
                     :checked="selectAllRows"
                   />
                 </th>
-                <td>
-                  <router-link
-                    :to="{ name: 'PaymentDetails', params: { id: payment.id } }"
-                  >
-                    {{ payment.id }}
-                  </router-link>
-                </td>
                 <td>
                   <router-link
                     :to="{
@@ -127,23 +129,10 @@
                 </td>
                 <td>
                   <button
-                    v-if="payment.status === PaymentStatus.VALIDATED"
-                    class="badge bg-danger"
-                    @click="rejectPayment(payment.id)"
+                    class="badge bg-secondary"
+                    @click="syncPayment(payment.id)"
                   >
-                    Rejeter
-                  </button>
-                  <button
-                    v-else
-                    class="badge bg-warning"
-                    @click="
-                      approvePayment(
-                        payment.id,
-                        payment.helloassoPaymentReceiptUrl
-                      )
-                    "
-                  >
-                    Approuver
+                    Synchroniser
                   </button>
                 </td>
               </tr>
@@ -188,23 +177,10 @@ export default defineComponent({
     setSearch(search: string) {
       this.search = search;
     },
-    async rejectPayment(id: number) {
-      console.log(id);
-      const response = await axios.patch("/payments/" + id + "/refuse");
-      if (response.status >= 300) return;
-      this.reloadTable();
-    },
-    async approvePayment(id: number, receipt: string) {
-      console.log(id);
-      const receiptToSend =
-        receipt === null
-          ? "Validation manuelle, pas de reçu de la part de HelloAsso"
-          : receipt;
-      const response = await axios.patch("/payments/" + id + "/validate", {
-        data: {
-          paymentReceiptUrl: receiptToSend,
-        },
-      });
+    async syncPayment(id: number) {
+      const response = await axios.patch(
+        "/payments/" + id + "/setstatusbyhelloasso"
+      );
       if (response.status >= 300) return;
       this.reloadTable();
     },
