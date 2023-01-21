@@ -118,8 +118,8 @@
                     {{ payment.inscription.race.name }}
                   </router-link>
                 </td>
-                <td>{{ payment.raceAmount }}</td>
-                <td>{{ payment.donationAmount }}</td>
+                <td>{{ centimesToEuros(payment.raceAmount) }}</td>
+                <td>{{ centimesToEuros(payment.donationAmount) }}</td>
                 <td>
                   <router-link
                     :to="{ name: 'PaymentDetails', params: { id: payment.id } }"
@@ -177,6 +177,9 @@ export default defineComponent({
     setSearch(search: string) {
       this.search = search;
     },
+    centimesToEuros(price: number) {
+      return price / 100;
+    },
     async syncPayment(id: number) {
       const response = await axios.patch(
         "/payments/" + id + "/setstatusbyhelloasso"
@@ -185,11 +188,13 @@ export default defineComponent({
       this.reloadTable();
     },
     async reloadTable() {
-      const response = await axios.get("payments");
+      const response = await axios.get("payments", {
+        params: {
+          order: "asc",
+        },
+      });
       if (response.status < 300) {
-        this.payments = response.data.data.sort((p1: Payment, p2: Payment) => {
-          return p1.id - p2.id;
-        });
+        this.payments = response.data.data;
       }
     },
   },

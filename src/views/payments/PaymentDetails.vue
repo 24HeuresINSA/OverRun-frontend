@@ -12,6 +12,11 @@
           <h2>Paiement #{{ payment.id }} (Paiement)</h2>
         </div>
         <div class="col-6"></div>
+        <div class="col-2 text-end">
+          <button class="btn btn-primary" @click="syncPayment(payment.id)">
+            Synchroniser
+          </button>
+        </div>
       </div>
       <div class="row mt-4 m-2">
         <div class="col text-start">
@@ -82,19 +87,24 @@
           >
         </div>
       </div>
-
+      <div class="row mt-2 m-2">
+        <div class="col text-start">
+          <span class="d-inline"
+            ><p class="d-inline fw-bolder me-2">
+              Montant du don pour la course caritative:
+            </p>
+            <p class="d-inline">
+              {{ centimesToEuros(payment.donationAmount) }}€
+            </p></span
+          >
+        </div>
+      </div>
       <div class="row mt-2 m-2">
         <div class="col text-start">
           <span class="d-inline"
             ><p class="d-inline fw-bolder me-2">Prix de la course:</p>
             <p class="d-inline">
-              {{
-                centimesToEuros(
-                  payment.inscription.va
-                    ? payment.inscription.race.vaRegistrationPrice
-                    : payment.inscription.race.registrationPrice
-                )
-              }}
+              {{ centimesToEuros(payment.raceAmount) }}
               €
             </p></span
           >
@@ -110,19 +120,6 @@
             ><p class="d-inline fw-bolder me-2">Montant total réglé:</p>
             <p class="d-inline">
               {{ centimesToEuros(payment.totalAmount) }}€
-            </p></span
-          >
-        </div>
-      </div>
-
-      <div class="row mt-2 m-2">
-        <div class="col text-start">
-          <span class="d-inline"
-            ><p class="d-inline fw-bolder me-2">
-              Montant du don pour la course caritative:
-            </p>
-            <p class="d-inline">
-              {{ centimesToEuros(payment.donationAmount) }}€
             </p></span
           >
         </div>
@@ -187,6 +184,13 @@ export default defineComponent({
   methods: {
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
+    },
+    async syncPayment(id: number) {
+      const response = await axios.patch(
+        "/payments/" + id + "/setstatusbyhelloasso"
+      );
+      if (response.status >= 300) return;
+      this.loadPayment();
     },
     centimesToEuros(cents: number) {
       return cents / 100;

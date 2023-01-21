@@ -168,8 +168,8 @@ export default defineComponent({
       ],
       selectedDisciplines: [] as Discipline[],
       name: null,
-      registrationPrice: null,
-      vaRegistrationPrice: null,
+      registrationPrice: 0,
+      vaRegistrationPrice: 0,
       maxParticipants: null,
       maxTeams: null,
       categoryId: null,
@@ -178,6 +178,9 @@ export default defineComponent({
   methods: {
     closeModal() {
       this.$emit("closeRaceModal");
+    },
+    eurosToCentimes(price: number) {
+      return price * 100;
     },
     selectDiscipline(id: number, name: string) {
       let i = 0;
@@ -210,8 +213,8 @@ export default defineComponent({
     async createRace(e: Event) {
       const response = await axios.post("races", {
         name: this.name,
-        registrationPrice: this.registrationPrice,
-        vaRegistrationPrice: this.vaRegistrationPrice,
+        registrationPrice: this.eurosToCentimes(this.registrationPrice),
+        vaRegistrationPrice: this.eurosToCentimes(this.vaRegistrationPrice),
         maxParticipants: this.maxParticipants,
         maxTeams: this.maxTeams,
         disciplineIds: this.selectedDisciplines,

@@ -143,8 +143,8 @@
                     }}</a>
                   </router-link>
                 </td>
-                <td>{{ race.registrationPrice }}</td>
-                <td>{{ race.vaRegistrationPrice }}</td>
+                <td>{{ centimesToEuros(race.registrationPrice) }}</td>
+                <td>{{ centimesToEuros(race.vaRegistrationPrice) }}</td>
                 <td>
                   <div class="error" v-show="hasError(race.id)">
                     Suppression impossible
@@ -237,6 +237,9 @@ export default defineComponent({
   methods: {
     hasError(id: number) {
       return id === this.raceError;
+    },
+    centimesToEuros(price: number) {
+      return price / 100;
     },
     toggleDeletionModal(toDelete: number) {
       this.showDeletionModal = !this.showDeletionModal;

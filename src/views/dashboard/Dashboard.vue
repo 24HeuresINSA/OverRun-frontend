@@ -264,10 +264,17 @@ export default defineComponent({
         );
       }
 
-      const paymentResponse = await axios.get("payments/");
+      const paymentResponse = await axios.get("payments", {
+        params: {
+          order: "asc",
+        },
+      });
       if (paymentResponse.status < 300) {
         this.payments = paymentResponse.data.data.filter((p: Payment) => {
-          return p.status !== PaymentStatus.VALIDATED;
+          return (
+            p.status === PaymentStatus.NOT_STARTED ||
+            p.status === PaymentStatus.PENDING
+          );
         });
       }
     },

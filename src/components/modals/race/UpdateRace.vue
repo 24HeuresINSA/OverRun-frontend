@@ -30,7 +30,7 @@
             id="inputRegularPrice"
             aria-describedby="emailHelp"
             required
-            v-model="race.registrationPrice"
+            v-model="registrationPrice"
           />
         </div>
         <div class="mb-3 fw-bold">
@@ -44,7 +44,7 @@
             id="inputVaPrice"
             aria-describedby="emailHelp"
             required
-            v-model="race.vaRegistrationPrice"
+            v-model="vaRegistrationPrice"
           />
         </div>
         <div class="mb-3 fw-bold">
@@ -166,12 +166,20 @@ export default defineComponent({
       disciplines: [] as Discipline[],
       categories: [] as Category[],
       selectedRaceDisciplines: [] as Discipline[],
+      registrationPrice: 0,
+      vaRegistrationPrice: 0,
       error: false,
     };
   },
   methods: {
     closeModal() {
       this.$emit("closeUpdateRace");
+    },
+    centimesToEuros(price: number) {
+      return price / 100;
+    },
+    eurosToCentimes(price: number) {
+      return price * 100;
     },
     toggleSelectionDiscipline(id: number, name: string) {
       let i = 0;
@@ -210,8 +218,8 @@ export default defineComponent({
     async updateRace() {
       const response = await axios.put("races/" + this.race.id, {
         name: this.race.name,
-        registrationPrice: this.race.registrationPrice,
-        vaRegistrationPrice: this.race.vaRegistrationPrice,
+        registrationPrice: this.eurosToCentimes(this.registrationPrice),
+        vaRegistrationPrice: this.eurosToCentimes(this.vaRegistrationPrice),
         maxParticipants: this.race.maxParticipants,
         maxTeams: this.race.maxTeams,
         disciplineIds: this.selectedRaceDisciplines,
@@ -226,6 +234,10 @@ export default defineComponent({
     },
   },
   async mounted() {
+    this.registrationPrice = this.centimesToEuros(this.race.registrationPrice);
+    this.vaRegistrationPrice = this.centimesToEuros(
+      this.race.vaRegistrationPrice
+    );
     let response = await axios.get("disciplines", {
       params: {
         editionId: this.$store.getters["edition/getEditionId"],
