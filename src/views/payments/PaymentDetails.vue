@@ -135,7 +135,7 @@
               Expiration du lien de paiement:
             </p>
             <p class="d-inline">
-              {{ payment.helloassoCheckoutExpiresAt }}
+              {{ formateDate(payment.helloassoCheckoutExpiresAt) }}
             </p></span
           >
         </div>
@@ -164,6 +164,7 @@
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
+import { dateFormat } from "@/types/dateFormat";
 import { Payment, PaymentStatus } from "@/types/payment";
 import axios from "axios";
 import { defineComponent } from "vue";
@@ -200,6 +201,9 @@ export default defineComponent({
       console.log(response);
       if (response.status >= 300) return;
       this.payment = response.data;
+    },
+    formateDate(date: string) {
+      return new Date(date).toLocaleDateString("FR-fr", dateFormat);
     },
   },
   beforeMount() {

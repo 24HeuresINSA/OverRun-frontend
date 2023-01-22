@@ -146,13 +146,24 @@ export default defineComponent({
       };
     },
     htmlImputDateTime(date: string) {
-      return new Date(date).toISOString().slice(0, 16);
+      const formatedDate = this.formateDate(date);
+      const day = formatedDate.slice(0, 2);
+      const month = formatedDate.slice(3, 5);
+      const year = formatedDate.slice(6, 10);
+      const time = formatedDate.slice(11, 16);
+      return `${year}-${month}-${day}T${time}`;
     },
     formateDate(date: string) {
       return new Date(date).toLocaleDateString("FR-fr", dateFormat);
     },
     async modifyEdition(edition: Edition) {
-      const response = await axios.put(`/editions/${edition.id}`, edition);
+      const response = await axios.put(`/editions/${edition.id}`, {
+        ...edition,
+        startDate: new Date(edition.startDate),
+        endDate: new Date(edition.endDate),
+        registrationStartDate: new Date(edition.registrationStartDate),
+        registrationEndDate: new Date(edition.registrationEndDate),
+      });
       if (response.status !== 200)
         return alert("Erreur lors de la mise à jour de l'édition");
       if (response.status === 200) alert("Edition mise à jour");
