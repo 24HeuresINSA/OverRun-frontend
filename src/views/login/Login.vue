@@ -76,7 +76,7 @@ export default defineComponent({
     return {
       email: "",
       password: "",
-      persistentLogin: false,
+      persistentLogin: true,
     };
   },
 
