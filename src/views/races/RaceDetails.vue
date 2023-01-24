@@ -50,17 +50,17 @@
             ><p class="d-inline fw-bolder me-2">Disciplines:</p>
             <p
               class="d-inline"
-              v-for="discipline in race.disciplines"
-              :key="discipline.id"
+              v-for="raceDiscipline in race.disciplines"
+              :key="raceDiscipline.id"
             >
               <router-link
                 :to="{
                   name: 'DisciplineDetails',
-                  params: { id: discipline.discipline.id },
+                  params: { id: raceDiscipline.discipline.id },
                 }"
               >
                 <a href="" class="badge rounded-pill bg-secondary">
-                  {{ discipline.discipline.name }}</a
+                  {{ raceDiscipline.discipline.name }} ({{ raceDiscipline.duration }}h)</a
                 >
               </router-link>
             </p>
