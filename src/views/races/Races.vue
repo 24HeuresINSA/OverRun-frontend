@@ -119,16 +119,16 @@
                 <td>{{ race.teams.length }}/{{ race.maxTeams }}</td>
                 <td>
                   <router-link
-                    v-for="discipline in race.disciplines"
-                    :key="discipline.id"
+                    v-for="raceDiscipline in race.disciplines"
+                    :key="raceDiscipline.id"
                     :to="{
                       name: 'DisciplineDetails',
-                      params: { id: discipline.discipline.id },
+                      params: { id: raceDiscipline.discipline.id },
                     }"
                   >
                     <a href="" class="badge rounded-pill bg-secondary mx-1">{{
-                      discipline.discipline.name
-                    }}</a>
+                      raceDiscipline.discipline.name
+                    }} ({{ raceDiscipline.duration }}h)</a>
                   </router-link>
                 </td>
                 <td>
