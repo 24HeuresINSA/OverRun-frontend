@@ -190,7 +190,9 @@ export default defineComponent({
     async reloadTable() {
       const response = await axios.get("payments", {
         params: {
+          editionId: this.$store.getters["edition/getEditionId"],
           order: "asc",
+          search: this.search,
         },
       });
       if (response.status < 300) {
@@ -202,8 +204,8 @@ export default defineComponent({
     this.reloadTable();
   },
   watch: {
-    search(newSearch, oldSearch) {
-      console.log(this.search);
+    search() {
+      this.reloadTable();
     },
   },
 });
