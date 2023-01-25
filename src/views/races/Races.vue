@@ -167,7 +167,7 @@
 
 <script lang="ts">
 import ConfirmationDeletionModal from "@/components/modals/ConfirmDeletionModal.vue";
-import CreateRaceModalVue from "@/components/modals/CreateRaceModal.vue";
+import CreateRaceModalVue from "@/components/modals/race/CreateRaceModal.vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";

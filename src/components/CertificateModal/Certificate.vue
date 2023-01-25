@@ -30,14 +30,14 @@
           <button
             type="button"
             class="btn menue-btn valide"
-            @click="validationOfCertificateWithStatus(1)"
+            @click="validationOfCertificateWithStatus('', 1)"
           >
             Valider
           </button>
           <button
             type="button"
             class="btn menue-btn reject"
-            @click="validationOfCertificateWithStatus(5)"
+            @click="toogleConfirmRefuseCertificat"
           >
             Refuser
           </button>
@@ -53,16 +53,26 @@
       </div>
     </div>
   </div>
+  <ConfirmRefuseCertificat
+    v-show="showConfirmRefuseCertificat"
+    @closeConfirmRefuseCertificat="toogleConfirmRefuseCertificat"
+    @sendReason="validationOfCertificateWithStatus($event, 5)"
+  />
 </template>
 
 <script lang="ts">
 import axios from "axios";
 import { defineComponent } from "vue";
+import ConfirmRefuseCertificat from "@/components/CertificateModal/ConfirmRefuseCertificat.vue";
 
 export default defineComponent({
+  components: {
+    ConfirmRefuseCertificat,
+  },
   data() {
     return {
       imageLink: "",
+      showConfirmRefuseCertificat: false,
     };
   },
   props: {
@@ -84,6 +94,9 @@ export default defineComponent({
     previousInscription() {
       this.$emit("previous");
     },
+    toogleConfirmRefuseCertificat() {
+      this.showConfirmRefuseCertificat = !this.showConfirmRefuseCertificat;
+    },
     async getImage(): Promise<string> {
       if (!this.certificateFile) return "";
       const response = await fetch(
@@ -102,7 +115,7 @@ export default defineComponent({
       }
       return "";
     },
-    async validationOfCertificateWithStatus(status: number) {
+    async validationOfCertificateWithStatus(reason: string, status: number) {
       const response = await axios.post(`certificates/${this.certificateId}`, {
         // Status signification
         // 1: Validated
@@ -112,9 +125,11 @@ export default defineComponent({
         // 5: Rejected
         status,
         statusUpdatedById: this.$store.getters["auth/getAdminId"],
+        reason,
       });
       if (response.status === 200) {
         if (status === 1) this.$emit("validate");
+        if (status === 5) this.toogleConfirmRefuseCertificat();
         this.$emit("next");
       }
     },
