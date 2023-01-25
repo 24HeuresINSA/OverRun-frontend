@@ -3,13 +3,13 @@
     <TopBar @toggleSideBar="toggleSideBar" />
     <SideBar :hide="hideSideBar" activeVue="Inscriptions" />
     <!-- TODO to change -->
-    <div v-show="showCertificateModal">
-      <CertificateModalVue
-        @hideCertificate="toggleCertificateModal"
-        :certificates="certificates"
-        :index="index"
-      />
-    </div>
+    <CertificateModalVue
+      v-show="showCertificateModal"
+      @hideCertificate="toggleCertificateModal"
+      @updateData="reloadTable"
+      :certificates="certificates"
+      :index="index"
+    />
     <ConfirmationDeletionModal
       v-show="showDeletionModal"
       @closeConfirmationDeletionModal="toggleDeletionModal(-1)"

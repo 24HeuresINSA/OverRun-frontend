@@ -130,7 +130,8 @@ export default defineComponent({
       if (response.status === 200) {
         if (status === 1) this.$emit("validate");
         if (status === 5) this.toogleConfirmRefuseCertificat();
-        this.$emit("next");
+        this.$emit("updateData");
+        if (this.next) this.$emit("next");
       }
     },
   },

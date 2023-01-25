@@ -241,6 +241,10 @@ export default defineComponent({
       type: Number,
       required: true,
     },
+    reloadData: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -262,6 +266,9 @@ export default defineComponent({
   watch: {
     inscriptionId(newId, oldId) {
       this.getInscription();
+    },
+    reloadData(newVal) {
+      if (newVal) this.getInscription();
     },
   },
   beforeMount() {

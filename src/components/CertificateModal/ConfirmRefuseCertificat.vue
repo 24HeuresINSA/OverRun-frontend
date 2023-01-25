@@ -5,8 +5,8 @@
         <div class="col">
           <h4>Raison du refus</h4>
           <p>
-            Préciser pourquoi le certificat de l'athlète est refusé. Cette raison
-            sera celle indiquée dans le mail envoyé à l'athlète
+            Préciser pourquoi le certificat de l'athlète est refusé. Cette
+            raison sera celle indiquée dans le mail envoyé à l'athlète
           </p>
         </div>
         <div class="col-1">

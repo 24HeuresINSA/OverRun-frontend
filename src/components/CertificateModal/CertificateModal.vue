@@ -7,6 +7,7 @@
             @next="nextInscription"
             @previous="previousInscription"
             @validate="validateCertificate"
+            @updateData="updateData"
             :next="certificates?.length > currentIndex + 1"
             :previous="currentIndex > 0"
             :certificateId="certificates[currentIndex]?.id"
@@ -17,6 +18,7 @@
           <SideInfo
             @hideCertificate="closeModal"
             :inscriptionId="certificates[currentIndex]?.inscription.id"
+            :reloadData="shouldReloadData"
           />
         </div>
       </div>
@@ -48,11 +50,17 @@ export default defineComponent({
   data() {
     return {
       currentIndex: 0,
+      shouldReloadData: false,
     };
   },
   methods: {
     closeModal() {
       this.$emit("hideCertificate", false, [], 0);
+    },
+    updateData() {
+      this.shouldReloadData = true;
+      this.$emit("updateData");
+      this.shouldReloadData = false;
     },
     nextInscription() {
       if (this.certificates) {
@@ -70,6 +78,7 @@ export default defineComponent({
     },
     validateCertificate() {
       this.certificates.splice(this.currentIndex, 1);
+      this.updateData;
     },
   },
   watch: {

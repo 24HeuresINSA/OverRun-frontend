@@ -7,6 +7,7 @@
     <CertificateModalVue
       v-show="showCertificateModal"
       @hideCertificate="toggleCertificateModal"
+      @updateData="reloadTable"
       :certificates="certificates"
       :index="index"
     />
