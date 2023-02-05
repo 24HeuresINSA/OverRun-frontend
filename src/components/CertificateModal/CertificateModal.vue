@@ -17,6 +17,7 @@
         <div class="col-3">
           <SideInfo
             @hideCertificate="closeModal"
+            @dataReloaded="setShouldReloadDataToFasle"
             :inscriptionId="certificates[currentIndex]?.inscription.id"
             :reloadData="shouldReloadData"
           />
@@ -27,6 +28,7 @@
 </template>
 
 <script lang="ts">
+import { MutationTypes } from "@/store/modules/certificates";
 import { Certificate as CertificateType } from "@/types/interface";
 import { defineComponent } from "vue";
 import Certificate from "./Certificate.vue";
@@ -47,6 +49,11 @@ export default defineComponent({
     Certificate,
     SideInfo,
   },
+  computed: {
+    certificate(): CertificateType {
+      return this.$store.getters["certificate/getmCertificate"];
+    },
+  },
   data() {
     return {
       currentIndex: 0,
@@ -60,6 +67,8 @@ export default defineComponent({
     updateData() {
       this.shouldReloadData = true;
       this.$emit("updateData");
+    },
+    setShouldReloadDataToFasle() {
       this.shouldReloadData = false;
     },
     nextInscription() {
@@ -84,6 +93,10 @@ export default defineComponent({
   watch: {
     index(newIndex, oldIndex) {
       this.currentIndex = newIndex;
+      this.$store.commit(
+        `certificates/${MutationTypes.SET_CERTIFICATE}`,
+        this.certificates[this.currentIndex]?.id
+      );
     },
   },
   mounted() {

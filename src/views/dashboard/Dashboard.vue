@@ -251,12 +251,20 @@ export default defineComponent({
       return cents / 100;
     },
     async reloadTable() {
-      const inscriptionsResponse = await axios.get("inscriptions/");
+      const inscriptionsResponse = await axios.get("inscriptions/", {
+        params: {
+          editionId: this.$store.getters["edition/getEditionId"],
+        },
+      });
       if (inscriptionsResponse.status < 300) {
         this.inscriptions = inscriptionsResponse.data.data;
       }
 
-      const certificateResponse = await axios.get("certificates/");
+      const certificateResponse = await axios.get("certificates/", {
+        params: {
+          editionId: this.$store.getters["edition/getEditionId"],
+        },
+      });
       if (certificateResponse.status < 300) {
         this.certificates = certificateResponse.data.data.filter(
           (certificate: Certificate) => {

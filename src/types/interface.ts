@@ -45,6 +45,8 @@ export interface VA {
 export interface Payment {
   id: number;
   status: PaymentStatus;
+  raceAmount: number;
+  donationAmount: number;
 }
 
 export interface Inscription {

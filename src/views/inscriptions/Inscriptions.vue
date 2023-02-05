@@ -290,9 +290,13 @@ export default defineComponent({
       certificateStatus: null,
       paymentStatus: null,
       inscriptions: [] as Inscription[],
-      certificates: [] as Certificate[],
       PaymentStatus,
     };
+  },
+  computed: {
+    certificates(): Certificate[] {
+      return this.$store.getters["certificates/getCertificates"];
+    },
   },
   methods: {
     hasError(id: number) {
@@ -337,10 +341,7 @@ export default defineComponent({
         this.inscriptions = response.data.data;
       }
 
-      const certificatesResponse = await axios.get("certificates");
-      if (certificatesResponse.status < 300) {
-        this.certificates = certificatesResponse.data.data;
-      }
+      this.$store.dispatch("certificates/fetchCertificates");
     },
   },
   async beforeMount() {
