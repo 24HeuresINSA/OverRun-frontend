@@ -189,37 +189,28 @@
       </div>
       <div class="row text-start">
         <div class="col">
-          <span class="d-inline"
-            ><p class="d-inline fw-bolder">Montant inscription:</p>
-            idk €
-            <p class="d-inline"></p
-          ></span>
-        </div>
-      </div>
-      <div class="row text-start">
-        <div class="col">
           <span class="d-inline text-start"
             ><p class="d-inline fw-bolder">Payé:</p>
-            <span class="badge ms-2 valide">idk</span>
+            <ValidationChipsPayment :status="inscription.payment?.status" />
           </span>
         </div>
       </div>
-
       <div class="row text-start">
         <div class="col">
           <span class="d-inline"
-            ><p class="d-inline fw-bolder">Identifiant Transaction:</p>
-            idk
+            ><p class="d-inline fw-bolder">Montant inscription:</p>
+            {{ centimesToEuros(inscription.payment?.raceAmount) }} €
             <p class="d-inline"></p
           ></span>
         </div>
       </div>
       <div class="row text-start">
         <div class="col">
-          <span class="d-inline text-start"
-            ><p class="d-inline fw-bolder">Date transaction:</p>
-            <p class="d-inline">DD/MM/YY à hh:mm</p>
-          </span>
+          <span class="d-inline"
+            ><p class="d-inline fw-bolder">Montant donation:</p>
+            {{ centimesToEuros(inscription.payment?.donationAmount) }} €
+            <p class="d-inline"></p
+          ></span>
         </div>
       </div>
     </div>
@@ -228,6 +219,7 @@
 
 <script lang="ts">
 import ValidationChips from "@/components/validationChips/ValidationsChips.vue";
+import ValidationChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
 import { Inscription } from "@/types/interface";
 import axios from "axios";
 import { defineComponent } from "vue";
@@ -235,6 +227,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   components: {
     ValidationChips,
+    ValidationChipsPayment,
   },
   props: {
     inscriptionId: {
@@ -261,6 +254,11 @@ export default defineComponent({
       if (response.status < 300) {
         this.inscription = response.data;
       }
+      this.$emit("dataReloaded");
+    },
+    centimesToEuros(centimes: number | undefined) {
+      if (!centimes) return 0;
+      return centimes / 100;
     },
   },
   watch: {
