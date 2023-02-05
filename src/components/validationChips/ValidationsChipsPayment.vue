@@ -23,7 +23,7 @@
     <a
       v-else-if="status === paymentStatus.REFUNDING"
       class="badge text-dark rounded-pill bg-primary mx-1"
-      >Remboursement en Course</a
+      >Remboursement en cours</a
     >
     <a
       v-else-if="status === paymentStatus.REFUND"
