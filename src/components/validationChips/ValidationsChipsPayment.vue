@@ -21,6 +21,11 @@
       >Non créé</a
     >
     <a
+      v-else-if="status === paymentStatus.REFUNDING"
+      class="badge text-dark rounded-pill bg-primary mx-1"
+      >Remboursement en Course</a
+    >
+    <a
       v-else-if="status === paymentStatus.REFUND"
       class="badge text-dark rounded-pill bg-warning mx-1"
       >Remboursé</a
