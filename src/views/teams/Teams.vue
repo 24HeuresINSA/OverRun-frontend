@@ -106,13 +106,19 @@
                   </router-link>
                 </td>
                 <td>
-                  {{ team.members.length }}/{{
-                    team.race.category.maxTeamMembers
-                  }}
+                  {{
+                    team.members.filter(
+                      (member) => member.status !== InscriptionStatus.CANCELLED
+                    ).length
+                  }}/{{ team.race.category.maxTeamMembers }}
                 </td>
                 <td>
                   {{ getValidatedInscriptions(team) }}/
-                  {{ team.members.length }}
+                  {{
+                    team.members.filter(
+                      (member) => member.status !== InscriptionStatus.CANCELLED
+                    ).length
+                  }}
                 </td>
                 <td>
                   <div class="error" v-show="hasError(team.id)">
@@ -139,7 +145,7 @@ import ConfirmationDeletionModal from "@/components/modals/ConfirmDeletionModal.
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
-import { Team } from "@/types/interface";
+import { Team, InscriptionStatus } from "@/types/interface";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -160,6 +166,7 @@ export default defineComponent({
       teams: [] as Team[],
       teamToDelete: -1,
       teamError: -1,
+      InscriptionStatus,
     };
   },
   methods: {
@@ -194,13 +201,13 @@ export default defineComponent({
       }
     },
     getValidatedInscriptions(team: Team) {
-      let nbValidatedInscirptions = 0;
+      let nbValidatedInscriptions = 0;
       team.members.forEach((member, index) => {
-        if (member.validated) {
-          nbValidatedInscirptions += 1;
+        if (member.status === InscriptionStatus.VALIDATED) {
+          nbValidatedInscriptions += 1;
         }
       });
-      return nbValidatedInscirptions;
+      return nbValidatedInscriptions;
     },
   },
   beforeMount() {

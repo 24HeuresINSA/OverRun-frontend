@@ -28,16 +28,21 @@
       </div>
       <div class="row m-2">
         <div class="col text-start">
-          Nombre d'équipier: {{ team.members.length }}/{{
-            team.race.category.maxTeamMembers
-          }}
+          Nombre d'équipier:
+          {{
+            team.members.filter(
+              (member) => member.status !== InscriptionStatus.CANCELLED
+            ).length
+          }}/{{ team.race.category.maxTeamMembers }}
         </div>
       </div>
 
       <div class="row m-2">
         <div class="col text-start">
           Nombre d'inscriptions complètes: {{ countValidatedMembers(team) }}/{{
-            team.members?.length
+            team.members.filter(
+              (member) => member.status === InscriptionStatus.VALIDATED
+            ).length
           }}
         </div>
       </div>
@@ -81,9 +86,7 @@
                 </td>
                 <td>{{ member.athlete.user.email }}</td>
                 <td>
-                  <ValidationsChips
-                    :status="member.validated ? 1 : undefined"
-                  />
+                  <ValidationChipsInscription :status="member.status" />
                 </td>
               </tr>
             </tbody>
@@ -97,8 +100,8 @@
 <script lang="ts">
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
-import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
-import { Admin, Member, Team } from "@/types/interface";
+import ValidationChipsInscription from "@/components/validationChips/ValidationChipsInscription.vue";
+import { Admin, Member, Team, InscriptionStatus } from "@/types/interface";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -106,12 +109,13 @@ export default defineComponent({
   components: {
     SideBar,
     TopBar,
-    ValidationsChips,
+    ValidationChipsInscription,
   },
   data() {
     return {
       hideSideBar: false,
       team: {} as Team,
+      InscriptionStatus,
     };
   },
   methods: {
@@ -125,7 +129,9 @@ export default defineComponent({
       }
     },
     countValidatedMembers(team: Team): number {
-      return team.members.filter((member: Member) => member.validated).length;
+      return team.members.filter(
+        (member: Member) => member.status !== InscriptionStatus.CANCELLED
+      ).length;
     },
     isTeamAdmin(id: number): boolean {
       return this.team.admins.some(
