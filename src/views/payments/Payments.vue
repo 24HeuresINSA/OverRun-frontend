@@ -78,6 +78,7 @@
                 <th scope="col">Course</th>
                 <th scope="col">Montant paiement</th>
                 <th scope="col">Montant donation</th>
+                <th scope="col">Inscription</th>
                 <th scope="col">Statut</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -122,6 +123,18 @@
                 <td>{{ centimesToEuros(payment.donationAmount) }}</td>
                 <td>
                   <router-link
+                    :to="{
+                      name: 'InscriptionDetails',
+                      params: { id: payment.inscription.id },
+                    }"
+                  >
+                    <ValidationChipsInscription
+                      :status="payment.inscription.status"
+                    />
+                  </router-link>
+                </td>
+                <td>
+                  <router-link
                     :to="{ name: 'PaymentDetails', params: { id: payment.id } }"
                   >
                     <ValidationsChipsPayment :status="payment.status" />
@@ -149,6 +162,7 @@ import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
+import ValidationChipsInscription from "@/components/validationChips/ValidationChipsInscription.vue";
 import { Payment, PaymentStatus } from "@/types/payment";
 import axios from "axios";
 import { defineComponent } from "vue";
@@ -159,6 +173,7 @@ export default defineComponent({
     TopBar,
     SearchBarVue,
     ValidationsChipsPayment,
+    ValidationChipsInscription,
   },
   data() {
     return {
