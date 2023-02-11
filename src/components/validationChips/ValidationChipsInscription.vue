@@ -16,7 +16,7 @@
     v-show="status === InscriptionStatus.CANCELLED"
     class="badge text-dark rounded-pill bg-danger mx-1"
   >
-    Annulé
+    Annulée
   </div>
 </template>
 
