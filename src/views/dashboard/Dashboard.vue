@@ -198,7 +198,7 @@ import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationChips from "@/components/validationChips/ValidationsChips.vue";
 import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
-import { Certificate, Inscription } from "@/types/interface";
+import { Certificate, Inscription, InscriptionStatus } from "@/types/interface";
 import { Payment, PaymentStatus } from "@/types/payment";
 import axios from "axios";
 import { defineComponent } from "vue";
@@ -218,6 +218,7 @@ export default defineComponent({
       hideSideBar: false,
       showCertificateModal: false,
       inscriptions: [] as Inscription[],
+      InscriptionStatus,
       certificates: [] as Certificate[],
       payments: [] as Payment[],
       index: 0,
@@ -280,12 +281,12 @@ export default defineComponent({
     },
     getValidatedInscriptionsLength() {
       return this.inscriptions.filter((inscription) => {
-        return inscription.validated;
+        return inscription.status === this.InscriptionStatus.VALIDATED;
       }).length;
     },
     getNotValidatedInscriptionsLength() {
       return this.inscriptions.filter((inscription) => {
-        return !inscription.validated;
+        return inscription.status !== this.InscriptionStatus.VALIDATED;
       }).length;
     },
   },

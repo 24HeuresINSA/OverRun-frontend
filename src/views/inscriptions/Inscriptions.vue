@@ -119,7 +119,8 @@
                 <th scope="col">VA</th>
                 <th scope="col">Certificat</th>
                 <th scope="col">Paiement</th>
-                <th scope="col"></th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -203,30 +204,7 @@
                   />
                 </td>
                 <td>
-                  <button
-                    v-if="inscription.validated"
-                    class="badge bg-warning"
-                    @click="toggleInscription(inscription.id, false)"
-                  >
-                    Dévalider inscription
-                  </button>
-                  <button
-                    v-else-if="
-                      inscription.certificate?.status === 1 &&
-                      inscription.payment?.status === PaymentStatus.VALIDATED
-                    "
-                    class="badge bg-success"
-                    @click="toggleInscription(inscription.id, true)"
-                  >
-                    Valider l'inscription
-                  </button>
-                  <button
-                    v-else
-                    class="badge bg-secondary"
-                    @click="toggleInscription(inscription.id, true)"
-                  >
-                    Valider l'inscription
-                  </button>
+                  <ValidationChipsInscription :status="inscription.status" />
                 </td>
                 <td>
                   <div
@@ -234,10 +212,35 @@
                     v-show="hasError(inscription.id)"
                     @click="toggleInscription(inscription.id, true)"
                   >
-                    Suppression impossible
+                    {{ errorMsg }}
                   </div>
+
                   <button
-                    class="badge bg-danger"
+                    v-if="inscription.status === InscriptionStatus.VALIDATED"
+                    class="badge me-1 bg-warning"
+                    @click="toggleInscription(inscription.id, false)"
+                  >
+                    Dévalider inscription
+                  </button>
+                  <button
+                    v-else-if="
+                      inscription.status !== InscriptionStatus.CANCELLED
+                    "
+                    class="badge me-1"
+                    :class="validationButtonColor(inscription)"
+                    @click="toggleInscription(inscription.id, true)"
+                  >
+                    Valider l'inscription
+                  </button>
+                  <button
+                    v-show="inscription.status !== InscriptionStatus.CANCELLED"
+                    class="badge me-1 bg-primary"
+                    @click="cancelInscription(inscription.id)"
+                  >
+                    Annuler l'inscription
+                  </button>
+                  <button
+                    class="badge me-1 bg-danger"
                     @click="toggleDeletionModal(inscription.id)"
                   >
                     Supprimer
@@ -260,7 +263,8 @@ import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
 import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
-import { Certificate, Inscription } from "@/types/interface";
+import ValidationChipsInscription from "@/components/validationChips/ValidationChipsInscription.vue";
+import { Certificate, Inscription, InscriptionStatus } from "@/types/interface";
 import { PaymentStatus } from "@/types/payment";
 import axios from "axios";
 import { defineComponent } from "vue";
@@ -274,6 +278,7 @@ export default defineComponent({
     ValidationsChips,
     ConfirmationDeletionModal,
     ValidationsChipsPayment,
+    ValidationChipsInscription,
   },
   data() {
     return {
@@ -292,6 +297,8 @@ export default defineComponent({
       inscriptions: [] as Inscription[],
       certificates: [] as Certificate[],
       PaymentStatus,
+      InscriptionStatus,
+      errorMsg: "",
     };
   },
   methods: {
@@ -315,6 +322,18 @@ export default defineComponent({
     async deleteInscription(id: number) {
       // TODO
       this.inscriptionError = id;
+      this.errorMsg = "Suppression impossible";
+    },
+    canValidateInscription(inscription: Inscription) {
+      return (
+        inscription.certificate?.status === 1 &&
+        inscription.payment?.status === PaymentStatus.VALIDATED
+      );
+    },
+    validationButtonColor(inscription: Inscription) {
+      return this.canValidateInscription(inscription)
+        ? "bg-success"
+        : "bg-secondary";
     },
     async toggleInscription(id: number, newStatus: boolean) {
       const response = await axios.patch("inscriptions/" + id, {
@@ -323,6 +342,15 @@ export default defineComponent({
       if (response.status >= 300) {
         return;
       }
+      this.reloadTable();
+    },
+    async cancelInscription(id: number) {
+      const response = await axios.post(`inscriptions/${id}/cancelation`);
+      if (response.status !== 200)
+        return (
+          (this.inscriptionError = id),
+          (this.errorMsg = "Erreur lors de l'annulation de l'inscription")
+        );
       this.reloadTable();
     },
     async reloadTable() {
