@@ -336,7 +336,7 @@ export default defineComponent({
         : "bg-secondary";
     },
     async toggleInscription(id: number, newStatus: boolean) {
-      const response = await axios.patch("inscriptions/" + id, {
+      const response = await axios.post(`inscriptions/${id}/validate`, {
         validated: newStatus,
       });
       if (response.status >= 300) {
@@ -345,7 +345,7 @@ export default defineComponent({
       this.reloadTable();
     },
     async cancelInscription(id: number) {
-      const response = await axios.post(`inscriptions/${id}/cancelation`);
+      const response = await axios.post(`inscriptions/${id}/cancel`);
       if (response.status !== 200)
         return (
           (this.inscriptionError = id),
