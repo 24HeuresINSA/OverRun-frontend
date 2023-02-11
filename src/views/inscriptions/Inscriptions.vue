@@ -239,12 +239,6 @@
                   >
                     Annuler l'inscription
                   </button>
-                  <button
-                    class="badge me-1 bg-danger"
-                    @click="toggleDeletionModal(inscription.id)"
-                  >
-                    Supprimer
-                  </button>
                 </td>
               </tr>
             </tbody>
