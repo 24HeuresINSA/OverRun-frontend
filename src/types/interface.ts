@@ -57,7 +57,13 @@ export interface Inscription {
   race: Race;
   certificate: Certificate | null;
   payment: Payment | null;
-  validated: boolean;
+  status: InscriptionStatus;
+}
+
+export enum InscriptionStatus {
+  PENDING = "PENDING",
+  VALIDATED = "VALIDATED",
+  CANCELLED = "CANCELLED",
 }
 
 export interface Edition {
