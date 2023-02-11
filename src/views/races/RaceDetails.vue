@@ -28,7 +28,7 @@
       <div class="row mt-4 m-2">
         <div class="col text-start">
           <span class="d-inline">
-            <p class="d-inline fw-bolder me-2">Categorie:</p>
+            <p class="d-inline fw-bolder me-2">Catégorie:</p>
             <p class="d-inline">
               <router-link
                 :to="{
@@ -60,7 +60,9 @@
                 }"
               >
                 <a href="" class="badge rounded-pill bg-secondary">
-                  {{ raceDiscipline.discipline.name }} ({{ raceDiscipline.duration }}h)</a
+                  {{ raceDiscipline.discipline.name }} ({{
+                    raceDiscipline.duration
+                  }}h)</a
                 >
               </router-link>
             </p>
@@ -73,7 +75,11 @@
           <span class="d-inline"
             ><p class="d-inline fw-bolder me-2">Nombre d'inscriptions:</p>
             <p class="d-inline">
-              {{ race.inscriptions.length }}/{{ race.maxParticipants }}
+              {{
+                race.inscriptions.filter(
+                  (i) => i.status !== InscriptionStatus.CANCELLED
+                ).length
+              }}/{{ race.maxParticipants }}
             </p>
           </span>
         </div>
@@ -168,9 +174,7 @@
                   />
                 </td>
                 <td>
-                  <ValidationsChips
-                    :status="inscription.validated ? 1 : undefined"
-                  />
+                  <ValidationChipsInscription :status="inscription.status" />
                 </td>
               </tr>
             </tbody>
@@ -198,7 +202,7 @@
           <table class="table table-striped table-hover">
             <thead style="position: sticky; top: 0">
               <tr>
-                <th scope="col">Equipe</th>
+                <th scope="col">Équipe</th>
                 <th scope="col">Membres</th>
                 <th scope="col">Inscriptions Complétées</th>
               </tr>
@@ -213,9 +217,11 @@
                   </router-link>
                 </td>
                 <td>
-                  {{ team.members.length }}/{{
-                    team.race.category.maxTeamMembers
-                  }}
+                  {{
+                    team.members.filter(
+                      (m) => m.status !== InscriptionStatus.CANCELLED
+                    ).length
+                  }}/{{ team.race.category.maxTeamMembers }}
                 </td>
                 <td>
                   {{ countValidatedMembers(team) }}/{{ team.members?.length }}
@@ -233,9 +239,15 @@
 import UpdateRace from "@/components/modals/race/UpdateRace.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
-import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
+import ValidationChipsInscription from "@/components/validationChips/ValidationChipsInscription.vue";
 import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
-import { Inscription, Member, Race, Team } from "@/types/interface";
+import {
+  Inscription,
+  InscriptionStatus,
+  Member,
+  Race,
+  Team,
+} from "@/types/interface";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -243,7 +255,7 @@ export default defineComponent({
   components: {
     SideBar,
     TopBar,
-    ValidationsChips,
+    ValidationChipsInscription,
     UpdateRace,
     ValidationsChipsPayment,
   },
@@ -256,6 +268,7 @@ export default defineComponent({
       race: {} as Race,
       teams: [] as Team[],
       inscriptions: [] as Inscription[],
+      InscriptionStatus,
     };
   },
   methods: {
@@ -290,7 +303,9 @@ export default defineComponent({
       }
     },
     countValidatedMembers(team: Team): number {
-      return team.members.filter((member: Member) => member.validated).length;
+      return team.members.filter(
+        (member: Member) => member.status !== InscriptionStatus.CANCELLED
+      ).length;
     },
   },
   beforeMount() {
