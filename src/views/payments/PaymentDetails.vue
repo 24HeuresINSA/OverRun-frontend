@@ -185,8 +185,8 @@ import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationChipsInscription from "@/components/validationChips/ValidationChipsInscription.vue";
 import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
-import { dateFormat } from "@/types/dateFormat";
 import { Payment, PaymentStatus } from "@/types/payment";
+import { formateDate } from "@/utils/mixins/date";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -205,6 +205,7 @@ export default defineComponent({
     };
   },
   methods: {
+    formateDate,
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
@@ -223,9 +224,6 @@ export default defineComponent({
       console.log(response);
       if (response.status >= 300) return;
       this.payment = response.data;
-    },
-    formateDate(date: string) {
-      return new Date(date).toLocaleDateString("FR-fr", dateFormat);
     },
   },
   beforeMount() {

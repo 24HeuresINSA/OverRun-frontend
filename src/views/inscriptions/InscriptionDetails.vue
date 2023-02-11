@@ -38,6 +38,28 @@
       </div>
 
       <div class="row mt-2 m-2">
+        <div
+          class="col text-start"
+          :class="
+            isAthleteMinor(inscription.athlete.dateOfBirth) ? 'bg-warning' : ''
+          "
+        >
+          <span class="d-inline"
+            ><p class="d-inline fw-bolder me-2">Date d'annniversaire:</p>
+            <p class="d-inline">
+              {{
+                new Date(inscription.athlete.dateOfBirth).toLocaleString("fr", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              }}
+            </p></span
+          >
+        </div>
+      </div>
+
+      <div class="row mt-2 m-2">
         <div class="col text-start">
           <span class="d-inline"
             ><p class="d-inline fw-bolder me-2">Téléphone:</p>
@@ -177,6 +199,8 @@ import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
 import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
 import { Inscription } from "@/types/interface";
+import { isAthleteMinor } from "@/utils/mixins/athlete";
+import { formateDate } from "@/utils/mixins/date";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -195,6 +219,8 @@ export default defineComponent({
     };
   },
   methods: {
+    isAthleteMinor,
+    formateDate,
     toggleCertificateModal() {
       this.showCertificateModal = !this.showCertificateModal;
     },

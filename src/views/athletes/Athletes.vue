@@ -56,7 +56,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="athlete in athletes" :key="athlete.id">
+              <tr
+                v-for="athlete in athletes"
+                :key="athlete.id"
+                :class="isAthleteMinor(athlete.dateOfBirth) ? 'bg-warning' : ''"
+              >
                 <th scope="row">
                   <input
                     class="form-check-input mt-0"
@@ -110,6 +114,7 @@ import ConfirmationDeletionModal from "@/components/modals/ConfirmDeletionModal.
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
+import { isAthleteMinor } from "@/utils/mixins/athlete";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -132,6 +137,7 @@ export interface Athlete {
   firstName: string;
   lastName: string;
   phoneNumber: string;
+  dateOfBirth: string;
   inscriptions: Edition[];
 }
 
@@ -155,6 +161,7 @@ export default defineComponent({
     };
   },
   methods: {
+    isAthleteMinor,
     hasError(id: number) {
       return id === this.athleteError;
     },

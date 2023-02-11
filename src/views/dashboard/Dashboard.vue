@@ -139,6 +139,13 @@
                       )
                       .slice(0, 5)"
                     :key="certificate.id"
+                    :class="
+                      isAthleteMinor(
+                        certificate.inscription.athlete.dateOfBirth
+                      )
+                        ? 'bg-warning'
+                        : ''
+                    "
                   >
                     <td>
                       <router-link
@@ -232,6 +239,7 @@ import ValidationChips from "@/components/validationChips/ValidationsChips.vue";
 import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
 import { Certificate, Inscription, InscriptionStatus } from "@/types/interface";
 import { Payment, PaymentStatus } from "@/types/payment";
+import { isAthleteMinor } from "@/utils/mixins/athlete";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -272,6 +280,7 @@ export default defineComponent({
     };
   },
   methods: {
+    isAthleteMinor,
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },

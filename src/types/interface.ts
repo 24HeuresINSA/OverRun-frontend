@@ -53,6 +53,7 @@ export interface Inscription {
   id: number;
   athlete: Athlete;
   team: Team;
+  teamAdmin: boolean;
   va: VA | null;
   race: Race;
   certificate: Certificate | null;

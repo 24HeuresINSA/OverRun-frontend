@@ -73,7 +73,10 @@
       </div>
 
       <div class="row mt-2 m-2">
-        <div class="col text-start">
+        <div
+          class="col text-start"
+          :class="isAthleteMinor(athlete.dateOfBirth) ? 'bg-warning' : ''"
+        >
           <span class="d-inline"
             ><p class="d-inline fw-bolder me-2">Date d'anniversaire :</p>
             <p class="d-inline">
@@ -114,6 +117,7 @@
 <script lang="ts">
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
+import { isAthleteMinor } from "@/utils/mixins/athlete";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -144,6 +148,7 @@ export default defineComponent({
     };
   },
   methods: {
+    isAthleteMinor,
     toggleCertificateModal() {
       this.showCertificateModal = !this.showCertificateModal;
     },

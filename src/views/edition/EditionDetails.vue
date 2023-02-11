@@ -109,8 +109,8 @@
 <script lang="ts">
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
-import { dateFormat } from "@/types/dateFormat";
 import { Edition } from "@/types/edition";
+import { formateDate } from "@/utils/mixins/date";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -126,6 +126,7 @@ export default defineComponent({
     };
   },
   methods: {
+    formateDate,
     toggleSideBar() {
       this.hideSideBar = !this.hideSideBar;
     },
@@ -152,9 +153,6 @@ export default defineComponent({
       const year = formatedDate.slice(6, 10);
       const time = formatedDate.slice(11, 16);
       return `${year}-${month}-${day}T${time}`;
-    },
-    formateDate(date: string) {
-      return new Date(date).toLocaleDateString("FR-fr", dateFormat);
     },
     async modifyEdition(edition: Edition) {
       const response = await axios.put(`/editions/${edition.id}`, {

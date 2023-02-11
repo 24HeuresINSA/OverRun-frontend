@@ -84,7 +84,12 @@
             >
           </div>
         </div>
-        <div class="row text-start">
+        <div
+          class="row text-start"
+          :class="
+            isAthleteMinor(inscription.athlete.dateOfBirth) ? 'bg-warning' : ''
+          "
+        >
           <div class="col">
             <span class="d-inline"
               ><p class="d-inline fw-bolder me-2">Date de naissance:</p>
@@ -221,6 +226,7 @@
 import ValidationChips from "@/components/validationChips/ValidationsChips.vue";
 import ValidationChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
 import { Inscription } from "@/types/interface";
+import { isAthleteMinor } from "@/utils/mixins/athlete";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -245,6 +251,7 @@ export default defineComponent({
     };
   },
   methods: {
+    isAthleteMinor,
     closeModal() {
       this.$emit("hideCertificate");
     },

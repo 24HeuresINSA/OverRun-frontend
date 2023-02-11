@@ -65,7 +65,13 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="member in team.members" :key="member.id">
+              <tr
+                v-for="member in team.members"
+                :key="member.id"
+                :class="
+                  isAthleteMinor(member.athlete.dateOfBirth) ? 'bg-warning' : ''
+                "
+              >
                 <th scope="row">
                   <span
                     v-show="isTeamAdmin(member.athlete.id)"
@@ -102,6 +108,7 @@ import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationChipsInscription from "@/components/validationChips/ValidationChipsInscription.vue";
 import { Admin, Member, Team, InscriptionStatus } from "@/types/interface";
+import { isAthleteMinor } from "@/utils/mixins/athlete";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -119,6 +126,7 @@ export default defineComponent({
     };
   },
   methods: {
+    isAthleteMinor,
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },

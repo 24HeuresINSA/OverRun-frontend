@@ -85,7 +85,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="payment in payments" :key="payment.id">
+              <tr
+                v-for="payment in payments"
+                :key="payment.id"
+                :class="
+                  isAthleteMinor(payment.inscription.athlete.dateOfBirth)
+                    ? 'bg-warning'
+                    : ''
+                "
+              >
                 <th scope="row">
                   <input
                     class="form-check-input mt-0"
@@ -164,6 +172,7 @@ import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
 import ValidationChipsInscription from "@/components/validationChips/ValidationChipsInscription.vue";
 import { Payment, PaymentStatus } from "@/types/payment";
+import { isAthleteMinor } from "@/utils/mixins/athlete";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -186,6 +195,7 @@ export default defineComponent({
     };
   },
   methods: {
+    isAthleteMinor,
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },

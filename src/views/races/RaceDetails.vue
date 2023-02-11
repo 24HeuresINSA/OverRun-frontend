@@ -124,7 +124,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="inscription in inscriptions" :key="inscription.id">
+              <tr
+                v-for="inscription in inscriptions"
+                :key="inscription.id"
+                :class="
+                  isAthleteMinor(inscription.athlete.dateOfBirth)
+                    ? 'bg-warning'
+                    : ''
+                "
+              >
                 <td>
                   <router-link
                     :to="{
@@ -248,6 +256,7 @@ import {
   Race,
   Team,
 } from "@/types/interface";
+import { isAthleteMinor } from "@/utils/mixins/athlete";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -272,6 +281,7 @@ export default defineComponent({
     };
   },
   methods: {
+    isAthleteMinor,
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },

@@ -124,7 +124,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="inscription in inscriptions" :key="inscription.id">
+              <tr
+                v-for="inscription in inscriptions"
+                :key="inscription.id"
+                :class="
+                  isAthleteMinor(inscription.athlete.dateOfBirth)
+                    ? 'bg-warning'
+                    : ''
+                "
+              >
                 <th scope="row">
                   <input
                     class="form-check-input mt-0"
@@ -262,6 +270,7 @@ import { Certificate, Inscription, InscriptionStatus } from "@/types/interface";
 import { PaymentStatus } from "@/types/payment";
 import axios from "axios";
 import { defineComponent } from "vue";
+import { isAthleteMinor } from "@/utils/mixins/athlete";
 
 export default defineComponent({
   components: {
@@ -300,6 +309,7 @@ export default defineComponent({
     },
   },
   methods: {
+    isAthleteMinor,
     hasError(id: number) {
       return id === this.inscriptionError;
     },
