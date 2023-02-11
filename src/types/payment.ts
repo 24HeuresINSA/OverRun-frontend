@@ -1,3 +1,5 @@
+import { InscriptionStatus } from "./interface";
+
 export interface Payment {
   id: number;
   donationAmount: number;
@@ -26,6 +28,7 @@ export interface Inscription {
   race: Race;
   edition: { id: number };
   va: boolean;
+  status: InscriptionStatus;
 }
 
 export interface Race {

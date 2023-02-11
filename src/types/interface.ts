@@ -28,7 +28,7 @@ export interface AdminInscription {
 export interface Member {
   id: number;
   athlete: Athlete;
-  validated: boolean;
+  status: InscriptionStatus;
 }
 
 export interface Team {
@@ -101,7 +101,7 @@ export interface Race {
   category: Category;
   id: number;
   disciplines: Discipline[];
-  inscriptions: Id[];
+  inscriptions: Inscription[];
   maxParticipants: number;
   maxTeams: number;
   name: string;
