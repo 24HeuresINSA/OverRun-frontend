@@ -119,7 +119,7 @@
                 <th scope="col">VA</th>
                 <th scope="col">Certificat</th>
                 <th scope="col">Paiement</th>
-                <th scope="col">Status</th>
+                <th scope="col">Statut</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>

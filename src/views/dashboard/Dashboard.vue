@@ -286,7 +286,7 @@ export default defineComponent({
     },
     getNotValidatedInscriptionsLength() {
       return this.inscriptions.filter((inscription) => {
-        return inscription.status !== this.InscriptionStatus.VALIDATED;
+        return inscription.status === this.InscriptionStatus.PENDING;
       }).length;
     },
   },
