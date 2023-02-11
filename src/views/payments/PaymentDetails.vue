@@ -63,7 +63,27 @@
         <div class="col text-start">
           <span class="d-inline">
             <div class="d-inline fw-bolder me-2">
-              Statut:
+              Inscription:
+              <router-link
+                :to="{
+                  name: 'InscriptionDetails',
+                  params: { id: payment.inscription.id },
+                }"
+              >
+                <ValidationChipsInscription
+                  :status="payment.inscription.status"
+                />
+              </router-link>
+            </div>
+          </span>
+        </div>
+      </div>
+
+      <div class="row mt-2 m-2">
+        <div class="col text-start">
+          <span class="d-inline">
+            <div class="d-inline fw-bolder me-2">
+              Statut du paiement:
               <ValidationsChipsPayment :status="payment.status" />
             </div>
           </span>
@@ -163,6 +183,7 @@
 <script lang="ts">
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
+import ValidationChipsInscription from "@/components/validationChips/ValidationChipsInscription.vue";
 import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
 import { dateFormat } from "@/types/dateFormat";
 import { Payment, PaymentStatus } from "@/types/payment";
@@ -174,6 +195,7 @@ export default defineComponent({
     SideBar,
     TopBar,
     ValidationsChipsPayment,
+    ValidationChipsInscription,
   },
   data() {
     return {
