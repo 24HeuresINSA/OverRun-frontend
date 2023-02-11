@@ -114,7 +114,11 @@
                   </router-link>
                 </td>
                 <td>
-                  {{ race.inscriptions.length }}/{{ race.maxParticipants }}
+                  {{
+                    race.inscriptions.filter(
+                      (i) => i.status !== InscriptionStatus.CANCELLED
+                    ).length
+                  }}/{{ race.maxParticipants }}
                 </td>
                 <td>{{ race.teams.length }}/{{ race.maxTeams }}</td>
                 <td>
@@ -126,9 +130,11 @@
                       params: { id: raceDiscipline.discipline.id },
                     }"
                   >
-                    <a href="" class="badge rounded-pill bg-secondary mx-1">{{
-                      raceDiscipline.discipline.name
-                    }} ({{ raceDiscipline.duration }}h)</a>
+                    <a href="" class="badge rounded-pill bg-secondary mx-1"
+                      >{{ raceDiscipline.discipline.name }} ({{
+                        raceDiscipline.duration
+                      }}h)</a
+                    >
                   </router-link>
                 </td>
                 <td>
@@ -171,6 +177,7 @@ import CreateRaceModalVue from "@/components/modals/CreateRaceModal.vue";
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
+import { InscriptionStatus } from "@/types/interface";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -192,6 +199,7 @@ export interface Category {
 
 export interface Inscription {
   id: number;
+  status: InscriptionStatus;
 }
 
 export interface Team {
@@ -232,6 +240,7 @@ export default defineComponent({
       teams: [{ id: 0, name: 0, members: [] }],
       raceToDelete: -1,
       raceError: -1,
+      InscriptionStatus,
     };
   },
   methods: {
