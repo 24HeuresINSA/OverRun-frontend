@@ -33,7 +33,12 @@
             </div>
             <div class="row pt-3">
               <div class="col-8 border-end">
-                <h1 class="mb-0">{{ inscriptions.length }}</h1>
+                <h1 class="mb-0">
+                  {{
+                    getPendingInscriptionsLength() +
+                    getValidatedInscriptionsLength()
+                  }}
+                </h1>
               </div>
               <div class="col-4 text-success">
                 <h2 class="d-block m-auto">+idk</h2>
@@ -46,21 +51,27 @@
           <div class="container-fluid p-1 pt-3 pb-3">
             <div class="row pt-1 pb-1">
               <div class="col border-bottom">
-                <h5>Status Inscriptions</h5>
+                <h5>Statut Inscriptions</h5>
               </div>
             </div>
             <div class="row pt-3">
-              <div class="col-6 text-success">
+              <div class="col-4 text-success border-end">
                 <h2 class="d-block m-auto">
                   {{ getValidatedInscriptionsLength() }}
                 </h2>
-                <div class="form-text d-block">Validé</div>
+                <div class="form-text d-block">Validées</div>
               </div>
-              <div class="col-6 text-danger">
+              <div class="col-4 text-warning border-end">
                 <h2 class="d-block m-auto">
-                  {{ getNotValidatedInscriptionsLength() }}
+                  {{ getPendingInscriptionsLength() }}
                 </h2>
-                <div class="form-text d-block">Non validé</div>
+                <div class="form-text d-block">En cours</div>
+              </div>
+              <div class="col-4 text-danger">
+                <h2 class="d-block m-auto">
+                  {{ getCancelledInscriptionsLength() }}
+                </h2>
+                <div class="form-text d-block">Annulées</div>
               </div>
             </div>
           </div>
@@ -101,7 +112,14 @@
           <div class="container-fluid p-1 pt-3">
             <div class="row pt-1 pb-1">
               <div class="col border-bottom">
-                <h5>Certificats à valider ({{ certificates.length }})</h5>
+                <h5>
+                  Certificats à valider ({{
+                    certificates.filter(
+                      (c) =>
+                        c.inscription.status !== InscriptionStatus.CANCELLED
+                    ).length
+                  }})
+                </h5>
               </div>
             </div>
             <div class="row">
@@ -114,7 +132,12 @@
                 </thead>
                 <tbody class="text-center">
                   <tr
-                    v-for="certificate in certificates.slice(0, 5)"
+                    v-for="certificate in certificates
+                      .filter(
+                        (c) =>
+                          c.inscription.status !== InscriptionStatus.CANCELLED
+                      )
+                      .slice(0, 5)"
                     :key="certificate.id"
                   >
                     <td>
@@ -163,7 +186,15 @@
                   </tr>
                 </thead>
                 <tbody class="text-center">
-                  <tr v-for="payment in payments.slice(0, 5)" :key="payment.id">
+                  <tr
+                    v-for="payment in payments
+                      .filter(
+                        (p) =>
+                          p.inscription.status !== InscriptionStatus.CANCELLED
+                      )
+                      .slice(0, 5)"
+                    :key="payment.id"
+                  >
                     <td>
                       <router-link
                         :to="{
@@ -293,9 +324,14 @@ export default defineComponent({
         return inscription.status === this.InscriptionStatus.VALIDATED;
       }).length;
     },
-    getNotValidatedInscriptionsLength() {
+    getPendingInscriptionsLength() {
       return this.inscriptions.filter((inscription) => {
         return inscription.status === this.InscriptionStatus.PENDING;
+      }).length;
+    },
+    getCancelledInscriptionsLength() {
+      return this.inscriptions.filter((inscription) => {
+        return inscription.status === this.InscriptionStatus.CANCELLED;
       }).length;
     },
   },
