@@ -4,13 +4,13 @@
     v-show="status === InscriptionStatus.PENDING"
     class="badge text-dark rounded-pill bg-info mx-1"
   >
-    En cours
+    À valider
   </div>
   <div
     v-show="status === InscriptionStatus.VALIDATED"
     class="badge text-dark rounded-pill bg-success mx-1"
   >
-    Validé
+    Validée
   </div>
   <div
     v-show="status === InscriptionStatus.CANCELLED"
