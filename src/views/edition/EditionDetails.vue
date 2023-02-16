@@ -110,9 +110,9 @@
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
 import { Edition } from "@/types/edition";
-import { formateDate } from "@/utils/mixins/date";
 import axios from "axios";
 import { defineComponent } from "vue";
+import { htmlImputDateTime } from "@/utils/mixins/date";
 
 export default defineComponent({
   components: {
@@ -126,7 +126,7 @@ export default defineComponent({
     };
   },
   methods: {
-    formateDate,
+    htmlImputDateTime,
     toggleSideBar() {
       this.hideSideBar = !this.hideSideBar;
     },
@@ -145,14 +145,6 @@ export default defineComponent({
           response.data.registrationEndDate
         ),
       };
-    },
-    htmlImputDateTime(date: string) {
-      const formatedDate = this.formateDate(date);
-      const day = formatedDate.slice(0, 2);
-      const month = formatedDate.slice(3, 5);
-      const year = formatedDate.slice(6, 10);
-      const time = formatedDate.slice(11, 16);
-      return `${year}-${month}-${day}T${time}`;
     },
     async modifyEdition(edition: Edition) {
       const response = await axios.put(`/editions/${edition.id}`, {
