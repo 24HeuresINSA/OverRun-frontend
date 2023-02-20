@@ -50,12 +50,54 @@
       >
         <div class="row mx-2">
           <div class="col-2 p-2 text-start">
-            <p class="fw-bolder mb-0">Status:</p>
-            <select class="form-select" aria-label="Default select example">
-              <option value="" disabled selected hidden>Choix status</option>
-              <option value="1">Validé</option>
-              <option value="2">A validé</option>
+            <p class="fw-bolder mb-0">Statut:</p>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              v-model="paymentStatus"
+            >
+              <option :value="null">Tous</option>
+              <option :value="PaymentStatus.NOT_STARTED">Non crée</option>
+              <option :value="PaymentStatus.PENDING">En cours</option>
+              <option :value="PaymentStatus.VALIDATED">Validé</option>
+              <option :value="PaymentStatus.REFUSED">Refusé</option>
+              <option :value="PaymentStatus.REFUNDING">
+                Remboursement en cours
+              </option>
+              <option :value="PaymentStatus.REFUND">Remboursé</option>
             </select>
+          </div>
+
+          <div class="col-2 p-2 text-start">
+            <p class="fw-bolder mb-0">Course:</p>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              v-model="raceId"
+            >
+              <option :value="null">Tous</option>
+              <option v-for="race in races" :key="race.id" :value="race.id">
+                {{ race.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-2 p-2 text-start">
+            <p class="fw-bolder mb-0">Statut de l'inscription:</p>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              v-model="inscriptionStatus"
+            >
+              <option :value="null">Tous</option>
+              <option :value="InscriptionStatus.PENDING">À valider</option>
+              <option :value="InscriptionStatus.VALIDATED">Validée</option>
+              <option :value="InscriptionStatus.CANCELLED">Annulée</option>
+            </select>
+          </div>
+
+          <div class="col-6 p-2 text-end light">
+            <button class="btn bg-secondary" @click="resetFilter">Reset</button>
           </div>
         </div>
       </div>
@@ -175,6 +217,7 @@ import { Payment, PaymentStatus } from "@/types/payment";
 import { isAthleteMinor } from "@/utils/mixins/athlete";
 import axios from "axios";
 import { defineComponent } from "vue";
+import { InscriptionStatus, Race } from "@/types/interface";
 
 export default defineComponent({
   components: {
@@ -191,11 +234,21 @@ export default defineComponent({
       selectAllRows: false,
       search: null as unknown,
       payments: [] as Payment[],
+      paymentStatus: null,
       PaymentStatus,
+      raceId: null,
+      races: [] as Race[],
+      inscriptionStatus: null,
+      InscriptionStatus,
     };
   },
   methods: {
     isAthleteMinor,
+    resetFilter() {
+      this.paymentStatus = null;
+      this.raceId = null;
+      this.inscriptionStatus = null;
+    },
     toggleSideBar(): void {
       this.hideSideBar = !this.hideSideBar;
     },
@@ -218,6 +271,9 @@ export default defineComponent({
           editionId: this.$store.getters["edition/getEditionId"],
           order: "asc",
           search: this.search,
+          status: this.paymentStatus,
+          raceId: this.raceId,
+          inscriptionStatus: this.inscriptionStatus,
         },
       });
       if (response.status < 300) {
@@ -225,11 +281,28 @@ export default defineComponent({
       }
     },
   },
-  mounted() {
+  async mounted() {
     this.reloadTable();
+
+    const response = await axios.get("races", {
+      params: {
+        editionId: this.$store.getters["edition/getEditionId"],
+      },
+    });
+    if (response.status !== 200) return;
+    this.races = response.data.data;
   },
   watch: {
     search() {
+      this.reloadTable();
+    },
+    paymentStatus() {
+      this.reloadTable();
+    },
+    raceId() {
+      this.reloadTable();
+    },
+    inscriptionStatus() {
       this.reloadTable();
     },
   },

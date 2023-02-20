@@ -49,11 +49,15 @@
         <div class="row mx-2">
           <div class="col-2 p-2 text-start">
             <p class="fw-bolder mb-0">Course:</p>
-            <select class="form-select" aria-label="Default select example">
-              <option value="" disabled selected hidden>Choix course</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              v-model="raceId"
+            >
+              <option :value="null">Tous</option>
+              <option v-for="race in races" :key="race.id" :value="race.id">
+                {{ race.name }}
+              </option>
             </select>
           </div>
         </div>
@@ -145,7 +149,7 @@ import ConfirmationDeletionModal from "@/components/modals/ConfirmDeletionModal.
 import SearchBarVue from "@/components/searchBar/SearchBar.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
-import { Team, InscriptionStatus } from "@/types/interface";
+import { Team, InscriptionStatus, Race } from "@/types/interface";
 import axios from "axios";
 import { defineComponent } from "vue";
 
@@ -167,6 +171,8 @@ export default defineComponent({
       teamToDelete: -1,
       teamError: -1,
       InscriptionStatus,
+      raceId: null,
+      races: [] as Race[],
     };
   },
   methods: {
@@ -194,6 +200,7 @@ export default defineComponent({
         params: {
           editionId: this.$store.getters["edition/getEditionId"],
           search: this.search,
+          raceId: this.raceId,
         },
       });
       if (response.status < 300) {
@@ -210,8 +217,22 @@ export default defineComponent({
       return nbValidatedInscriptions;
     },
   },
-  beforeMount() {
+  async beforeMount() {
     this.reloadTable();
+
+    const response = await axios.get("races", {
+      params: {
+        editionId: this.$store.getters["edition/getEditionId"],
+        minTeamMembers: 2,
+      },
+    });
+    if (response.status !== 200) return;
+    this.races = response.data.data;
+  },
+  watch: {
+    raceId() {
+      this.reloadTable();
+    },
   },
 });
 </script>

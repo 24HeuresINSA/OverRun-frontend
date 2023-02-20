@@ -58,25 +58,25 @@
             <select
               class="form-select"
               aria-label="Default select example"
-              v-model="race"
+              v-model="raceId"
             >
-              <option value="" disabled selected hidden>Choix course</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              <option :value="null">Tous</option>
+              <option v-for="race in races" :key="race.id" :value="race.id">
+                {{ race.name }}
+              </option>
             </select>
           </div>
           <div class="col-2 p-2 text-start">
-            <p class="fw-bolder mb-0">Status Certificat:</p>
+            <p class="fw-bolder mb-0">Statut Certificat:</p>
             <select
               class="form-select"
               aria-label="Default select example"
               v-model="certificateStatus"
             >
-              <option value="" disabled selected hidden>Choix status</option>
+              <option :value="null">Tous</option>
               <option value="1">Validé</option>
-              <option value="3">En attente</option>
-              <option value="2">Rejeté</option>
+              <option value="4">A valider</option>
+              <option value="5">Refusé</option>
             </select>
           </div>
           <div class="col-2 p-2 text-start">
@@ -86,15 +86,34 @@
               aria-label="Default select example"
               v-model="paymentStatus"
             >
-              <option value="" disabled selected hidden>Choix status</option>
-              <option value="1">Validé</option>
-              <option value="3">En attente</option>
-              <option value="2">Rejeté</option>
+              <option :value="null">Tous</option>
+              <option :value="PaymentStatus.NOT_STARTED">Non crée</option>
+              <option :value="PaymentStatus.PENDING">En cours</option>
+              <option :value="PaymentStatus.VALIDATED">Validé</option>
+              <option :value="PaymentStatus.REFUSED">Refusé</option>
+              <option :value="PaymentStatus.REFUNDING">
+                Remboursement en cours
+              </option>
+              <option :value="PaymentStatus.REFUND">Remboursé</option>
             </select>
           </div>
 
-          <div class="col-6 p-2 text-end light">
-            <button class="btn bg-secondary">Reset</button>
+          <div class="col-2 p-2 text-start">
+            <p class="fw-bolder mb-0">Statut</p>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              v-model="status"
+            >
+              <option :value="null">Tous</option>
+              <option :value="InscriptionStatus.PENDING">À valider</option>
+              <option :value="InscriptionStatus.VALIDATED">Validée</option>
+              <option :value="InscriptionStatus.CANCELLED">Annulée</option>
+            </select>
+          </div>
+
+          <div class="col-4 p-2 text-end light">
+            <button class="btn bg-secondary" @click="resetFilter">Reset</button>
           </div>
         </div>
       </div>
@@ -266,7 +285,12 @@ import TopBar from "@/components/TopBar/TopBar.vue";
 import ValidationsChips from "@/components/validationChips/ValidationsChips.vue";
 import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
 import ValidationChipsInscription from "@/components/validationChips/ValidationChipsInscription.vue";
-import { Certificate, Inscription, InscriptionStatus } from "@/types/interface";
+import {
+  Certificate,
+  Inscription,
+  InscriptionStatus,
+  Race,
+} from "@/types/interface";
 import { PaymentStatus } from "@/types/payment";
 import axios from "axios";
 import { defineComponent } from "vue";
@@ -292,12 +316,14 @@ export default defineComponent({
       showDeletionModal: false,
       index: 0,
       search: "",
-      race: null,
+      raceId: null,
       inscriptionToDelete: -1,
       inscriptionError: -1,
       certificateStatus: null,
       paymentStatus: null,
+      status: null,
       inscriptions: [] as Inscription[],
+      races: [] as Race[],
       PaymentStatus,
       InscriptionStatus,
       errorMsg: "",
@@ -310,6 +336,12 @@ export default defineComponent({
   },
   methods: {
     isAthleteMinor,
+    resetFilter() {
+      this.certificateStatus = null;
+      this.paymentStatus = null;
+      this.status = null;
+      this.raceId = null;
+    },
     hasError(id: number) {
       return id === this.inscriptionError;
     },
@@ -367,6 +399,10 @@ export default defineComponent({
         params: {
           editionId: this.$store.getters["edition/getEditionId"],
           search: this.search,
+          raceId: this.raceId,
+          certificateStatus: this.certificateStatus,
+          paymentStatus: this.paymentStatus,
+          status: this.status,
         },
       });
       if (response.status < 300) {
@@ -378,9 +414,29 @@ export default defineComponent({
   },
   async beforeMount() {
     await this.reloadTable();
+
+    const response = await axios.get("races", {
+      params: {
+        editionId: this.$store.getters["edition/getEditionId"],
+      },
+    });
+    if (response.status !== 200) return;
+    this.races = response.data.data;
   },
   watch: {
-    search(newSearch, oldSearch) {
+    search() {
+      this.reloadTable();
+    },
+    certificateStatus() {
+      this.reloadTable();
+    },
+    paymentStatus() {
+      this.reloadTable();
+    },
+    status() {
+      this.reloadTable();
+    },
+    raceId() {
       this.reloadTable();
     },
   },
