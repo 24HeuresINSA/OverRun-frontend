@@ -57,7 +57,7 @@
               v-model="paymentStatus"
             >
               <option :value="null">Tous</option>
-              <option :value="PaymentStatus.NOT_STARTED">Non crée</option>
+              <option :value="PaymentStatus.NOT_STARTED">Non créé</option>
               <option :value="PaymentStatus.PENDING">En cours</option>
               <option :value="PaymentStatus.VALIDATED">Validé</option>
               <option :value="PaymentStatus.REFUSED">Refusé</option>
