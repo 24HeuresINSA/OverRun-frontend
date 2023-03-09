@@ -25,6 +25,13 @@
           >
             <button
               type="button"
+              class="btn btn-success"
+              @click="exportPayments"
+            >
+              Exporter
+            </button>
+            <button
+              type="button"
               class="btn btn-warning"
               @click="filterMenuActive = !filterMenuActive"
             >
@@ -279,6 +286,24 @@ export default defineComponent({
       if (response.status < 300) {
         this.payments = response.data.data;
       }
+    },
+    async exportPayments() {
+      const response = await axios.get("payments/countInCSV", {
+        params: {
+          editionId: this.$store.getters["edition/getEditionId"],
+        },
+      });
+
+      if (response.status !== 200) return;
+
+      // download file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.setAttribute("download", "payments.csv");
+      document.body.appendChild(link);
+      link.click();
     },
   },
   async mounted() {
