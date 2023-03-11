@@ -114,7 +114,7 @@
       </div>
 
       <div class="row m-2 mt-3">
-        <div class="col bg-light me-2 rounded-3 shadow-sm">
+        <div class="col bg-light me-2 rounded-3 shadow-sm w-50">
           <InscriptionInTime
             :dataset="chartInscriptionDataset"
           ></InscriptionInTime>
@@ -235,7 +235,7 @@
             </div>
           </div>
         </div>
-        <div class="col bg-light ms-2 rounded-3 shadow-sm">
+        <div class="col bg-light ms-2 rounded-3 shadow-sm w-50">
           <PaymentInTime :dataset="chartPaymentDataset"></PaymentInTime>
         </div>
       </div>
