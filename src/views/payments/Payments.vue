@@ -288,7 +288,7 @@ export default defineComponent({
       }
     },
     async exportPayments() {
-      const response = await axios.get("payments/countInCSV", {
+      const response = await axios.get("payments/exportInCSV", {
         params: {
           editionId: this.$store.getters["edition/getEditionId"],
         },
