@@ -11,9 +11,9 @@
       :index="index"
     />
     <ConfirmationDeletionModal
-      v-show="showDeletionModal"
-      @closeConfirmationDeletionModal="toggleDeletionModal(-1)"
-      @confirmDeletion="deleteInscription(inscriptionToDelete)"
+      v-show="showCancellationModal"
+      @closeConfirmationDeletionModal="toggleCancellationModal(-1)"
+      @confirmDeletion="cancelInscription(inscriptionToCancel)"
     />
 
     <div
@@ -262,7 +262,7 @@
                   <button
                     v-show="inscription.status !== InscriptionStatus.CANCELLED"
                     class="badge me-1 bg-primary"
-                    @click="cancelInscription(inscription.id)"
+                    @click="toggleCancellationModal(inscription.id)"
                   >
                     Annuler l'inscription
                   </button>
@@ -313,11 +313,11 @@ export default defineComponent({
       filterMenuActive: false,
       selectAllRows: false,
       showCertificateModal: false,
-      showDeletionModal: false,
+      showCancellationModal: false,
       index: 0,
       search: "",
       raceId: null,
-      inscriptionToDelete: -1,
+      inscriptionToCancel: -1,
       inscriptionError: -1,
       certificateStatus: null,
       paymentStatus: null,
@@ -355,14 +355,9 @@ export default defineComponent({
     setSearch(search: string) {
       this.search = search;
     },
-    toggleDeletionModal(toDelete: number) {
-      this.showDeletionModal = !this.showDeletionModal;
-      this.inscriptionToDelete = this.showDeletionModal ? toDelete : -1;
-    },
-    async deleteInscription(id: number) {
-      // TODO
-      this.inscriptionError = id;
-      this.errorMsg = "Suppression impossible";
+    toggleCancellationModal(toDelete: number) {
+      this.showCancellationModal = !this.showCancellationModal;
+      this.inscriptionToCancel = this.showCancellationModal ? toDelete : -1;
     },
     canValidateInscription(inscription: Inscription) {
       return (

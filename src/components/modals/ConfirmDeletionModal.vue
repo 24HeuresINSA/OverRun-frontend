@@ -3,7 +3,7 @@
     <div class="col bg-light custom-modal m-auto rounded-3 mt-5">
       <div class="row pt-3">
         <div class="col">
-          <h4>Suppression</h4>
+          <h4>Suppression/Annulation</h4>
         </div>
         <div class="col-1">
           <button id="close-arrow" @click="closeModal">
@@ -13,9 +13,10 @@
       </div>
       <hr class="dropdown-divider my-2" />
       <div class="warning">
-        Attention : toute suppression est irréversible.<br />Continuer ?
+        Attention : toute suppression/annulation est irréversible.<br />Continuer
+        ?
       </div>
-      <div class="row pt-3">
+      <div class="row pt-3 pb-3">
         <div class="col d-flex justify-content-center">
           <button class="btn btn-primary mx-2" @click="closeModal">
             Annuler
