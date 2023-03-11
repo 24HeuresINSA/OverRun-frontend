@@ -155,7 +155,7 @@
                 <td>
                   <router-link
                     :to="{
-                      name: 'InscriptionDetails',
+                      name: 'AthleteDetails',
                       params: { id: payment.inscription.athlete.id },
                     }"
                   >
