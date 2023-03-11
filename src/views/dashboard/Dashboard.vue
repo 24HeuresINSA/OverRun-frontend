@@ -32,7 +32,7 @@
               </div>
             </div>
             <div class="row pt-3">
-              <div class="col-8 border-end">
+              <div class="col-6 border-end">
                 <h1 class="mb-0">
                   {{
                     getPendingInscriptionsLength() +
@@ -40,9 +40,9 @@
                   }}
                 </h1>
               </div>
-              <div class="col-4 text-success">
-                <h2 class="d-block m-auto">+idk</h2>
-                <div class="form-text d-block">last 24 h</div>
+              <div class="col-6 text-success">
+                <h2 class="d-block m-auto">+ {{ countLast24h }}</h2>
+                <div class="form-text d-block">sur les dernières 24h</div>
               </div>
             </div>
           </div>
@@ -80,10 +80,12 @@
           <div class="container-fluid p-1 pt-3">
             <div class="row pt-1 pb-1">
               <div class="col border-bottom">
-                <h5></h5>
+                <h5>Début de la course dans :</h5>
               </div>
             </div>
-            <div class="row pt-3"></div>
+            <div class="row pt-2">
+              <Countdown :end="new Date(endDate)"></Countdown>
+            </div>
           </div>
         </div>
         <div class="col bg-light ms-2 rounded-3 shadow-sm">
@@ -94,12 +96,17 @@
               </div>
             </div>
             <div class="row pt-3">
-              <div class="col-8 border-end">
-                <h1>idk €</h1>
+              <div class="col-6 border-end">
+                <h2 class="d-block m-auto">
+                  {{ centimesToEuros(validatedPaymentTotal) }} €
+                </h2>
+                <div class="form-text d-block">Courses</div>
               </div>
-              <div class="col-4 text-danger">
-                <h4 class="d-block m-auto">idk €</h4>
-                <div class="form-text d-block">manquants</div>
+              <div class="col-6 text-success">
+                <h2 class="d-block m-auto">
+                  {{ centimesToEuros(donationPaymentTotal) }} €
+                </h2>
+                <div class="form-text d-block">Dons</div>
               </div>
             </div>
           </div>
@@ -107,8 +114,12 @@
       </div>
 
       <div class="row m-2 mt-3">
-        <div class="col bg-light me-2 rounded-3 shadow-sm"></div>
-        <div class="col-5 bg-light ms-2 rounded-3 shadow-sm">
+        <div class="col bg-light me-2 rounded-3 shadow-sm">
+          <InscriptionInTime
+            :dataset="chartInscriptionDataset"
+          ></InscriptionInTime>
+        </div>
+        <div class="col-4 bg-light ms-2 rounded-3 shadow-sm">
           <div class="container-fluid p-1 pt-3">
             <div class="row pt-1 pb-1">
               <div class="col border-bottom">
@@ -224,7 +235,9 @@
             </div>
           </div>
         </div>
-        <div class="col bg-light ms-2 rounded-3 shadow-sm"></div>
+        <div class="col bg-light ms-2 rounded-3 shadow-sm">
+          <PaymentInTime :dataset="chartPaymentDataset"></PaymentInTime>
+        </div>
       </div>
     </div>
   </div>
@@ -234,7 +247,10 @@
 import CertificateModalVue from "@/components/CertificateModal/CertificateModal.vue";
 // import Doughnut from "@/components/charts/Doughnut.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
+import InscriptionInTime from "@/components/charts/InscriptionInTime.vue";
+import PaymentInTime from "@/components/charts/PaymentInTime.vue";
 import TopBar from "@/components/TopBar/TopBar.vue";
+import Countdown from "@/components/countdown/Countdown.vue";
 import ValidationChips from "@/components/validationChips/ValidationsChips.vue";
 import ValidationsChipsPayment from "@/components/validationChips/ValidationsChipsPayment.vue";
 import { Certificate, Inscription, InscriptionStatus } from "@/types/interface";
@@ -249,35 +265,44 @@ export default defineComponent({
     TopBar,
     CertificateModalVue,
     // Doughnut,
+    InscriptionInTime,
+    PaymentInTime,
     ValidationChips,
     ValidationsChipsPayment,
+    Countdown,
   },
 
   data() {
     return {
+      chartInscriptionDataset: {} as {
+        labels: string[];
+        data: { simple: number[]; cumulative: number[] };
+      },
+      chartPaymentDataset: {} as {
+        labels: string[];
+        data: {
+          simpleRace: number[];
+          cumulativeRace: number[];
+          simpleDonation: number[];
+          cumulativeDonation: number[];
+        };
+      },
       hideSideBar: false,
       showCertificateModal: false,
       inscriptions: [] as Inscription[],
       InscriptionStatus,
       certificates: [] as Certificate[],
       payments: [] as Payment[],
+      validatedPaymentTotal: 0,
+      donationPaymentTotal: 0,
+      countLast24h: 0,
       index: 0,
-      chartOptions: {
-        hoverBorderWidth: 20,
-      },
-      chartData: {
-        hoverBackgroundColor: "red",
-        hoverBorderWidth: 10,
-        labels: ["Green", "Red", "Blue"],
-        datasets: [
-          {
-            label: "Data One",
-            backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
-            data: [1, 10, 5],
-          },
-        ],
-      },
     };
+  },
+  computed: {
+    endDate() {
+      return this.$store.getters["edition/getEdition"].startDate;
+    },
   },
   methods: {
     isAthleteMinor,
@@ -309,7 +334,7 @@ export default defineComponent({
       if (certificateResponse.status < 300) {
         this.certificates = certificateResponse.data.data.filter(
           (certificate: Certificate) => {
-            return certificate.status !== 1;
+            return certificate.status !== 1 && certificate.status !== 5;
           }
         );
       }
@@ -327,6 +352,42 @@ export default defineComponent({
           );
         });
       }
+
+      this.getTotalPaymentAmounts();
+      this.getCountLast24hInscriptions();
+      this.getChartDatasetInscriptions();
+      this.getChartDatasetPayments();
+    },
+    async getTotalPaymentAmounts() {
+      const paymentResponse = await axios.get("payments/total", {
+        params: {
+          editionId: this.$store.getters["edition/getEditionId"],
+        },
+      });
+      if (paymentResponse.status >= 300) return;
+      if (paymentResponse.data.length === 0) return;
+
+      this.validatedPaymentTotal = paymentResponse.data[0]._sum.raceAmount;
+      this.donationPaymentTotal = paymentResponse.data[0]._sum.donationAmount;
+    },
+    async getCountLast24hInscriptions() {
+      const lastResponse = await axios.get("inscriptions/countLast24h");
+      if (lastResponse.status >= 300) return;
+      this.countLast24h = lastResponse.data;
+    },
+    async getChartDatasetInscriptions() {
+      const datasetResponse = await axios.get("inscriptions/countByDate", {
+        params: { edition: this.$store.getters["edition/getEditionId"] },
+      });
+      if (datasetResponse.status >= 300) return;
+      this.chartInscriptionDataset = datasetResponse.data;
+    },
+    async getChartDatasetPayments() {
+      const datasetResponse = await axios.get("payment/amountByDate", {
+        params: { edition: this.$store.getters["edition/getEditionId"] },
+      });
+      if (datasetResponse.status >= 300) return;
+      this.chartPaymentDataset = datasetResponse.data;
     },
     getValidatedInscriptionsLength() {
       return this.inscriptions.filter((inscription) => {
