@@ -2,19 +2,19 @@
   <div v-if="now.getTime() < end.getTime()" id="container">
     <div id="timer">
       <div class="days">
-        <div class="numbers">{{ day }}</div>
+        <div class="numbers">{{ interval.days }}</div>
         jours
       </div>
       <div class="hours">
-        <div class="numbers">{{ hour }}</div>
+        <div class="numbers">{{ interval.hours }}</div>
         heures
       </div>
       <div class="minutes">
-        <div class="numbers">{{ min }}</div>
+        <div class="numbers">{{ interval.min }}</div>
         min
       </div>
       <div class="seconds">
-        <div class="numbers">{{ sec }}</div>
+        <div class="numbers">{{ interval.sec }}</div>
         sec
       </div>
     </div>
@@ -42,13 +42,19 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue";
+export interface Interval {
+  days: string;
+  hours: string;
+  min: string;
+  sec: string;
+}
+
+export default defineComponent({
   props: {
     end: {
       type: Date,
-      default() {
-        return new Date();
-      },
+      required: true,
     },
   },
   data() {
@@ -58,35 +64,23 @@ export default {
     };
   },
   computed: {
-    day() {
+    interval(): Interval {
       const d = Math.trunc(
-        (this.$props.end.getTime() - this.$data.now.getTime()) /
-          1000 /
-          3600 /
-          24
+        (this.end.getTime() - this.now.getTime()) / 1000 / 3600 / 24
       );
-      return d;
-    },
-    hour() {
       const h =
-        Math.trunc(
-          (this.$props.end.getTime() - this.$data.now.getTime()) / 1000 / 3600
-        ) % 24;
-      return h > 9 ? h : "0" + h;
-    },
-    min() {
+        Math.trunc((this.end.getTime() - this.now.getTime()) / 1000 / 3600) %
+        24;
       const m =
-        Math.trunc(
-          (this.$props.end.getTime() - this.$data.now.getTime()) / 1000 / 60
-        ) % 60;
-      return m > 9 ? m : "0" + m;
-    },
-    sec() {
+        Math.trunc((this.end.getTime() - this.now.getTime()) / 1000 / 60) % 60;
       const s =
-        Math.trunc(
-          (this.$props.end.getTime() - this.$data.now.getTime()) / 1000
-        ) % 60;
-      return s > 9 ? s : "0" + s;
+        Math.trunc((this.end.getTime() - this.now.getTime()) / 1000) % 60;
+      return {
+        days: d + "",
+        hours: (h > 9 ? "" : "0") + h,
+        min: (m > 9 ? "" : "0") + m,
+        sec: (s > 9 ? "" : "0") + s,
+      };
     },
   },
   mounted() {
@@ -95,7 +89,7 @@ export default {
   unmounted() {
     clearInterval(this.timer);
   },
-};
+});
 </script>
 
 <style>
