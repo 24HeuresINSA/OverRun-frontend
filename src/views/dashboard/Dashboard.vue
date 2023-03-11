@@ -245,7 +245,6 @@
 
 <script lang="ts">
 import CertificateModalVue from "@/components/CertificateModal/CertificateModal.vue";
-// import Doughnut from "@/components/charts/Doughnut.vue";
 import SideBar from "@/components/SideBar/SideBar.vue";
 import InscriptionInTime from "@/components/charts/InscriptionInTime.vue";
 import PaymentInTime from "@/components/charts/PaymentInTime.vue";
@@ -264,7 +263,6 @@ export default defineComponent({
     SideBar,
     TopBar,
     CertificateModalVue,
-    // Doughnut,
     InscriptionInTime,
     PaymentInTime,
     ValidationChips,
