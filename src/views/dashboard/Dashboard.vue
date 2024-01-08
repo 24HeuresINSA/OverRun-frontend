@@ -340,6 +340,7 @@ export default defineComponent({
       const paymentResponse = await axios.get("payments", {
         params: {
           order: "asc",
+          editionId: this.$store.getters["edition/getEditionId"],
         },
       });
       if (paymentResponse.status < 300) {
